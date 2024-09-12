@@ -127,14 +127,26 @@ _For more examples, please refer to the [Documentation](https://example.com)_
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Figma UI design
 - [ ] Miro Flowchart Site Diagram
+- [ ] Figma UI design
 - [ ] Setup Flask environment
 - [ ] Document API calls
   - [ ] Steam Web API
   - [ ] [Steam Python API](https://github.com/ValvePython/steam?tab=readme-ov-file)
   - [ ] Howlongtobeat API
   - [ ] CheapShark API
+- [ ] Implement pages
+  - [ ] Home page
+  - [ ] Game page
+  - [ ] Sign up page
+  - [ ] Login page
+- [ ] Database
+  - [ ] Database Conceptual Design
+  - [ ] Database Schema
+  - [ ] Setup PostgreSQL server
+- [ ] Create User Accounts
+- [ ] Implement wishlist
+- [ ] Develop price alert system
 
 See the [open issues](https://github.com/santi224m/GameScout/issues) for a full list of proposed features (and known issues).
 
