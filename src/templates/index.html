@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Steam App ID: {{ app_details[steam_app_id|string]['data']['steam_appid'] }}</h1>
+
+{% for data_key, data_val in app_details[steam_app_id|string]['data'].items() %}
+{% if data_val is string and '.jpg' not in data_val %}
+<p>{{ data_key }}: {{ data_val|safe }}</p>
+{% else %}
+<img src="{{ data_val }}">
+{% endif %}
+{% endfor %}
+{% endblock %}
