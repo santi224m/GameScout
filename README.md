@@ -75,27 +75,27 @@ GameScout will solve this buy aggregating data from all the websites gamers must
 
 Clone the repository
 
-```console
+```bash
 git clone git@github.com:santi224m/GameScout.git
 cd GameScout
 ```
 
 Setup a virtual environment
 
-```console
+```bash
 python -m venv venv
 source venv/bin/activate
 ```
 
 Install requirements
 
-```console
+```bash
 pip install -r requirements.txt
 ```
 
 Install and configure Redis
 
-```console
+```bash
 sudo apt install redis-server
 sudo nano /etc/redis/redis.conf
 ```
@@ -106,14 +106,14 @@ sudo nano /etc/redis/redis.conf
 
 1. Export environment variables
 
-```console
+```bash
 export FLASK_APP=src
 export FLASK_ENV=development
 ```
 
 2. Run app
 
-```cosnole
+```bash
 flask run
 ```
 
