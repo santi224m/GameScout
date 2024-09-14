@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% block title %}{{app_details[steam_app_id|string]['data']['name']}}{% endblock %}
 
 {% block content %}
 <h1>Steam App ID: {{ app_details[steam_app_id|string]['data']['steam_appid'] }}</h1>
