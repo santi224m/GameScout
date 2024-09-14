@@ -1,14 +1,53 @@
 {% extends 'base.html' %}
-{% block title %}{{app_details[steam_app_id|string]['data']['name']}}{% endblock %}
+{% block title %}{{ game_details.title }}{% endblock %}
 
 {% block content %}
-<h1>Steam App ID: {{ app_details[steam_app_id|string]['data']['steam_appid'] }}</h1>
+<div class="content">
+  <h1>Title: {{ game_details.title }}</h1>
+  <p>Steam App ID: {{ game_details.steam_app_id }}</p>
+  <p>Steam Price: {{ game_details.steam_price }}</p>
+  <p>Steam Discount: {{ game_details.steam_discount }}%</p>
+  <p>Release Date: {{ game_details.release_date }}</p>
+  <p>Review Count: {{ game_details.review_count }}</p>
 
-{% for data_key, data_val in app_details[steam_app_id|string]['data'].items() %}
-{% if data_val is string and '.jpg' not in data_val %}
-<p>{{ data_key }}: {{ data_val|safe }}</p>
-{% else %}
-<img src="{{ data_val }}">
-{% endif %}
-{% endfor %}
+  <img src="{{ game_details.header_img_url }}">
+
+  <p>{{ game_details.detailed_description|safe }}</p>
+
+  <h2>Screenshots</h2>
+  {% for screenshot_url in game_details.screenshots %}
+    <img style="max-width: 300px;" src="{{ screenshot_url }}">
+  {% endfor %}
+
+  {% if game_details.is_available_windows %}
+    <h3>PC Requirements</h3>
+    {% if game_details.pc_requirements_min %}
+      {{ game_details.pc_requirements_min|safe }}
+    {% endif %}
+    {% if game_details.pc_requirements_recommended %}
+      {{ game_details.pc_requirements_recommended|safe }}
+    {% endif %}
+  {% endif %}
+
+  {% if game_details.is_available_mac %}
+    <h3>Mac Requirements</h3>
+    {% if game_details.mac_requirements_min %}
+      {{ game_details.mac_requirements_min|safe }}
+    {% endif %}
+    {% if game_details.mac_requirements_recommended %}
+      {{ game_details.mac_requirements_recommended|safe }}
+    {% endif %}
+  {% endif %}
+
+  {% if game_details.is_available_linux %}
+    <h3>Linux Requirements</h3>
+    {% if game_details.linux_requirements_min %}
+      {{ game_details.linux_requirements_min|safe }}
+    {% endif %}
+    {% if game_details.linux_requirements_recommended %}
+      {{ game_details.linux_requirements_recommended|safe }}
+    {% endif %}
+  {% endif %}
+</div>
+
 {% endblock %}
