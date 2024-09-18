@@ -3,12 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{% endblock %} | GameScout</title>
-    <style>
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-    </style>
+    <link href="{{ url_for('static', filename='/css/style.css') }}" rel="stylesheet">
 </head>
 <body>
   <nav></nav>
