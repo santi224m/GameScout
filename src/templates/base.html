@@ -6,9 +6,17 @@
     <link href="{{ url_for('static', filename='/css/style.css') }}" rel="stylesheet">
 </head>
 <body>
-  <nav></nav>
+  <nav>
+    <a class="nav-logo" href="/">GameScout</a>
+    <input type="text" placeholder="Search for a game..." name="nav-search" onkeydown="redirect_to_search_page(event)">
+  </nav>
   <div class="content">
         {% block content %}{% endblock %}
     </div>
+
+
+    {% block scripts %}
+    <script src=" {{ url_for('static', filename='js/nav_search.js') }}"></script>
+    {% endblock %}
 </body>
 </html>

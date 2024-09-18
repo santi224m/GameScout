@@ -10,4 +10,7 @@ def create_app(config_class=Config):
     from src.main import bp as main_bp
     app.register_blueprint(main_bp)
 
+    from src.search import bp as search_bp
+    app.register_blueprint(search_bp, url_prefix='/search')
+
     return app
