@@ -4,5 +4,26 @@
 {% block content %}
 <h1>Search Page</h1>
 <p>Searching for {{ search_term }}</p>
-<p>{{ res_json }}</p>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Steam App ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for res in res_json %}
+    <tr>
+      <td>{{ res['external'] }}</td>
+      <td>
+        {% if res['steamAppID'] != None %}
+        <a href="/{{ res['steamAppID'] }}">{{ res['steamAppID'] }}</a>
+        {% else %}
+        <td>Steam App ID not provided by CheapShark API</td>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
