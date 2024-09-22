@@ -129,14 +129,18 @@ flask run
 - [x] Setup Flask environment
 - [ ] Document API calls
   - [ ] Steam Web API
+    - [x] App Details API
+    - [ ] Steam Reviews API
   - [ ] [Steam Python API](https://github.com/ValvePython/steam?tab=readme-ov-file)
   - [ ] Howlongtobeat API
+    * Probably need to implement our own
   - [ ] CheapShark API
 - [ ] Implement pages
   - [ ] Home page
   - [ ] Game page
   - [ ] Sign up page
   - [ ] Login page
+  - [ ] Search results page
 - [ ] Database
   - [ ] Database Conceptual Design
   - [ ] Database Schema
