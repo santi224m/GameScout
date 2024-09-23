@@ -3,19 +3,31 @@
 ## API URLS
 
 **List of Deals** : https://www.cheapshark.com/api/1.0/deals?storeID=1&upperPrice=15
+
+
 **Deal Lookup** : https://www.cheapshark.com/api/1.0/deals?id=X8sebHhbc1Ga0dTkgg59WgyM506af9oNZZJLU9uSrX8%3D
 
 
 **List of Games** : https://www.cheapshark.com/api/1.0/games?title=batman
+
+
 **Game Lookup** : https://www.cheapshark.com/api/1.0/games?id=612
+
+
 **Multiple Game Lookup** : https://www.cheapshark.com/api/1.0/games?ids=128,129,130
 
 **Stores Info** : https://www.cheapshark.com/api/1.0/stores
+
+
 **Stores Last Change** : https://www.cheapshark.com/api/1.0/stores?lastChange=
 
 
 **Edit Alert** : https://www.cheapshark.com/api/1.0/alerts?action=set&email=someone@example.org&gameID=59&price=14.99
+
+
 **Manage Alert** : https://www.cheapshark.com/api/1.0/alerts?action=manage&email=address-with-alerts@example.org
+
+
 **Get Alerts** :https://www.cheapshark.com/api/1.0/alerts?action=get&key=example-key-value
 
 
