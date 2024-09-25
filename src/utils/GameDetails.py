@@ -23,8 +23,12 @@ class GameDetails :
     self.is_available_linux = False
     self.screenshots = []
     self.review_count = None
+    self.positive_reviews = None
+    self.negative_reviews = None
     self.release_date = None
+    self.steam_reviews = []
     self.update_with_steam_api()
+    self.update_with_steam_reviews_api()
 
   def update_with_steam_api(self):
     """Update game details using Steam API"""
@@ -61,6 +65,21 @@ class GameDetails :
       self.steam_price = app_details['price_overview']['final_formatted']
       self.steam_discount = app_details['price_overview']['discount_percent']
     self.screenshots = [screenshot['path_full'] for screenshot in app_details['screenshots']]
-    if 'recommendations' in app_details:
-      self.review_count = app_details['recommendations']['total']
     self.release_date = app_details['release_date']['date']
+
+  def update_with_steam_reviews_api(self):
+    url_params = {
+      'appids': self.steam_app_id,
+      'json': 1,
+      'filter': 'all',
+      'language': 'english',
+      'purchase_type': 'all',
+      'review_type': 'all',
+      'num_per_page': 5
+      }
+    res = requests.get(f'https://store.steampowered.com/appreviews/{self.steam_app_id}', params=url_params)
+    app_reviews = res.json()
+    self.review_count = app_reviews['query_summary']['total_reviews']
+    self.positive_reviews = app_reviews['query_summary']['total_positive']
+    self.negative_reviews = app_reviews['query_summary']['total_negative']
+    self.steam_reviews = app_reviews['reviews']

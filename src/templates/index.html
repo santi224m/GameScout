@@ -9,7 +9,11 @@
   <p>Steam Price: {{ game_details.steam_price }}</p>
   <p>Steam Discount: {{ game_details.steam_discount }}%</p>
   <p>Release Date: {{ game_details.release_date }}</p>
-  <p>Review Count: {{ game_details.review_count }}</p>
+  <p>Total Reviews: {{ game_details.review_count }}</p>
+  <p>Positive Reviews: {{ game_details.positive_reviews }}</p>
+  <p>Negative Reviews: {{ game_details.negative_reviews }}</p>
+  {% set score = game_details.positive_reviews / game_details.review_count * 100 %}
+  <p>{{ '%0.2f' % score|float }}% positive reviews</p>
 
   <p style="margin: 1rem 0; border-top: 1px solid black; padding-top: 1rem;">{{ game_details.detailed_description|safe }}</p>
 
@@ -54,5 +58,14 @@
     </div>
   {% endif %}
 </div>
+
+{% if game_details.steam_reviews|length > 0 %}
+<h2>Steam Reviews</h2>
+
+{% for review in game_details.steam_reviews %}
+<p style="margin: 1rem 0;">{{ review['review'] }}</p>
+{% endfor %}
+
+{% endif %}
 
 {% endblock %}
