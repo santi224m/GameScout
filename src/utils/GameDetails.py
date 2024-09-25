@@ -7,6 +7,7 @@ class GameDetails :
       raise ValueError("Steam App ID must be a digit")
     self.steam_app_id = str(steam_app_id)
     self.title = None
+    self.short_description = None
     self.detailed_description = None
     self.header_img_url = None
     self.pc_requirements_min = None
@@ -22,8 +23,12 @@ class GameDetails :
     self.is_available_linux = False
     self.screenshots = []
     self.review_count = None
+    self.positive_reviews = None
+    self.negative_reviews = None
     self.release_date = None
+    self.steam_reviews = []
     self.update_with_steam_api()
+    self.update_with_steam_reviews_api()
 
     #List of Deals API
     self.pageNumber = None
@@ -61,6 +66,7 @@ class GameDetails :
 
     # Update game details
     self.title = app_details['name']
+    self.short_description = app_details['short_description']
     self.detailed_description = app_details['detailed_description']
     self.header_img_url = app_details['header_image']
     self.is_available_windows = app_details['platforms']['windows']
@@ -81,8 +87,25 @@ class GameDetails :
         self.linux_requirements_min = app_details['linux_requirements']['minimum']
       if 'recommended' in app_details['linux_requirements']:
         self.linux_requirements_recommended = app_details['linux_requirements']['recommended']
-    self.steam_price = app_details['price_overview']['final_formatted']
-    self.steam_discount = app_details['price_overview']['discount_percent']
+    if 'price_overview' in app_details:
+      self.steam_price = app_details['price_overview']['final_formatted']
+      self.steam_discount = app_details['price_overview']['discount_percent']
     self.screenshots = [screenshot['path_full'] for screenshot in app_details['screenshots']]
-    self.review_count = app_details['recommendations']['total']
     self.release_date = app_details['release_date']['date']
+
+  def update_with_steam_reviews_api(self):
+    url_params = {
+      'appids': self.steam_app_id,
+      'json': 1,
+      'filter': 'all',
+      'language': 'english',
+      'purchase_type': 'all',
+      'review_type': 'all',
+      'num_per_page': 5
+      }
+    res = requests.get(f'https://store.steampowered.com/appreviews/{self.steam_app_id}', params=url_params)
+    app_reviews = res.json()
+    self.review_count = app_reviews['query_summary']['total_reviews']
+    self.positive_reviews = app_reviews['query_summary']['total_positive']
+    self.negative_reviews = app_reviews['query_summary']['total_negative']
+    self.steam_reviews = app_reviews['reviews']
