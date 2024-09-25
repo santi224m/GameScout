@@ -25,6 +25,32 @@ class GameDetails :
     self.release_date = None
     self.update_with_steam_api()
 
+    #List of Deals API
+    self.pageNumber = None
+    self.storeID = None
+    self.pageSize = None
+    self.sortBy = None
+    self.desc = None
+    self.lowerPrice = None
+    self.upperPrie = None
+    self.metacritic = None
+    self.steamRating = None
+    self.maxAge = None
+    self.steamAppID = None
+    self.AAA = None
+    self.steamworks = None
+    self.onSale = None
+
+    #
+    self.gamelookups = [] #game lookup api
+
+
+  def update_with_cheap_shark_api(self):
+    """Cheap Shark"""
+    
+    
+    
+
   def update_with_steam_api(self):
     """Update game details using Steam API"""
     # Make API call
