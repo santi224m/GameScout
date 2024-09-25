@@ -55,8 +55,9 @@ class GameDetails :
         self.linux_requirements_min = app_details['linux_requirements']['minimum']
       if 'recommended' in app_details['linux_requirements']:
         self.linux_requirements_recommended = app_details['linux_requirements']['recommended']
-    self.steam_price = app_details['price_overview']['final_formatted']
-    self.steam_discount = app_details['price_overview']['discount_percent']
+    if 'price_overview' in app_details:
+      self.steam_price = app_details['price_overview']['final_formatted']
+      self.steam_discount = app_details['price_overview']['discount_percent']
     self.screenshots = [screenshot['path_full'] for screenshot in app_details['screenshots']]
     self.review_count = app_details['recommendations']['total']
     self.release_date = app_details['release_date']['date']
