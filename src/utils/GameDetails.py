@@ -46,14 +46,48 @@ class GameDetails :
     self.steamworks = None
     self.onSale = None
 
-    #
+    #GAME LOOKUP
     self.gamelookups = [] #game lookup api
+    self.id = None
+    self.dealID = None
+    self.price = None
+    self.retailPrice = None
+    self.savings = None 
+    self.update_with_cheap_shark_api()
+
+    #ALERTS API 
+    self.action = None
+    self.email = None
+    self.gameID = None
+    self.alertPrice = None
 
 
   def update_with_cheap_shark_api(self):
     """Cheap Shark"""
+    #
+    res = requests.get('https://www.cheapshark.com/api/1.0/games', params=id)
+
+    app_details = res.json()[self.id]['deals']
+
+    self.storeID = app_details['deals']['storeID']
+    self.dealID = app_details['deals']['dealID']
+    self.price = app_details['deals']['price']
+    self.retailPrice = app_details['deals']['price']
+    self.savings = app_details['deals']['savings']
+
+
+#https://www.cheapshark.com/api/1.0/alerts?action=set&email=someone@example.org&gameID=59&price=14.99
+  def update_with_alert_cheak_shark_api(self):
+    """ALERT API FROM CHEAPSHARK""""
+    url_param = {
+      'action': self.action
+      'email' : self.email,
+      'gameID' : self.gameID,
+      'price' : self.alertPrice
+    }
+    res = requests.get('https://www.cheapshark.com/api/1.0/alerts',url_param)
     
-    
+
     
 
   def update_with_steam_api(self):
