@@ -7,6 +7,7 @@ class GameDetails :
       raise ValueError("Steam App ID must be a digit")
     self.steam_app_id = str(steam_app_id)
     self.title = None
+    self.short_description = None
     self.detailed_description = None
     self.header_img_url = None
     self.pc_requirements_min = None
@@ -35,6 +36,7 @@ class GameDetails :
 
     # Update game details
     self.title = app_details['name']
+    self.short_description = app_details['short_description']
     self.detailed_description = app_details['detailed_description']
     self.header_img_url = app_details['header_image']
     self.is_available_windows = app_details['platforms']['windows']

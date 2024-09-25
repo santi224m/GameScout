@@ -3,50 +3,55 @@
 
 {% block content %}
 <div class="content">
-  <h1>Title: {{ game_details.title }}</h1>
-  <p>Steam App ID: {{ game_details.steam_app_id }}</p>
+  <h1>{{ game_details.title }}</h1>
+  <img src="{{ game_details.header_img_url }}">
+  <p style="padding: 1rem 0;">{{ game_details.short_description|safe }}</p>
   <p>Steam Price: {{ game_details.steam_price }}</p>
   <p>Steam Discount: {{ game_details.steam_discount }}%</p>
   <p>Release Date: {{ game_details.release_date }}</p>
   <p>Review Count: {{ game_details.review_count }}</p>
 
-  <img src="{{ game_details.header_img_url }}">
+  <p style="margin: 1rem 0; border-top: 1px solid black; padding-top: 1rem;">{{ game_details.detailed_description|safe }}</p>
 
-  <p>{{ game_details.detailed_description|safe }}</p>
-
-  <h2>Screenshots</h2>
+  <h2 style="margin-top: 15px;">Screenshots</h2>
   {% for screenshot_url in game_details.screenshots %}
     <img style="max-width: 300px;" src="{{ screenshot_url }}">
   {% endfor %}
 
   {% if game_details.is_available_windows %}
-    <h3>PC Requirements</h3>
-    {% if game_details.pc_requirements_min %}
+    <div style="margin: 1rem 0;">
+      <h3>PC Requirements</h3>
+      {% if game_details.pc_requirements_min %}
       {{ game_details.pc_requirements_min|safe }}
-    {% endif %}
-    {% if game_details.pc_requirements_recommended %}
+      {% endif %}
+      {% if game_details.pc_requirements_recommended %}
       {{ game_details.pc_requirements_recommended|safe }}
-    {% endif %}
+      {% endif %}
+    </div>
   {% endif %}
 
   {% if game_details.is_available_mac %}
-    <h3>Mac Requirements</h3>
-    {% if game_details.mac_requirements_min %}
+    <div style="margin: 1rem 0;">
+      <h3>Mac Requirements</h3>
+      {% if game_details.mac_requirements_min %}
       {{ game_details.mac_requirements_min|safe }}
-    {% endif %}
-    {% if game_details.mac_requirements_recommended %}
+      {% endif %}
+      {% if game_details.mac_requirements_recommended %}
       {{ game_details.mac_requirements_recommended|safe }}
-    {% endif %}
+      {% endif %}
+    </div>
   {% endif %}
 
   {% if game_details.is_available_linux %}
-    <h3>Linux Requirements</h3>
-    {% if game_details.linux_requirements_min %}
+    <div style="margin: 1rem 0">
+      <h3>Linux Requirements</h3>
+      {% if game_details.linux_requirements_min %}
       {{ game_details.linux_requirements_min|safe }}
-    {% endif %}
-    {% if game_details.linux_requirements_recommended %}
+      {% endif %}
+      {% if game_details.linux_requirements_recommended %}
       {{ game_details.linux_requirements_recommended|safe }}
-    {% endif %}
+      {% endif %}
+    </div>
   {% endif %}
 </div>
 
