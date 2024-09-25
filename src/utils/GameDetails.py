@@ -59,5 +59,6 @@ class GameDetails :
       self.steam_price = app_details['price_overview']['final_formatted']
       self.steam_discount = app_details['price_overview']['discount_percent']
     self.screenshots = [screenshot['path_full'] for screenshot in app_details['screenshots']]
-    self.review_count = app_details['recommendations']['total']
+    if 'recommendations' in app_details:
+      self.review_count = app_details['recommendations']['total']
     self.release_date = app_details['release_date']['date']
