@@ -59,14 +59,17 @@
   {% endif %}
 </div>
 
-{% if game_details.deals|length > 0 %}
-<h2>CheapShark Prices</h2>
+{% if game_details.hltb %}
+<h2>HowLongToBeat Data</h2>
+<p>Main: {{ game_details.hltb.main }}</p>
+<p>Main + Sides: {{ game_details.hltb.main_extra }}</p>
+<p>Completionist: {{ game_details.hltb.completionist }}</p>
+<p>All Styles: {{ game_details.hltb.all_styles }}</p>
+{% endif %}
 
 {% for deal in game_details.deals %}
 <p style="margin: 1rem 0;">Store: {{ deal['storeName'] }}, DealID: {{ deal['dealID'] }}, Current Price: {{ deal['price'] }}, Retail Price: {{ deal['retailPrice'] }}, Savings: {{ '%0.2f' % deal['savings']|float }}%</p>
 {% endfor %}
-
-{% endif %}
 
 {% if game_details.steam_reviews|length > 0 %}
 <h2>Steam Reviews</h2>

@@ -1,5 +1,7 @@
 """The GameDetails class collects and stores game info using various APIs"""
 import requests
+import math
+from howlongtobeatpy import HowLongToBeat
 
 class GameDetails :
   def __init__(self, steam_app_id):
@@ -34,6 +36,13 @@ class GameDetails :
     
     # HowLongToBeat
     # TODO: Add HLTB data here (i'll do it soon)
+    self.hltb = {
+      'link': None,
+      'main': None,
+      'main_extra': None,
+      'completionist': None,
+      'all_styles': None
+    }
 
     # CheapShark
     self.deals = []
@@ -41,7 +50,19 @@ class GameDetails :
     # Update with APIs
     self.update_with_steam_api()
     self.update_with_steam_reviews_api()
+    self.update_with_hltb()
     self.update_with_cheap_shark_api()
+
+  def update_with_hltb(self):
+    results_list = HowLongToBeat().search(self.title)
+    if results_list is not None and len(results_list) > 0:
+        best_element = max(results_list, key=lambda element: element.similarity)
+        self.hltb['link'] = best_element.game_web_link
+        self.hltb['main'] = self.hltb_format(best_element.main_story)
+        self.hltb['main_extra'] = self.hltb_format(best_element.main_extra)
+        self.hltb['completionist'] = self.hltb_format(best_element.completionist)
+        self.hltb['all_styles'] = self.hltb_format(best_element.all_styles)
+    else: self.hltb = None
 
 
   def update_with_cheap_shark_api(self):
@@ -158,3 +179,9 @@ class GameDetails :
     self.positive_reviews = app_reviews['query_summary']['total_positive']
     self.negative_reviews = app_reviews['query_summary']['total_negative']
     self.steam_reviews = app_reviews['reviews']
+
+  def hltb_format(self, num):
+    norm_num = round(num * 2) / 2
+
+    if norm_num%1==0: return str(int(norm_num))
+    else: return str(math.floor(norm_num)) + "½"
