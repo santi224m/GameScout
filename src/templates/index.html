@@ -59,6 +59,15 @@
   {% endif %}
 </div>
 
+{% if game_details.deals|length > 0 %}
+<h2>CheapShark Prices</h2>
+
+{% for deal in game_details.deals %}
+<p style="margin: 1rem 0;">Store: {{ deal['storeName'] }}, DealID: {{ deal['dealID'] }}, Current Price: {{ deal['price'] }}, Retail Price: {{ deal['retailPrice'] }}, Savings: {{ '%0.2f' % deal['savings']|float }}%</p>
+{% endfor %}
+
+{% endif %}
+
 {% if game_details.steam_reviews|length > 0 %}
 <h2>Steam Reviews</h2>
 

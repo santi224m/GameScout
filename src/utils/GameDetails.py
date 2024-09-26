@@ -5,6 +5,8 @@ class GameDetails :
   def __init__(self, steam_app_id):
     if isinstance(steam_app_id, str) and not steam_app_id.isdigit():
       raise ValueError("Steam App ID must be a digit")
+    
+    # Steam Info
     self.steam_app_id = str(steam_app_id)
     self.title = None
     self.short_description = None
@@ -22,74 +24,87 @@ class GameDetails :
     self.is_available_mac = False
     self.is_available_linux = False
     self.screenshots = []
+    self.release_date = None
+
+    # Steam Reviews
     self.review_count = None
     self.positive_reviews = None
     self.negative_reviews = None
-    self.release_date = None
     self.steam_reviews = []
+    
+    # HowLongToBeat
+    # TODO: Add HLTB data here (i'll do it soon)
+
+    # CheapShark
+    self.deals = []
+
+    # Update with APIs
     self.update_with_steam_api()
     self.update_with_steam_reviews_api()
-
-    #List of Deals API
-    self.pageNumber = None
-    self.storeID = None
-    self.pageSize = None
-    self.sortBy = None
-    self.desc = None
-    self.lowerPrice = None
-    self.upperPrie = None
-    self.metacritic = None
-    self.steamRating = None
-    self.maxAge = None
-    self.steamAppID = None
-    self.AAA = None
-    self.steamworks = None
-    self.onSale = None
-
-    #GAME LOOKUP
-    self.gamelookups = [] #game lookup api
-    self.id = None
-    self.dealID = None
-    self.price = None
-    self.retailPrice = None
-    self.savings = None 
     self.update_with_cheap_shark_api()
-
-    #ALERTS API 
-    self.action = None
-    self.email = None
-    self.gameID = None
-    self.alertPrice = None
 
 
   def update_with_cheap_shark_api(self):
-    """Cheap Shark"""
-    #
-    res = requests.get('https://www.cheapshark.com/api/1.0/games', params=id)
+    """Update deals details using CheapShark API"""
+    # Convert Steam App ID into CheapShark ID
+    url_params = {'steamAppID':self.steam_app_id, 'limit': 1}
+    res = requests.get('https://www.cheapshark.com/api/1.0/games', params=url_params)
 
-    app_details = res.json()[self.id]['deals']
+    # Take the CheapShark ID we just got and make it a list of prices
+    res = requests.get('https://www.cheapshark.com/api/1.0/games', params={'id':res.json()[0]['gameID']})
+    app_details = res.json()['deals']
 
-    self.storeID = app_details['deals']['storeID']
-    self.dealID = app_details['deals']['dealID']
-    self.price = app_details['deals']['price']
-    self.retailPrice = app_details['deals']['price']
-    self.savings = app_details['deals']['savings']
-
-
-#https://www.cheapshark.com/api/1.0/alerts?action=set&email=someone@example.org&gameID=59&price=14.99
-  def update_with_alert_cheak_shark_api(self):
-    """ALERT API FROM CHEAPSHARK""""
-    url_param = {
-      'action': self.action
-      'email' : self.email,
-      'gameID' : self.gameID,
-      'price' : self.alertPrice
-    }
-    res = requests.get('https://www.cheapshark.com/api/1.0/alerts',url_param)
+    # Massive switch to remove to set storeName based on storeID (only uses active CheapShark stores which is why numbers are skipped)
+    for deal in app_details:
+      match int(deal['storeID']):
+        case 1:
+            deal['storeName'] = "Steam"
+        case 2:
+            deal['storeName'] = "GamersGate"
+        case 3:
+            deal['storeName'] = "GreenManGaming"
+        case 7:
+            deal['storeName'] = "GOG"
+        case 8:
+            deal['storeName'] = "Origin"
+        case 11:
+            deal['storeName'] = "Humble Store"
+        case 13:
+            deal['storeName'] = "Uplay"
+        case 14:
+            deal['storeName'] = "IndieGameStand"
+        case 15:
+            deal['storeName'] = "Fanatical"
+        case 21:
+            deal['storeName'] = "WinGameStore"
+        case 23:
+            deal['storeName'] = "GameBillet"
+        case 24:
+            deal['storeName'] = "Voidu"
+        case 25:
+            deal['storeName'] = "Epic Games Store"
+        case 27:
+            deal['storeName'] = "Gamesplanet"
+        case 28:
+            deal['storeName'] = "Gamesload"
+        case 29:
+            deal['storeName'] = "2Game"
+        case 30:
+            deal['storeName'] = "IndieGala"
+        case 31:
+            deal['storeName'] = "Blizzard Shop"
+        case 33:
+            deal['storeName'] = "DLGamer"
+        case 34:
+            deal['storeName'] = "Noctre"
+        case 35:
+            deal['storeName'] = "DreamGame"
+      del deal['storeID']
     
+    # Update Deals
+    self.deals = app_details
 
-    
-
+   
   def update_with_steam_api(self):
     """Update game details using Steam API"""
     # Make API call
