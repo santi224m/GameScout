@@ -41,6 +41,7 @@ class GameDetails :
       'score': None,
       'url': None
     }
+    self.legal_notice = None;
     self.categories = []
     self.screenshots = []
     self.achievements = None
@@ -181,6 +182,8 @@ class GameDetails :
       self.mac_requirements = app_details['mac_requirements']
     if self.platforms['linux']:
       self.linux_requirements = app_details['linux_requirements']
+    if 'legal_notice' in app_details:
+       self.legal_notice = app_details['legal_notice']
     if 'metacritic' in app_details:
       self.metacritic = app_details['metacritic']
     self.categories = app_details['categories']

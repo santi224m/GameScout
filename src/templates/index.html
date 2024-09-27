@@ -86,19 +86,74 @@
           </div>
         </div>
       </div>
+      <div class="body">
+        <div class="left">
+          {% for deal in game_details.deals %}
+          <div class="store-entry">
+            <span class="name">{{ deal.storeName }}</span>
+            <div class="price-platform">
+              <div class="platforms">
+                {% if game_details.platforms.windows %}
+                  <i class="fa-brands fa-windows"></i>
+                {% endif %}
+                {% if game_details.platforms.mac %}
+                  <i class="fa-brands fa-apple"></i>
+                {% endif %}
+                {% if game_details.platforms.linux %}
+                  <i class="fa-brands fa-ubuntu"></i>
+                {% endif %}
+              </div>
+              <div class="price-container">
+                <div class="display">
+                  {% if deal.savings|float|round|int != 0 %}
+                  <span class="percent">-{{ deal.savings|float|round|int }}%</span>
+                  {% endif %}
+                  <div class="prices">
+                    {% if deal.savings|float|round|int != 0 %}
+                    <span class="retail-price">${{ deal.retailPrice }}</span>
+                    {% endif %}
+                    <span class="price">${{ deal.price }}</span>
+                  </div>
+                </div>
+                <a href="https://www.cheapshark.com/redirect?dealID={{ deal.dealID}}" target="_blank">Purchase</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="about">
+            {{ game_details.detailed_description|safe }}
+          </div>
+          <div class="requirements">
+            <div class="header">
+              <span class="title">System Requirements</span>
+              <div>
+                <button class="active">Windows</button>
+                <button>macOS</button>
+                <button>Linux</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="right">
+
+        </div>
+      </div>
     </div>
-    
-    <h1></h1>
-    <img src="{{ game_details.header_img }}">
+    <div class="reviews">
+
+    </div>
+  </div>
+</section>
+    <!-- <img src="{{ game_details.header_img }}">
     <p style="padding: 1rem 0;">{{ game_details.short_description|safe }}</p>
     <p>Release Date: {{ game_details.release_date }}</p>
     <p>Total Reviews: {{ game_details.total_reviews }}</p>
     <p>Positive Reviews: {{ game_details.positive_reviews }}</p>
     <p>Negative Reviews: {{ game_details.negative_reviews }}</p>
     {% set score = game_details.positive_reviews / game_details.total_reviews * 100 %}
-    <p>{{ '%0.2f' % score|float }}% positive reviews</p>
+    <p>{{ '%0.2f' % score|float }}% positive reviews</p> -->
 
-    <p style="margin: 1rem 0; border-top: 1px solid black; padding-top: 1rem;">{{ game_details.detailed_description|safe }}</p>
+    <!-- <p style="margin: 1rem 0; border-top: 1px solid black; padding-top: 1rem;">{{ game_details.detailed_description|safe }}</p> -->
 
     <!-- <h2 style="margin-top: 15px;">Screenshots</h2>
     {% for screenshot in game_details.screenshots %}
@@ -149,14 +204,14 @@
     <p>All Styles: {{ game_details.hltb.all_styles }}</p>
 
     {% endif %}
-
+<!-- 
     {% if game_details.deals|length > 0 %}
     <h2>CheapShark Data</h2>
     {% for deal in game_details.deals %}
     <p style="margin: 1rem 0;">Store: {{ deal['storeName'] }}, DealID: {{ deal['dealID'] }}, Current Price: {{ deal['price'] }}, Retail Price: {{ deal['retailPrice'] }}, Savings: {{ '%0.2f' % deal['savings']|float }}%</p>
     {% endfor %}
 
-    {% endif %}
+    {% endif %} -->
 
     {% if game_details.steam_reviews|length > 0 %}
     <h2>Steam Reviews</h2>
@@ -171,5 +226,3 @@
     {% endif %}
 
     {% endblock %}
-  </div>
-</section>
