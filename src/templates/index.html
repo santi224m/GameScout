@@ -78,7 +78,10 @@
 <h2>Steam Reviews</h2>
 
 {% for review in game_details.steam_reviews %}
-<p style="margin: 1rem 0;">{{ review['review'] }}</p>
+<p style="margin: 1rem 0;">Name: {{ review.author.name }}</p>
+<a href="{{ review.author.profile_url }}">Link</a>
+<img src="{{ review.author.avatar }}">
+<p>{{ review['review'] }}</p>
 {% endfor %}
 
 {% endif %}

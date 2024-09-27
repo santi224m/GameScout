@@ -39,6 +39,7 @@
       <a href="#getting-started">Getting Started</a>
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#setting-up-steamwebapi">Setting up SteamWebAPI</a></li>
         <li><a href="#run-flask-app">Run Flask App</a></li>
       </ul>
     </li>
@@ -80,11 +81,18 @@ git clone git@github.com:santi224m/GameScout.git
 cd GameScout
 ```
 
-Setup a virtual environment
+Setup a virtual environment (macOS, Linux)
 
 ```bash
 python -m venv venv
 source venv/bin/activate
+```
+
+Setup a virtual environment (Windows)
+
+```bash
+python -m venv venv
+.\venv\Scripts\activate
 ```
 
 Install requirements
@@ -93,22 +101,56 @@ Install requirements
 pip install -r requirements.txt
 ```
 
-Install and configure Redis
+Install Redis (Linux)
 
 ```bash
 sudo apt install redis-server
 sudo nano /etc/redis/redis.conf
 ```
 
+Install Redis (macOS)
+
+```bash
+brew install redis
+sudo nano /etc/redis/redis.conf
+```
+
+Install Redis (Windows)
+
+*Redis is not offically supported on Windows but you can install it using WSL2, instructions [here](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-windows/).*
+
+Configure Redis
+
 * In the ```redis.conf``` file, change the line ```supervised no``` to ```supervised systemd```.
+
+### Setting up SteamWebAPI
+
+To start you need a SteamWebAPI key, which you can get [here](https://steamcommunity.com/dev/apikey).
+
+Once you have your SteamWebAPI key, create a new file in the root GameScout folder called `.env`.
+
+Inside your newly created `.env` file, add the following:
+
+```json
+STEAM_API_KEY = "{{YOUR STEAM API KEY HERE}}"
+```
+
+You should now be able to use the SteamWebAPI
 
 ### Run Flask app
 
-1. Export environment variables
+1. Export environment variables (macOS, Linux)
 
 ```bash
 export FLASK_APP=src
 export FLASK_ENV=development
+```
+
+1. Export environment variables (Windows)
+
+```bash
+set FLASK_APP=src
+set FLASK_ENV=development
 ```
 
 2. Run app
@@ -117,7 +159,7 @@ export FLASK_ENV=development
 flask run
 ```
 
-3. Open app url in browser ```http://127.0.0.1:5000```
+3. Open app url in browser `http://127.0.0.1:5000` or `localhost:5000`
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -133,7 +175,6 @@ flask run
     - [ ] Steam Reviews API
   - [ ] [Steam Python API](https://github.com/ValvePython/steam?tab=readme-ov-file)
   - [ ] Howlongtobeat API
-    * Probably need to implement our own
   - [ ] CheapShark API
 - [ ] Implement pages
   - [ ] Home page

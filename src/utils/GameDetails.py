@@ -1,7 +1,11 @@
 """The GameDetails class collects and stores game info using various APIs"""
 import requests
 import math
+import os
 from howlongtobeatpy import HowLongToBeat
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class GameDetails :
   def __init__(self, steam_app_id):
@@ -71,12 +75,11 @@ class GameDetails :
     if results_list is not None and len(results_list) > 0:
         best_element = max(results_list, key=lambda element: element.similarity)
         self.hltb['link'] = best_element.game_web_link
-        self.hltb['main'] = self.hltb_format(best_element.main_story)
-        self.hltb['main_extra'] = self.hltb_format(best_element.main_extra)
-        self.hltb['completionist'] = self.hltb_format(best_element.completionist)
-        self.hltb['all_styles'] = self.hltb_format(best_element.all_styles)
+        self.hltb['main'] = hltb_format(best_element.main_story)
+        self.hltb['main_extra'] = hltb_format(best_element.main_extra)
+        self.hltb['completionist'] = hltb_format(best_element.completionist)
+        self.hltb['all_styles'] = hltb_format(best_element.all_styles)
     else: self.hltb = None
-    print(str(self.hltb))
 
 
   def update_with_cheap_shark_api(self):
@@ -87,10 +90,10 @@ class GameDetails :
 
     # Take the CheapShark ID we just got and make it a list of prices
     res = requests.get('https://www.cheapshark.com/api/1.0/games', params={'id':res.json()[0]['gameID']})
-    app_details = res.json()['deals']
+    app_deals = res.json()['deals']
 
     # Massive switch to remove to set storeName based on storeID (only uses active CheapShark stores which is why numbers are skipped)
-    for deal in app_details:
+    for deal in app_deals:
       match int(deal['storeID']):
         case 1:
             deal['storeName'] = "Steam"
@@ -137,7 +140,7 @@ class GameDetails :
       del deal['storeID']
     
     # Update Deals
-    self.deals = app_details
+    self.deals = app_deals
 
    
   def update_with_steam_api(self):
@@ -180,7 +183,7 @@ class GameDetails :
       'purchase_type': 'all',
       'review_type': 'all',
       'num_per_page': 1
-      }
+    }
     res = requests.get(f'https://store.steampowered.com/appreviews/{self.steam_app_id}', params=url_params)
     app_reviews = res.json()['query_summary']
 
@@ -197,14 +200,37 @@ class GameDetails :
       'purchase_type': 'all',
       'review_type': 'all',
       'num_per_page': 10
-      }
+    }
     res = requests.get(f'https://store.steampowered.com/appreviews/{self.steam_app_id}', params=url_params)
     app_reviews = res.json()
     
     self.steam_reviews = app_reviews['reviews']
+    
+    self.parse_steam_ids()
 
-  def hltb_format(self, num):
-    norm_num = round(num * 2) / 2
+  def parse_steam_ids(self):
+    """Get the display name and profile pictures for the steam ids in reviews"""
+    if os.getenv('STEAM_API_KEY') is None: 
+       raise ValueError('STEAM_API_KEY is not set properly in your .env file')
+    
+    url_params = {
+      'key': os.getenv("STEAM_API_KEY"),
+      'steamids': ','.join([d['author']['steamid'] for d in self.steam_reviews])
+    }
+    print(url_params['steamids'])
+    res = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/', params=url_params)
+    app_ids = res.json()['response']['players']
 
-    if norm_num%1==0: return str(int(norm_num))
-    else: return str(math.floor(norm_num)) + "½"
+    for review in self.steam_reviews:
+       author = next((item for item in app_ids if item['steamid'] == review['author']['steamid']), None)
+       review['author']['name'] = author['personaname']
+       review['author']['profile_url'] = author['profileurl']
+       review['author']['avatar'] = author['avatar']
+
+
+def hltb_format(num):
+  """Format HowLongToBeat hours by round to the nearest half hour and adding the 1/2 symbol"""
+  norm_num = round(num * 2) / 2
+
+  if norm_num%1==0: return str(int(norm_num))
+  else: return str(math.floor(norm_num)) + "½"
