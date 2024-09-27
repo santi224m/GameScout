@@ -18,6 +18,8 @@ class GameDetails :
     self.short_description = None
     self.detailed_description = None
     self.header_img = None
+    self.developers = None
+    self.publishers = None
     self.platforms = {
       'windows': False,
       'mac': False,
@@ -45,6 +47,9 @@ class GameDetails :
     self.release_date = None
     self.esrb_rating = None
 
+    # Steam Spy
+    self.tags = []
+
     # Steam Reviews
     self.total_reviews = None
     self.positive_reviews = None
@@ -65,9 +70,20 @@ class GameDetails :
 
     # Update with APIs
     self.update_with_steam_api()
+    self.update_with_steamspy_api()
     self.update_with_steam_reviews_api()
     self.update_with_hltb()
     self.update_with_cheap_shark_api()
+
+  def update_with_steamspy_api(self):
+    """Update tags using the SteamSpy API"""
+    url_params = {'request': 'appdetails', 'appid':self.steam_app_id}
+    res = requests.get('https://steamspy.com/api.php', params=url_params)
+    app_tags = res.json()['tags']
+
+    self.tags = [tag for tag in app_tags]
+
+
 
   def update_with_hltb(self):
     """Update HowLongToBeat data using howlongtobeatpy"""
@@ -156,6 +172,8 @@ class GameDetails :
     self.short_description = app_details['short_description']
     self.detailed_description = app_details['detailed_description']
     self.header_img = app_details['header_image']
+    self.developers = ', '.join(app_details['developers'])
+    self.publishers = ', '.join(app_details['publishers'])
     self.platforms = app_details['platforms']
     if self.platforms['windows']:
       self.pc_requirements = app_details['pc_requirements']
