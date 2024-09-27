@@ -2,88 +2,114 @@
 {% block title %}{{ game_details.title }}{% endblock %}
 
 {% block content %}
-<div class="content">
-  <h1>{{ game_details.title }}</h1>
-  <img src="{{ game_details.header_img }}">
-  <p style="padding: 1rem 0;">{{ game_details.short_description|safe }}</p>
-  <p>Release Date: {{ game_details.release_date }}</p>
-  <p>Total Reviews: {{ game_details.total_reviews }}</p>
-  <p>Positive Reviews: {{ game_details.positive_reviews }}</p>
-  <p>Negative Reviews: {{ game_details.negative_reviews }}</p>
-  {% set score = game_details.positive_reviews / game_details.total_reviews * 100 %}
-  <p>{{ '%0.2f' % score|float }}% positive reviews</p>
+<section class="main">
+  <img class="bg" alt="Background Image" src="{{ game_details.screenshots[0]['path_full'] }}">
 
-  <p style="margin: 1rem 0; border-top: 1px solid black; padding-top: 1rem;">{{ game_details.detailed_description|safe }}</p>
+  <div class="sidebar"></div>
 
-  <h2 style="margin-top: 15px;">Screenshots</h2>
-  {% for screenshot in game_details.screenshots %}
-    <img style="max-width: 300px;" src="{{ screenshot['path_full'] }}">
-  {% endfor %}
+  <div class="content">
+    <div class="info">
+      <div class="featured">
+        <div class="header">
+          <span>{{ game_details.title }}</span>
+          <div class="buttons">
+            <button><i class="fa-regular fa-heart"></i> Wishlist</button>
+            <button><i class="fa-regular fa-eye"></i> Watch</button>
+          </div>
+        </div>
+        <div class="quick-look">
+          <div class="carousel">
 
-  {% if game_details.platforms['windows'] and game_details.pc_requirements|length > 0 %}
-    <div style="margin: 1rem 0;">
-      <h3>PC Requirements</h3>
-      {% if game_details.pc_requirements['minimum'] %}
-      {{ game_details.pc_requirements['minimum']|safe }}
-      {% endif %}
-      {% if game_details.pc_requirements['recommended'] %}
-      {{ game_details.pc_requirements['recommended']|safe }}
-      {% endif %}
+          </div>
+          <div class="details">
+
+          </div>
+        </div>
+      </div>
     </div>
-  {% endif %}
+    
+    <h1></h1>
+    <img src="{{ game_details.header_img }}">
+    <p style="padding: 1rem 0;">{{ game_details.short_description|safe }}</p>
+    <p>Release Date: {{ game_details.release_date }}</p>
+    <p>Total Reviews: {{ game_details.total_reviews }}</p>
+    <p>Positive Reviews: {{ game_details.positive_reviews }}</p>
+    <p>Negative Reviews: {{ game_details.negative_reviews }}</p>
+    {% set score = game_details.positive_reviews / game_details.total_reviews * 100 %}
+    <p>{{ '%0.2f' % score|float }}% positive reviews</p>
 
-  {% if game_details.platforms['mac'] and game_details.mac_requirements|length > 0 %}
-    <div style="margin: 1rem 0;">
-      <h3>Mac Requirements</h3>
-      {% if game_details.mac_requirements['minimum'] %}
-      {{ game_details.mac_requirements['minimum']|safe }}
-      {% endif %}
-      {% if game_details.mac_requirements['recommended'] %}
-      {{ game_details.mac_requirements['recommended']|safe }}
-      {% endif %}
-    </div>
-  {% endif %}
+    <p style="margin: 1rem 0; border-top: 1px solid black; padding-top: 1rem;">{{ game_details.detailed_description|safe }}</p>
 
-  {% if game_details.platforms['linux'] and game_details.linux_requirements|length > 0 %}
-    <div style="margin: 1rem 0">
-      <h3>Linux Requirements</h3>
-      {% if game_details.linux_requirements['minimum'] %}
-      {{ game_details.linux_requirements['minimum']|safe }}
-      {% endif %}
-      {% if game_details.linux_requirements['recommended'] %}
-      {{ game_details.linux_requirements['recommended']|safe }}
-      {% endif %}
-    </div>
-  {% endif %}
-</div>
+    <h2 style="margin-top: 15px;">Screenshots</h2>
+    {% for screenshot in game_details.screenshots %}
+      <img style="max-width: 300px;" src="{{ screenshot['path_full'] }}">
+    {% endfor %}
 
-{% if game_details.hltb %}
-<h2>HowLongToBeat Data</h2>
-<p>Main: {{ game_details.hltb.main }}</p>
-<p>Main + Sides: {{ game_details.hltb.main_extra }}</p>
-<p>Completionist: {{ game_details.hltb.completionist }}</p>
-<p>All Styles: {{ game_details.hltb.all_styles }}</p>
+    {% if game_details.platforms['windows'] and game_details.pc_requirements|length > 0 %}
+      <div style="margin: 1rem 0;">
+        <h3>PC Requirements</h3>
+        {% if game_details.pc_requirements['minimum'] %}
+        {{ game_details.pc_requirements['minimum']|safe }}
+        {% endif %}
+        {% if game_details.pc_requirements['recommended'] %}
+        {{ game_details.pc_requirements['recommended']|safe }}
+        {% endif %}
+      </div>
+    {% endif %}
 
-{% endif %}
+    {% if game_details.platforms['mac'] and game_details.mac_requirements|length > 0 %}
+      <div style="margin: 1rem 0;">
+        <h3>Mac Requirements</h3>
+        {% if game_details.mac_requirements['minimum'] %}
+        {{ game_details.mac_requirements['minimum']|safe }}
+        {% endif %}
+        {% if game_details.mac_requirements['recommended'] %}
+        {{ game_details.mac_requirements['recommended']|safe }}
+        {% endif %}
+      </div>
+    {% endif %}
 
-{% if game_details.deals|length > 0 %}
-<h2>CheapShark Data</h2>
-{% for deal in game_details.deals %}
-<p style="margin: 1rem 0;">Store: {{ deal['storeName'] }}, DealID: {{ deal['dealID'] }}, Current Price: {{ deal['price'] }}, Retail Price: {{ deal['retailPrice'] }}, Savings: {{ '%0.2f' % deal['savings']|float }}%</p>
-{% endfor %}
+    {% if game_details.platforms['linux'] and game_details.linux_requirements|length > 0 %}
+      <div style="margin: 1rem 0">
+        <h3>Linux Requirements</h3>
+        {% if game_details.linux_requirements['minimum'] %}
+        {{ game_details.linux_requirements['minimum']|safe }}
+        {% endif %}
+        {% if game_details.linux_requirements['recommended'] %}
+        {{ game_details.linux_requirements['recommended']|safe }}
+        {% endif %}
+      </div>
+    {% endif %}
 
-{% endif %}
+    {% if game_details.hltb %}
+    <h2>HowLongToBeat Data</h2>
+    <p>Main: {{ game_details.hltb.main }}</p>
+    <p>Main + Sides: {{ game_details.hltb.main_extra }}</p>
+    <p>Completionist: {{ game_details.hltb.completionist }}</p>
+    <p>All Styles: {{ game_details.hltb.all_styles }}</p>
 
-{% if game_details.steam_reviews|length > 0 %}
-<h2>Steam Reviews</h2>
+    {% endif %}
 
-{% for review in game_details.steam_reviews %}
-<p style="margin: 1rem 0;">Name: {{ review.author.name }}</p>
-<a href="{{ review.author.profile_url }}">Link</a>
-<img src="{{ review.author.avatar }}">
-<p>{{ review['review'] }}</p>
-{% endfor %}
+    {% if game_details.deals|length > 0 %}
+    <h2>CheapShark Data</h2>
+    {% for deal in game_details.deals %}
+    <p style="margin: 1rem 0;">Store: {{ deal['storeName'] }}, DealID: {{ deal['dealID'] }}, Current Price: {{ deal['price'] }}, Retail Price: {{ deal['retailPrice'] }}, Savings: {{ '%0.2f' % deal['savings']|float }}%</p>
+    {% endfor %}
 
-{% endif %}
+    {% endif %}
 
-{% endblock %}
+    {% if game_details.steam_reviews|length > 0 %}
+    <h2>Steam Reviews</h2>
+
+    {% for review in game_details.steam_reviews %}
+    <p style="margin: 1rem 0;">Name: {{ review.author.name }}</p>
+    <a href="{{ review.author.profile_url }}">Link</a>
+    <img src="{{ review.author.avatar }}">
+    <p>{{ review['review'] }}</p>
+    {% endfor %}
+
+    {% endif %}
+
+    {% endblock %}
+  </div>
+</section>

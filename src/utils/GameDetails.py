@@ -217,7 +217,6 @@ class GameDetails :
       'key': os.getenv("STEAM_API_KEY"),
       'steamids': ','.join([d['author']['steamid'] for d in self.steam_reviews])
     }
-    print(url_params['steamids'])
     res = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/', params=url_params)
     app_ids = res.json()['response']['players']
 
