@@ -671,14 +671,14 @@ section.main div.content .info .body .left .requirements .body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  align-self: stretch;
   gap: 10px;
 }
 section.main div.content .info .body .left .requirements .body .container {
   display: none;
 }
 section.main div.content .info .body .left .requirements .body .container.active {
-  display: inline;
+  display: flex;
+  gap: 10px;
 }
 section.main div.content .info .body .left .requirements .body .container div {
   display: flex;
