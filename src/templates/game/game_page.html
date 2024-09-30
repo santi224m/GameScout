@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% block title %}{{ game.title }}{% endblock %}
+
+{% block content %}
+<section class="main">
+  <img class="bg" alt="Background Image" src="{{ game.screenshots[0]['path_full'] }}">
+
+  <div class="sidebar"></div>
+
+  <div class="content">
+    <div class="info">
+      <div class="featured">
+        <div class="header">
+          <span>{{ game.title }}</span>
+          <div class="buttons">
+            <button><i class="fa-regular fa-heart"></i> Wishlist</button>
+            <button><i class="fa-regular fa-eye"></i> Watch</button>
+          </div>
+        </div>
+        <div class="quick-look">
+          <div class="carousel">
+            <img class="active" src="{{ game.screenshots[0]['path_full'] }}">
+            <div class="images-container">
+              <i class="fa-solid fa-chevron-left"></i>
+              <div class="images">
+                <img src="{{ game.screenshots[0]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[1]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[2]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[3]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[4]['path_thumbnail'] }}">
+              </div>
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+            <div class="indicators">
+              <span class="indicator active"></span>
+              <span class="indicator"></span>
+              <span class="indicator"></span>
+              <span class="indicator"></span>
+              <span class="indicator"></span>
+            </div>
+          </div>
+          <div class="details">
+            <img src="{{ game.header_img }}">
+            <span class="desc">{{ game.short_description|safe }}</span>
+            <div class="container-item">
+              <span class="title">Reviews</span>
+              <div class="reviews">
+                <span class="content">All Time</span>
+                <div class="display">
+                  <div class="bar">
+                    <span class="positive"  style="width: calc({{ game.positive_reviews / game.total_reviews }} * 134px);"></span>
+                    <span class="negative"></span>
+                  </div>
+                  <div class="positive">
+                    <span>{{ (game.positive_reviews / game.total_reviews * 100)|round|int }}%</span>
+                    <i class="fa-solid fa-thumbs-up"></i>
+                  </div>
+                  <div class="negative">
+                    <span>{{ (game.negative_reviews / game.total_reviews * 100)|round|int }}%</span>
+                    <i class="fa-solid fa-thumbs-down"></i>
+                  </div>
+                </div>
+                <span class="secondary">{{ "{:,}".format(game.total_reviews) }} Reviews</span>
+              </div>
+            </div>
+            <div class="inline-item">
+              <span class="title">Release Date</span>
+              <span class="content">{{ game.release_date }}</span>
+            </div>
+            <div class="inline-item">
+              <span class="title">Developer</span>
+              <span class="content">{{ game.developers }}</span>
+            </div>
+            <div class="inline-item">
+              <span class="title">Publisher</span>
+              <span class="content">{{ game.publishers }}</span>
+            </div>
+            <div class="container-item">
+              <span class="title">Popular Tags</span>
+              <div class="tags">
+                {% for i in range(0, 6) %}
+                <span>{{ game.tags[i] }}</span>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="body">
+        <div class="left">
+          {% for deal in game.deals %}
+          <div class="store-entry">
+            <span class="name">{{ deal.storeName }}</span>
+            <div class="price-platform">
+              <div class="platforms">
+                {% if game.platforms.windows %}
+                  <i class="fa-brands fa-windows"></i>
+                {% endif %}
+                {% if game.platforms.mac %}
+                  <i class="fa-brands fa-apple"></i>
+                {% endif %}
+                {% if game.platforms.linux %}
+                  <i class="fa-brands fa-ubuntu"></i>
+                {% endif %}
+              </div>
+              <div class="price-container">
+                <div class="display">
+                  {% if deal.savings|float|round|int != 0 %}
+                  <span class="percent">-{{ deal.savings|float|round|int }}%</span>
+                  {% endif %}
+                  <div class="prices">
+                    {% if deal.savings|float|round|int != 0 %}
+                    <span class="retail-price">${{ deal.retailPrice }}</span>
+                    {% endif %}
+                    <span class="price">${{ deal.price }}</span>
+                  </div>
+                </div>
+                <a href="https://www.cheapshark.com/redirect?dealID={{ deal.dealID}}" target="_blank">Purchase</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+          <div class="about">
+            <!-- TODO: Games that have no "About This Game" in text have no header -->
+            {{ game.detailed_description|safe }}
+          </div>
+          <div class="requirements">
+            <div class="header">
+              <span class="title">System Requirements</span>
+              <div>
+                {% if game.platforms.windows and game.pc_requirements|length > 0 %}
+                <button class="active">Windows</button>
+                {% endif %}
+                {% if game.platforms.mac and game.mac_requirements|length > 0 %}
+                <button>macOS</button>
+                {% endif %}
+                {% if game.platforms.linux and game.linux_requirements|length > 0 %}
+                <button>Linux + SteamOS</button>
+                {% endif %}
+              </div>
+            </div>
+            <div class="body">
+              {% if game.platforms.windows and game.pc_requirements|length > 0 %}
+              <div class="container active">
+                {% if game.pc_requirements['minimum'] %}
+                <div>{{ game.pc_requirements['minimum']|safe }}</div>
+                {% endif %}
+                {% if game.pc_requirements['recommended'] %}
+                <div>{{ game.pc_requirements['recommended']|safe }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+              {% if game.platforms.mac and game.mac_requirements|length > 0 %}
+              <div class="container">
+                {% if game.mac_requirements['minimum'] %}
+                <div>{{ game.mac_requirements['minimum']|safe }}</div>
+                {% endif %}
+                {% if game.mac_requirements['recommended'] %}
+                <div>{{ game.mac_requirements['recommended']|safe }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+              {% if game.platforms.linux and game.linux_requirements|length > 0 %}
+              <div class="container">
+                {% if game.linux_requirements['minimum'] %}
+                <div>{{ game.linux_requirements['minimum']|safe }}</div>
+                {% endif %}
+                {% if game.linux_requirements['recommended'] %}
+                <div>{{ game.linux_requirements['recommended']|safe }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+            {% if game.legal_notice %}
+            <span class="legal">{{ game.legal_notice|safe }}</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="right">
+          <div class="features container">
+            <!-- TODO: Features -->
+            <span class="title">Features</span>
+          </div>
+          {% if game.hltb %}
+          <div class="hltb container">
+            <span class="title">How Long To Beat</span>
+            <div class="item">
+              <div>
+                <i class="fa-solid fa-gamepad"></i>
+                <span>Main</span>
+              </div>
+              <span>{{ game.hltb.main }} Hours</span>
+            </div>
+            <div class="item">
+              <div>
+                <i class="fa-solid fa-code-fork"></i>
+                <span>Main + Sides</span>
+              </div>
+              <span>{{ game.hltb.main_extra }} Hours</span>
+            </div>
+            <div class="item">
+              <div>
+                <i class="fa-solid fa-award"></i>
+                <span>Completionist</span>
+              </div>
+              <span>{{ game.hltb.completionist }} Hours</span>
+            </div>
+            <div class="item">
+              <div>
+                <i class="fa-solid fa-globe"></i>
+                <span>All Styles</span>
+              </div>
+              <span>{{ game.hltb.all_styles }} Hours</span>
+            </div>
+          </div>
+          {% endif %}
+          <div class="achievements container">
+            <span class="title">Achievements</span>
+            <div>
+              {% for i in range(0, 4) %}
+              <img src="{{ game.achievements.highlighted[i].path }}" alt="{{ game.achievements.highlighted[i].name }} Achievement Image" title="{{ game.achievements.highlighted[i].name }}">
+              {% endfor %}
+              <span class="more">+{{ game.achievements.total - 4 }}</span>
+            </div>
+          </div>
+          {% if game.metacritic %}
+          <div class="metacritic container">
+            <div class="display">
+              <span class="score {{ game.metacritic.color }}">
+                {{ game.metacritic.score }}
+              </span>
+              <div class="logo">
+                <img src="{{ url_for('static', filename='img/metacritic.png') }}" alt="Metacritic Logo">
+                <div class="name">
+                  <span>metacritic</span>
+                  <a href="{{ game.metacritic.url }}" target="_blank">Read Critic Reviews <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% if game.esrb_rating %}
+          <div class="esrb container">
+            <div class="rating">
+              {% set esrb_path = "img/esrb/" + game.esrb_rating.rating  + ".svg" %}
+              <img src="{{ url_for('static', filename=esrb_path) }}" alt="ESRB {{ game.esrb_rating.rating }} Rating">
+              <div class="desc">
+                {% if game.esrb_rating.descriptors %}
+                <span>{{ game.esrb_rating.descriptors }}</span>
+                {% endif %}
+                {% if game.esrb_rating.interactive_elements %}
+                <span class="heading">Interactive Elements</span>
+                <span>{{ game.esrb_rating.interactive_elements }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% if game.reviews|length > 0 %}
+    <div class="reviews-container">
+      <span class="heading">User Reviews</span>
+      <div class="inner">
+        <div class="overall">
+          <span class="title">Overall Reviews</span>
+          <div class="display">
+            <div class="bar">
+              <span class="positive"  style="width: calc({{ game.positive_reviews / game.total_reviews }} * 134px);"></span>
+              <span class="negative"></span>
+            </div>
+            <div class="positive">
+              <span>{{ (game.positive_reviews / game.total_reviews * 100)|round|int }}%</span>
+              <i class="fa-solid fa-thumbs-up"></i>
+            </div>
+            <div class="negative">
+              <span>{{ (game.negative_reviews / game.total_reviews * 100)|round|int }}%</span>
+              <i class="fa-solid fa-thumbs-down"></i>
+            </div>
+          </div>
+          <span class="secondary">{{ "{:,}".format(game.total_reviews) }} Reviews</span>
+        </div>
+        <span class="subheading">Most Helpful Reviews <span>(Past 30 Days)</span></span>
+        <div class="reviews">
+          {% for review in game.reviews %}
+          <div class="review">
+            <div class="header">
+              <div>
+                <a href="{{ review.author.profile_url }}" target="_blank">
+                  <img src="{{ review.author.avatar }}" alt="Review Profile Picture">
+                  <span class="name">{{ review.author.name }}</span>
+                </a>
+                <span class="num_reviews">{{ review.author.num_reviews }} reviews</span>
+              </div>
+              <span class="date">Posted on {{ review.post_date }}</span>
+            </div>
+            <div class="recomendation">
+              {% if review.voted_up %}
+              <img src="{{ url_for('static', filename='img/thumbs_up.png') }}" alt="Thumbs Up">
+              <div class="inner">
+                <span class="text">Recommended</span>
+              {% endif %}
+              {% if not review.voted_up %}
+              <img src="{{ url_for('static', filename='img/thumbs_down.png') }}" alt="Thumbs Down">
+              <div class="inner">
+                <span class="text">Not Recommended</span>
+              {% endif %}
+                <span class="playtime">{{ "{:.1f}".format(review.author.playtime_forever / 60) }}hrs on record ({{ "{:.1f}".format(review.author.playtime_at_review / 60) }}hrs at review time)</span>
+              </div>
+            </div>
+            <span class="text">{{ review['review']|safe }}</span>
+            <div class="tags">
+              <div class="tag">
+                <span class="title">Yes</span>
+                <i class="fa-solid fa-thumbs-up"></i>
+                <span class="num">{{ review.votes_up }}</span>
+              </div>
+              <div class="tag">
+                <span class="title">Funny</span>
+                <i class="fa-regular fa-face-smile"></i>
+                <span class="num">{{ review.votes_funny }}</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

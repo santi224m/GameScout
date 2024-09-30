@@ -14,7 +14,7 @@
       {% if res['steamAppID'] != None %}
       <tr>
         <td>
-          <a href="/{{ res['steamAppID'] }}">
+          <a href="/game/{{ res['steamAppID'] }}">
             {% if res['thumb'] != None %}
             <img src="{{ res['thumb'] }}" alt="Game Thumbnail">
             {% endif %}
