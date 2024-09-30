@@ -131,7 +131,7 @@ Once you have your SteamWebAPI key, create a new file in the root GameScout fold
 
 Inside your newly created `.env` file, add the following:
 
-```json
+```yaml
 STEAM_API_KEY = "{{YOUR STEAM API KEY HERE}}"
 ```
 
