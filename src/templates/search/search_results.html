@@ -2,27 +2,29 @@
 {% block title %}Search Results{% endblock %}
 
 {% block content %}
-<table>
-  <thead>
-    <tr>
-      <th>Title</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for res in res_json %}
-    <tr>
-      <td>
-        {% if res['thumb'] != None %}
-        <img style="max-height: 45px;" src="{{ res['thumb'] }}">
-        {% endif %}
-        {% if res['steamAppID'] != None %}
-        <a href="/{{ res['steamAppID'] }}">{{ res['external'] }}</a>
-        {% else %}
-        {{ res['external'] }}
-        {% endif %}
-      </td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+<section class="search">
+  <table>
+    <thead>
+      <tr>
+        <th>Title</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for res in res_json %}
+      {% if res['steamAppID'] != None %}
+      <tr>
+        <td>
+          <a href="/{{ res['steamAppID'] }}">
+            {% if res['thumb'] != None %}
+            <img src="{{ res['thumb'] }}" alt="Game Thumbnail">
+            {% endif %}
+            {{ res['external'] }}
+          </a>
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
 {% endblock %}

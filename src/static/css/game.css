@@ -1145,4 +1145,46 @@ section.main div.content .reviews-container .inner .reviews .review span.text {
   color: var(--text-main);
 }
 
+section.search table {
+  padding: 20px;
+  font-family: var(--font);
+  font-weight: bold;
+  font-size: 26px;
+  color: var(--text-main);
+  display: grid;
+  gap: 10px;
+}
+section.search tbody {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  font-family: var(--font);
+  font-weight: bold;
+  font-size: 22px;
+  justify-content: center;
+}
+section.search tr, section.search td, section.search a {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+section.search tbody > tr {
+  background-color: var(--bg-highlight);
+  border-radius: 5px;
+  padding: 10px;
+}
+section.search a {
+  text-decoration: none;
+  color: var(--primary);
+}
+section.search a:visited, section.search a:active {
+  color: var(--primary);
+}
+section.search a:hover {
+  color: var(--secondary);
+}
+section.search img {
+  height: 100px;
+}
+
 /*# sourceMappingURL=game.css.map */

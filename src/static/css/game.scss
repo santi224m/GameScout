@@ -1329,3 +1329,52 @@ section.main {
     }
   }
 }
+
+
+// Temp Search Styling
+section.search {
+  table {
+    padding: 20px;
+    @include headingLarge();
+    color: col(text-main);
+    display: grid;
+    gap: 10px;
+  }
+
+  tbody {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    @include headingMedium();
+    justify-content: center;
+  }
+
+  tr, td, a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  tbody > tr {
+    background-color: col(bg-highlight);
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+  a {
+    text-decoration: none;
+    color: col(primary);
+
+    &:visited, &:active {
+      color: col(primary);
+    }
+
+    &:hover {
+      color: col(secondary);
+    }
+  }
+
+  img {
+    height: 100px;
+  }
+}
