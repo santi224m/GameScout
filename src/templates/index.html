@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
-{% block title %}{{ game_details.title }}{% endblock %}
+{% block title %}{{ game.title }}{% endblock %}
 
 {% block content %}
 <section class="main">
-  <img class="bg" alt="Background Image" src="{{ game_details.screenshots[0]['path_full'] }}">
+  <img class="bg" alt="Background Image" src="{{ game.screenshots[0]['path_full'] }}">
 
   <div class="sidebar"></div>
 
@@ -11,7 +11,7 @@
     <div class="info">
       <div class="featured">
         <div class="header">
-          <span>{{ game_details.title }}</span>
+          <span>{{ game.title }}</span>
           <div class="buttons">
             <button><i class="fa-regular fa-heart"></i> Wishlist</button>
             <button><i class="fa-regular fa-eye"></i> Watch</button>
@@ -19,15 +19,15 @@
         </div>
         <div class="quick-look">
           <div class="carousel">
-            <img class="active" src="{{ game_details.screenshots[0]['path_full'] }}">
+            <img class="active" src="{{ game.screenshots[0]['path_full'] }}">
             <div class="images-container">
               <i class="fa-solid fa-chevron-left"></i>
               <div class="images">
-                <img src="{{ game_details.screenshots[0]['path_thumbnail'] }}">
-                <img src="{{ game_details.screenshots[1]['path_thumbnail'] }}">
-                <img src="{{ game_details.screenshots[2]['path_thumbnail'] }}">
-                <img src="{{ game_details.screenshots[3]['path_thumbnail'] }}">
-                <img src="{{ game_details.screenshots[4]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[0]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[1]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[2]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[3]['path_thumbnail'] }}">
+                <img src="{{ game.screenshots[4]['path_thumbnail'] }}">
               </div>
               <i class="fa-solid fa-chevron-right"></i>
             </div>
@@ -40,46 +40,46 @@
             </div>
           </div>
           <div class="details">
-            <img src="{{ game_details.header_img }}">
-            <span class="desc">{{ game_details.short_description|safe }}</span>
+            <img src="{{ game.header_img }}">
+            <span class="desc">{{ game.short_description|safe }}</span>
             <div class="container-item">
               <span class="title">Reviews</span>
               <div class="reviews">
                 <span class="content">All Time</span>
                 <div class="display">
                   <div class="bar">
-                    <span class="positive"  style="width: calc({{ game_details.positive_reviews / game_details.total_reviews }} * 134px);"></span>
+                    <span class="positive"  style="width: calc({{ game.positive_reviews / game.total_reviews }} * 134px);"></span>
                     <span class="negative"></span>
                   </div>
                   <div class="positive">
-                    <span>{{ (game_details.positive_reviews / game_details.total_reviews * 100)|round|int }}%</span>
+                    <span>{{ (game.positive_reviews / game.total_reviews * 100)|round|int }}%</span>
                     <i class="fa-solid fa-thumbs-up"></i>
                   </div>
                   <div class="negative">
-                    <span>{{ (game_details.negative_reviews / game_details.total_reviews * 100)|round|int }}%</span>
+                    <span>{{ (game.negative_reviews / game.total_reviews * 100)|round|int }}%</span>
                     <i class="fa-solid fa-thumbs-down"></i>
                   </div>
                 </div>
-                <span class="secondary">{{ "{:,}".format(game_details.total_reviews) }} Reviews</span>
+                <span class="secondary">{{ "{:,}".format(game.total_reviews) }} Reviews</span>
               </div>
             </div>
             <div class="inline-item">
               <span class="title">Release Date</span>
-              <span class="content">{{ game_details.release_date }}</span>
+              <span class="content">{{ game.release_date }}</span>
             </div>
             <div class="inline-item">
               <span class="title">Developer</span>
-              <span class="content">{{ game_details.developers }}</span>
+              <span class="content">{{ game.developers }}</span>
             </div>
             <div class="inline-item">
               <span class="title">Publisher</span>
-              <span class="content">{{ game_details.publishers }}</span>
+              <span class="content">{{ game.publishers }}</span>
             </div>
             <div class="container-item">
               <span class="title">Popular Tags</span>
               <div class="tags">
                 {% for i in range(0, 6) %}
-                <span>{{ game_details.tags[i] }}</span>
+                <span>{{ game.tags[i] }}</span>
                 {% endfor %}
               </div>
             </div>
@@ -88,18 +88,18 @@
       </div>
       <div class="body">
         <div class="left">
-          {% for deal in game_details.deals %}
+          {% for deal in game.deals %}
           <div class="store-entry">
             <span class="name">{{ deal.storeName }}</span>
             <div class="price-platform">
               <div class="platforms">
-                {% if game_details.platforms.windows %}
+                {% if game.platforms.windows %}
                   <i class="fa-brands fa-windows"></i>
                 {% endif %}
-                {% if game_details.platforms.mac %}
+                {% if game.platforms.mac %}
                   <i class="fa-brands fa-apple"></i>
                 {% endif %}
-                {% if game_details.platforms.linux %}
+                {% if game.platforms.linux %}
                   <i class="fa-brands fa-ubuntu"></i>
                 {% endif %}
               </div>
@@ -121,21 +121,110 @@
           </div>
           {% endfor %}
           <div class="about">
-            {{ game_details.detailed_description|safe }}
+            <!-- TODO: Games that have no "About This Game" in text have no header -->
+            {{ game.detailed_description|safe }}
           </div>
           <div class="requirements">
             <div class="header">
               <span class="title">System Requirements</span>
               <div>
+                {% if game.platforms.windows and game.pc_requirements|length > 0 %}
                 <button class="active">Windows</button>
+                {% endif %}
+                {% if game.platforms.mac and game.mac_requirements|length > 0 %}
                 <button>macOS</button>
-                <button>Linux</button>
+                {% endif %}
+                {% if game.platforms.linux and game.linux_requirements|length > 0 %}
+                <button>Linux + SteamOS</button>
+                {% endif %}
               </div>
             </div>
+            <div class="body">
+              {% if game.platforms.windows and game.pc_requirements|length > 0 %}
+              <div class="container active">
+                {% if game.pc_requirements['minimum'] %}
+                <div>{{ game.pc_requirements['minimum']|safe }}</div>
+                {% endif %}
+                {% if game.pc_requirements['recommended'] %}
+                <div>{{ game.pc_requirements['recommended']|safe }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+              {% if game.platforms.mac and game.mac_requirements|length > 0 %}
+              <div class="container">
+                {% if game.mac_requirements['minimum'] %}
+                <div>{{ game.mac_requirements['minimum']|safe }}</div>
+                {% endif %}
+                {% if game.mac_requirements['recommended'] %}
+                <div>{{ game.mac_requirements['recommended']|safe }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+              {% if game.platforms.linux and game.linux_requirements|length > 0 %}
+              <div class="container">
+                {% if game.linux_requirements['minimum'] %}
+                <div>{{ game.linux_requirements['minimum']|safe }}</div>
+                {% endif %}
+                {% if game.linux_requirements['recommended'] %}
+                <div>{{ game.linux_requirements['recommended']|safe }}</div>
+                {% endif %}
+              </div>
+              {% endif %}
+            </div>
+            {% if game.legal_notice %}
+            <span class="legal">{{ game.legal_notice }}</span>
+            {% endif %}
           </div>
         </div>
         <div class="right">
-
+          <div class="features container">
+            <span class="title">Features</span>
+          </div>
+          <div class="hltb container">
+            <span class="title">How Long To Beat</span>
+          </div>
+          <div class="achievements container">
+            <span class="title">Achievements</span>
+            <div>
+              {% for i in range(0, 4) %}
+              <img src="{{ game.achievements.highlighted[i].path }}" alt="{{ game.achievements.highlighted[i].name }} Achievement Image" title="{{ game.achievements.highlighted[i].name }}">
+              {% endfor %}
+              <span class="more">+{{ game.achievements.total - 4 }}</span>
+            </div>
+          </div>
+          {% if game.metacritic %}
+          <div class="metacritic container">
+            <div class="display">
+              <span class="score {{ game.metacritic.color }}">
+                {{ game.metacritic.score }}
+              </span>
+              <div class="logo">
+                <img src="{{ url_for('static', filename='img/metacritic.png') }}" alt="Metacritic Logo">
+                <div class="name">
+                  <span>metacritic</span>
+                  <a href="{{ game.metacritic.url }}" target="_blank">Read Critic Reviews <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% if game.esrb_rating %}
+          <div class="esrb container">
+            <div class="rating">
+              {% set esrb_path = "img/esrb/" + game.esrb_rating.rating  + ".svg" %}
+              <img src="{{ url_for('static', filename=esrb_path) }}" alt="ESRB {{ game.esrb_rating.rating }} Rating">
+              <div class="desc">
+                {% if game.esrb_rating.descriptors %}
+                <span>{{ game.esrb_rating.descriptors }}</span>
+                {% endif %}
+                {% if game.esrb_rating.interactive_elements %}
+                <span class="heading">Interactive Elements</span>
+                <span>{{ game.esrb_rating.interactive_elements }}</span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
         </div>
       </div>
     </div>
@@ -144,79 +233,79 @@
     </div>
   </div>
 </section>
-    <!-- <img src="{{ game_details.header_img }}">
-    <p style="padding: 1rem 0;">{{ game_details.short_description|safe }}</p>
-    <p>Release Date: {{ game_details.release_date }}</p>
-    <p>Total Reviews: {{ game_details.total_reviews }}</p>
-    <p>Positive Reviews: {{ game_details.positive_reviews }}</p>
-    <p>Negative Reviews: {{ game_details.negative_reviews }}</p>
-    {% set score = game_details.positive_reviews / game_details.total_reviews * 100 %}
+    <!-- <img src="{{ game.header_img }}">
+    <p style="padding: 1rem 0;">{{ game.short_description|safe }}</p>
+    <p>Release Date: {{ game.release_date }}</p>
+    <p>Total Reviews: {{ game.total_reviews }}</p>
+    <p>Positive Reviews: {{ game.positive_reviews }}</p>
+    <p>Negative Reviews: {{ game.negative_reviews }}</p>
+    {% set score = game.positive_reviews / game.total_reviews * 100 %}
     <p>{{ '%0.2f' % score|float }}% positive reviews</p> -->
 
-    <!-- <p style="margin: 1rem 0; border-top: 1px solid black; padding-top: 1rem;">{{ game_details.detailed_description|safe }}</p> -->
+    <!-- <p style="margin: 1rem 0; border-top: 1px solid black; padding-top: 1rem;">{{ game.detailed_description|safe }}</p> -->
 
     <!-- <h2 style="margin-top: 15px;">Screenshots</h2>
-    {% for screenshot in game_details.screenshots %}
+    {% for screenshot in game.screenshots %}
       <img style="max-width: 300px;" src="{{ screenshot['path_full'] }}">
     {% endfor %} -->
-
-    {% if game_details.platforms['windows'] and game_details.pc_requirements|length > 0 %}
+<!-- 
+    {% if game.platforms['windows'] and game.pc_requirements|length > 0 %}
       <div style="margin: 1rem 0;">
         <h3>PC Requirements</h3>
-        {% if game_details.pc_requirements['minimum'] %}
-        {{ game_details.pc_requirements['minimum']|safe }}
+        {% if game.pc_requirements['minimum'] %}
+        {{ game.pc_requirements['minimum']|safe }}
         {% endif %}
-        {% if game_details.pc_requirements['recommended'] %}
-        {{ game_details.pc_requirements['recommended']|safe }}
+        {% if game.pc_requirements['recommended'] %}
+        {{ game.pc_requirements['recommended']|safe }}
         {% endif %}
       </div>
     {% endif %}
 
-    {% if game_details.platforms['mac'] and game_details.mac_requirements|length > 0 %}
+    {% if game.platforms['mac'] and game.mac_requirements|length > 0 %}
       <div style="margin: 1rem 0;">
         <h3>Mac Requirements</h3>
-        {% if game_details.mac_requirements['minimum'] %}
-        {{ game_details.mac_requirements['minimum']|safe }}
+        {% if game.mac_requirements['minimum'] %}
+        {{ game.mac_requirements['minimum']|safe }}
         {% endif %}
-        {% if game_details.mac_requirements['recommended'] %}
-        {{ game_details.mac_requirements['recommended']|safe }}
+        {% if game.mac_requirements['recommended'] %}
+        {{ game.mac_requirements['recommended']|safe }}
         {% endif %}
       </div>
     {% endif %}
 
-    {% if game_details.platforms['linux'] and game_details.linux_requirements|length > 0 %}
+    {% if game.platforms['linux'] and game.linux_requirements|length > 0 %}
       <div style="margin: 1rem 0">
         <h3>Linux Requirements</h3>
-        {% if game_details.linux_requirements['minimum'] %}
-        {{ game_details.linux_requirements['minimum']|safe }}
+        {% if game.linux_requirements['minimum'] %}
+        {{ game.linux_requirements['minimum']|safe }}
         {% endif %}
-        {% if game_details.linux_requirements['recommended'] %}
-        {{ game_details.linux_requirements['recommended']|safe }}
+        {% if game.linux_requirements['recommended'] %}
+        {{ game.linux_requirements['recommended']|safe }}
         {% endif %}
       </div>
     {% endif %}
 
-    {% if game_details.hltb %}
+    {% if game.hltb %}
     <h2>HowLongToBeat Data</h2>
-    <p>Main: {{ game_details.hltb.main }}</p>
-    <p>Main + Sides: {{ game_details.hltb.main_extra }}</p>
-    <p>Completionist: {{ game_details.hltb.completionist }}</p>
-    <p>All Styles: {{ game_details.hltb.all_styles }}</p>
+    <p>Main: {{ game.hltb.main }}</p>
+    <p>Main + Sides: {{ game.hltb.main_extra }}</p>
+    <p>Completionist: {{ game.hltb.completionist }}</p>
+    <p>All Styles: {{ game.hltb.all_styles }}</p>
 
-    {% endif %}
+    {% endif %} -->
 <!-- 
-    {% if game_details.deals|length > 0 %}
+    {% if game.deals|length > 0 %}
     <h2>CheapShark Data</h2>
-    {% for deal in game_details.deals %}
+    {% for deal in game.deals %}
     <p style="margin: 1rem 0;">Store: {{ deal['storeName'] }}, DealID: {{ deal['dealID'] }}, Current Price: {{ deal['price'] }}, Retail Price: {{ deal['retailPrice'] }}, Savings: {{ '%0.2f' % deal['savings']|float }}%</p>
     {% endfor %}
 
     {% endif %} -->
 
-    {% if game_details.steam_reviews|length > 0 %}
+    {% if game.reviews|length > 0 %}
     <h2>Steam Reviews</h2>
 
-    {% for review in game_details.reviews %}
+    {% for review in game.reviews %}
     <p style="margin: 1rem 0;">Name: {{ review.author.name }}</p>
     <a href="{{ review.author.profile_url }}">Link</a>
     <img src="{{ review.author.avatar }}">

@@ -9,4 +9,4 @@ from src.utils.GameDetails import GameDetails
 @bp.route('/<steam_app_id>')
 def index(steam_app_id):
     game_details = GameDetails(steam_app_id)
-    return render_template('index.html', game_details=game_details)
+    return render_template('index.html', game=game_details)

@@ -54,13 +54,6 @@ body {
   -khtml-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
-  user-drag: none;
-  -webkit-user-drag: none;
-  user-select: none;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -webkit-touch-callout: none;
 }
 
 nav {
@@ -339,6 +332,7 @@ section.main div.content .info .featured .quick-look .details .content {
   font-weight: normal;
   font-size: 14px;
   color: var(--text-main);
+  width: calc(100% - 90px);
 }
 section.main div.content .info .featured .quick-look .details .secondary {
   font-family: var(--font);
@@ -462,6 +456,13 @@ section.main div.content .info .featured .quick-look .details .inline-item {
   display: flex;
   align-items: flex-start;
   gap: 15px;
+  width: 100%;
+}
+section.main div.content .info .body {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  align-self: stretch;
 }
 section.main div.content .info .body .left {
   display: flex;
@@ -582,6 +583,7 @@ section.main div.content .info .body .left .about {
   border-radius: 5px;
   background-color: var(--bg-main-50);
   color: var(--text-main);
+  line-height: 24px;
   font-family: var(--font);
   font-weight: normal;
   font-size: 16px;
@@ -623,6 +625,7 @@ section.main div.content .info .body .left .requirements {
   align-items: flex-start;
   border-radius: 5px;
   background-color: var(--bg-main-50);
+  gap: 40px;
 }
 section.main div.content .info .body .left .requirements .header {
   display: flex;
@@ -630,12 +633,237 @@ section.main div.content .info .body .left .requirements .header {
   align-items: center;
   align-self: stretch;
 }
+section.main div.content .info .body .left .requirements .header .title {
+  font-family: var(--font);
+  font-weight: bold;
+  font-size: 18px;
+  color: var(--text-dim);
+}
+section.main div.content .info .body .left .requirements .header div {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+}
+section.main div.content .info .body .left .requirements .header button {
+  display: flex;
+  height: 44px;
+  padding: 7px 20px;
+  justify-content: center;
+  align-items: center;
+  border-radius: var(--border-radius);
+  border: none;
+  font-family: var(--font);
+  font-weight: normal;
+  font-size: 16px;
+  color: var(--text-dim);
+  background-color: var(--bg-main-50);
+  cursor: pointer;
+}
+section.main div.content .info .body .left .requirements .header button:hover {
+  background-color: var(--bg-hover);
+}
+section.main div.content .info .body .left .requirements .header button.active {
+  color: var(--text-main);
+  background-color: var(--bg-hover);
+}
+section.main div.content .info .body .left .requirements .body {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  align-self: stretch;
+  gap: 10px;
+}
+section.main div.content .info .body .left .requirements .body .container {
+  display: none;
+}
+section.main div.content .info .body .left .requirements .body .container.active {
+  display: inline;
+}
+section.main div.content .info .body .left .requirements .body .container div {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+}
+section.main div.content .info .body .left .requirements .body .container div strong {
+  color: var(--text-dim);
+  font-weight: normal;
+  width: 150px;
+}
+section.main div.content .info .body .left .requirements .body .container div ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  color: var(--text-main);
+  font-family: var(--font);
+  font-weight: normal;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+section.main div.content .info .body .left .requirements .body .container div ul li:has(> strong) {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: auto;
+  grid-template-areas: "key value";
+  width: 100%;
+  justify-items: stretch;
+  align-items: stretch;
+}
+section.main div.content .info .body .left .requirements .body .container div ul li:has(> strong) strong {
+  grid-area: key;
+}
+section.main div.content .info .body .left .requirements .body .container div ul li:has(> strong) span {
+  grid-area: value;
+}
+section.main div.content .info .body .left .requirements .body .container div ul li:has(> strong):empty {
+  color: red !important;
+}
+section.main div.content .info .body .left .requirements .legal {
+  font-family: var(--font);
+  font-weight: normal;
+  font-size: 14px;
+  color: var(--text-dim);
+}
 section.main div.content .info .body .right {
   display: flex;
   width: 440px;
   flex-direction: column;
   align-items: flex-start;
   gap: 12px;
+}
+section.main div.content .info .body .right .title {
+  font-family: var(--font);
+  font-weight: normal;
+  font-size: 16px;
+  color: var(--text-dim);
+  height: 25px;
+}
+section.main div.content .info .body .right .container {
+  display: flex;
+  padding: 25px 20px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 7px;
+  align-self: stretch;
+  border-radius: 5px;
+  background-color: var(--bg-main);
+}
+section.main div.content .info .body .right .achievements div {
+  display: flex;
+  width: 400px;
+  justify-content: space-between;
+  align-items: center;
+}
+section.main div.content .info .body .right .achievements img, section.main div.content .info .body .right .achievements .more {
+  width: 72px;
+  height: 72px;
+}
+section.main div.content .info .body .right .achievements .more {
+  background-color: var(--bg-highlight);
+  font-family: var(--font);
+  font-weight: normal;
+  font-size: 16px;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+section.main div.content .info .body .right .metacritic .display {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+}
+section.main div.content .info .body .right .metacritic .display .score {
+  display: flex;
+  width: 72px;
+  height: 72px;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font);
+  font-weight: bold;
+  font-size: 26px;
+  color: var(--text-main);
+  border-radius: var(--border-radius);
+}
+section.main div.content .info .body .right .metacritic .display .score.green {
+  background-color: var(--metascore-green);
+}
+section.main div.content .info .body .right .metacritic .display .score.yellow {
+  background-color: var(--metascore-yellow);
+  color: var(--bg-main);
+}
+section.main div.content .info .body .right .metacritic .display .score.red {
+  background-color: var(--metascore-red);
+}
+section.main div.content .info .body .right .metacritic .display .logo {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+section.main div.content .info .body .right .metacritic .display .logo img {
+  width: 50px;
+  height: auto;
+}
+section.main div.content .info .body .right .metacritic .display .logo .name {
+  display: flex;
+  height: 50px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+section.main div.content .info .body .right .metacritic .display .logo .name span {
+  font-family: var(--font);
+  font-weight: bold;
+  font-size: 26px;
+  color: var(--text-main);
+}
+section.main div.content .info .body .right .metacritic .display .logo .name a {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font);
+  font-weight: normal;
+  font-size: 12px;
+  color: var(--text-main);
+}
+section.main div.content .info .body .right .metacritic .display .logo .name a i, section.main div.content .info .body .right .metacritic .display .logo .name a svg {
+  width: 10px;
+  height: auto;
+  color: var(--primary);
+}
+section.main div.content .info .body .right .esrb .rating {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+section.main div.content .info .body .right .esrb .rating img {
+  width: 72px;
+  height: auto;
+}
+section.main div.content .info .body .right .esrb .rating span {
+  font-family: var(--font);
+  font-weight: normal;
+  font-size: 14px;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+section.main div.content .info .body .right .esrb .rating span.heading {
+  color: var(--text-dim);
+  margin-bottom: 3px;
+}
+section.main div.content .info .body .right .esrb .rating .desc {
+  display: flex;
+  flex-direction: column;
 }
 
 /*# sourceMappingURL=game.css.map */
