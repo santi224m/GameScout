@@ -172,7 +172,7 @@
               {% endif %}
             </div>
             {% if game.legal_notice %}
-            <span class="legal">{{ game.legal_notice }}</span>
+            <span class="legal">{{ game.legal_notice|safe }}</span>
             {% endif %}
           </div>
         </div>

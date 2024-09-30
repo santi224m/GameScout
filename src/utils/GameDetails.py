@@ -181,7 +181,7 @@ def query_hltb(title):
 
   return hltb_data
 
-
+  
 def query_hltb_manual(title):
     """
     Get HLTB Data without howlongtobeatpy, sometimes faster, sometimes still slow, 
