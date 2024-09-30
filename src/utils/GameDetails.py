@@ -8,6 +8,7 @@ from bs4 import BeautifulSoup
 import time
 from fake_useragent import UserAgent
 import json
+from datetime import datetime
 
 load_dotenv()
 
@@ -355,7 +356,9 @@ def parse_steam_ids(data):
       review['author']['name'] = author['personaname']
       review['author']['profile_url'] = author['profileurl']
       review['author']['avatar'] = author['avatar']
+      review['post_date'] = datetime.fromtimestamp(int(review['timestamp_created'])).strftime("%B %d %Y")
   return data
+
 
 def hltb_format(num):
   """Format HowLongToBeat hours by round to the nearest half hour and adding the 1/2 symbol"""

@@ -828,6 +828,11 @@ section.main {
                     width: 150px;
                   }
 
+                  p {
+                    margin: 0;
+                    color: col(text-main);
+                  }
+
                   ul {
                     list-style-type: none;
                     padding: 0;
@@ -853,10 +858,6 @@ section.main {
 
                       span {
                         grid-area: value
-                      }
-
-                      &:empty {
-                        color: red !important
                       }
                     }
                   }
@@ -898,6 +899,41 @@ section.main {
 
           .features {
             
+          }
+
+          .hltb {
+            .item {
+              display: flex;
+              width: 401px;
+              height: 34px;
+              padding: 8px 13px;
+              justify-content: space-between;
+              align-items: center;
+              background-color: rgba(30, 35, 41, 0.39);
+              border-radius: br();
+
+              div {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                i, svg {
+                  height: 24px;
+                  width: 30px;
+                  color: col(primary);
+                }
+
+                span {
+                  @include bodySmall();
+                  color: col(primary);
+                }
+              }
+
+              span {
+                @include bodySmall();
+                color: col(text-main);
+              }
+            }
           }
 
           .achievements {
@@ -1023,6 +1059,269 @@ section.main {
                 display: flex;
                 flex-direction: column;
               }
+            }
+          }
+        }
+      }
+    }
+
+    .reviews-container {
+      display: flex;
+      width: 850px;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 25px;
+
+      .heading {
+        @include headingMedium();
+        color: col(text-main);
+      }
+
+      .inner {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 21px;
+
+        .subheading {
+          @include headingSmall();
+          color: col(text-main);
+
+          span {
+            color: col(text-dim);
+          }
+        }
+
+        .overall {
+          display: flex;
+          padding: 20px;
+          align-items: center;
+          gap: 20px;
+          align-self: stretch;
+          background-color: col(bg-main);
+          border-radius: 5px;
+
+          span {
+            &.title {
+              @include bodyLarge();
+              color: col(text-main);
+            }
+
+            &.secondary {
+              @include bodyMedium();
+              color: col(secondary);
+            }
+          }
+
+          .display {
+            width: 138px;
+            height: 23px;
+            display: grid;
+            grid-template-rows: auto;
+            grid-template-columns: auto;
+            grid-template-areas: 
+              "positive negative"
+              "bar bar";
+            gap: 3px;
+
+            .bar {
+              display: flex;
+              width: 138px;
+              align-items: flex-start;
+              gap: 2px;
+              grid-area: bar;
+
+              span {
+                height: 4px;
+                border-radius: 2px;
+                opacity: 0.8;
+
+                &.positive {
+                  width: 124px;
+                  background-color: col(primary);
+                }
+
+                &.negative {
+                  flex: 1 0 0;
+                  background-color: col(accent-red);
+                }
+              }
+            }
+
+            .positive {
+              display: inline-flex;
+              align-items: center;
+              gap: 3px;
+              grid-area: positive;
+
+              span {
+                @include bodySmall();
+                color: col(primary);
+              }
+
+              i, svg {
+                opacity: 0.4;
+                color: col(primary);
+                width: 13px;
+                height: auto;
+              }
+            }
+
+            .negative {
+              display: flex;
+              width: 100%;
+              justify-content: flex-end;
+              align-items: center;
+              gap: 3px;
+              grid-area: negative;
+
+              span {
+                @include bodySmall();
+                color: col(accent-red);
+              }
+
+              i, svg {
+                opacity: 0.4;
+                color: col(accent-red);
+                width: 13px;
+                height: auto;
+              }
+            }
+          }
+        }
+
+        .reviews {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 15px;
+          align-self: stretch;
+
+          .review {
+            display: flex;
+            padding: 15px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 25px;
+            align-self: stretch;
+            border-radius: 5px;
+            background-color: col(bg-main-50);
+
+            .header {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              align-self: stretch;
+
+              a {
+                text-decoration: none;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+                margin-right: 5px;
+              }
+
+              img {
+                width: 16px;
+                height: 18px;
+              }
+
+              div {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+              }
+
+              span {
+                &.date {
+                  @include bodySmall();
+                  color: col(text-dim);
+                }
+
+                &.num_reviews {
+                  @include bodyMedium();
+                  color: col(text-dim);
+                }
+
+                &.name {
+                  @include bodyMedium();
+                  color: col(text-main);
+                }
+              }
+            }
+
+            .recomendation {
+              display: flex;
+              padding: 5px;
+              align-items: flex-start;
+              gap: 12px;
+              align-self: stretch;
+              border-radius: br();
+              background-color: col(bg-main);
+
+              img {
+                width: 49px;
+                height: 49px;
+              }
+              
+              .inner {
+                display: flex;
+                height: 49px;
+                padding: 3px 0px;
+                flex-direction: column;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: inherit;
+
+                span.text {
+                  @include bodyMedium();
+                  color: col(text-main);
+                }
+  
+                span.playtime {
+                  @include bodyMedium();
+                  color: col(text-dim);
+                }
+              }
+            }
+
+            .tags {
+              display: flex;
+              align-items: flex-start;
+              gap: 7px;
+
+              .tag {
+                display: flex;
+                height: 37px;
+                padding: 17px 10px;
+                align-items: center;
+                gap: 5px;
+                background-color: col(bg-main);
+                border-radius: br();
+
+                .title {
+                  @include bodySmall();
+                  color: col(text-main);
+                }
+
+                .num {
+                  @include bodySmall();
+                  color: col(primary)
+                }
+
+                i, svg {
+                  height: 17px;
+                  width: auto;
+                  color: col(text-main);
+                  opacity: 0.4;
+                }
+              }
+            }
+
+            span.text {
+              @include bodyLarge();
+              color: col(text-main);
             }
           }
         }
