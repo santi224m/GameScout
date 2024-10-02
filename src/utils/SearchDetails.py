@@ -81,7 +81,7 @@ class SearchDetails:
       tags = []
         
       self.results.append(result)
-      res = requests.get(f'https://store.steampowered.com/apphover/{game['data-ds-appid']}')
+      res = requests.get(f'https://store.steampowered.com/apphover/{game["data-ds-appid"]}')
       tag_data = BeautifulSoup(res._content, features="html.parser")
 
       for tag in tag_data.find_all(class_="app_tag"):
