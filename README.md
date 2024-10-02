@@ -140,6 +140,7 @@ You should now be able to use the SteamWebAPI
 ### Run Flask app
 
 1. Export environment variables (macOS, Linux)
+  * You can also add these variables to your ```.env``` file so that you don't have to manually export them each time
 
 ```bash
 export FLASK_APP=src
@@ -169,25 +170,28 @@ flask run
 - [ ] Miro Flowchart Site Diagram
 - [ ] Figma UI design
 - [x] Setup Flask environment
-- [ ] Document API calls
-  - [ ] Steam Web API
+- [x] Document API calls
+  - [x] Steam Web API
     - [x] App Details API
-    - [ ] Steam Reviews API
-  - [ ] [Steam Python API](https://github.com/ValvePython/steam?tab=readme-ov-file)
-  - [ ] Howlongtobeat API
-  - [ ] CheapShark API
+    - [x] Steam Reviews API
+  - [x] CheapShark API
 - [ ] Implement pages
   - [ ] Home page
-  - [ ] Game page
+    * This page should display game deals
+  - [x] Game page
+    * This page displays information about a particular game that the user has clicked on
+  - [ ] Search results page
+    * This page displays games that match the user's search term
   - [ ] Sign up page
   - [ ] Login page
-  - [ ] Search results page
+  - [ ] Edit user profile page
+    * This page allows users to update their profile information
+  - [ ] Wishlist page
+    * This page allows users to view and update their game wishlist
 - [ ] Database
   - [ ] Database Conceptual Design
   - [ ] Database Schema
   - [ ] Setup PostgreSQL server
-- [ ] Create User Accounts
-- [ ] Implement wishlist
 - [ ] Develop price alert system
 
 See the [open issues](https://github.com/santi224m/GameScout/issues) for a full list of proposed features (and known issues).
