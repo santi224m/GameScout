@@ -52,13 +52,15 @@ class GameDetails :
     self.release_date = None
     self.esrb_rating = None
 
-    # Steam Spy
+    # ITAD
+    self.deals = []
     self.tags = []
-
-    # Steam Reviews
+    self.is_reviews = False
     self.total_reviews = None
     self.positive_reviews = None
-    self.negative_reviews = None
+    self.negative_reviews = None    
+
+    # Steam Reviews
     self.reviews = []
     
     # HowLongToBeat
@@ -70,16 +72,13 @@ class GameDetails :
       'all_styles': None
     }
 
-    # CheapShark
-    self.deals = []
-
     init_end = time.perf_counter()
 
     steam_data = query_steam_api(self.steam_app_id)
     steam_end = time.perf_counter()
 
-    steamspy_data = query_steamspy_api(self.steam_app_id)
-    steamspy_end = time.perf_counter()
+    # steamspy_data = query_steamspy_api(self.steam_app_id)
+    # steamspy_end = time.perf_counter()
 
     reviews_data = query_steam_reviews_api(self.steam_app_id)
     reviews_end = time.perf_counter()
@@ -87,27 +86,30 @@ class GameDetails :
     reviews_data = parse_steam_ids(reviews_data)
     parse_reviews_end = time.perf_counter()
 
-    cheap_shark_data = query_cheap_shark_api(self.steam_app_id)
-    cheapshark_end = time.perf_counter()
+    itad_data = query_itad_api(self.steam_app_id)
+    itad_end = time.perf_counter()
+
+    # cheap_shark_data = query_cheap_shark_api(self.steam_app_id)
+    # cheapshark_end = time.perf_counter()
 
     # hltb_data = query_hltb_manual(steam_data['name'])
     hltb_data = query_hltb(steam_data['name'])
     hltb_end = time.perf_counter()
 
-    self.update(steam_data, steamspy_data, reviews_data, cheap_shark_data, hltb_data)
+    self.update(steam_data, reviews_data, itad_data, hltb_data)
     update_end = time.perf_counter()
 
     print(f"Init variables in {init_end - start:0.4f} seconds")
     print(f"Gathered Steam Data in {steam_end - init_end:0.4f} seconds")
-    print(f"Gathered SteamSpy Data in {steamspy_end - steam_end:0.4f} seconds")
-    print(f"Gathered Reviews Data in {reviews_end - steamspy_end:0.4f} seconds")
+    # print(f"Gathered SteamSpy Data in {steamspy_end - steam_end:0.4f} seconds")
+    print(f"Gathered Reviews Data in {reviews_end - steam_end:0.4f} seconds")
     print(f"Updated Reviews Data in {parse_reviews_end - reviews_end:0.4f} seconds")
-    print(f"Gathered CheapShark Data in {cheapshark_end - parse_reviews_end:0.4f} seconds")
-    print(f"Gathered HLTB in {hltb_end - cheapshark_end:0.4f} seconds")
+    print(f"Gathered ITAD Data in {itad_end - parse_reviews_end:0.4f} seconds")
+    print(f"Gathered HLTB in {hltb_end - itad_end:0.4f} seconds")
     print(f"Update variables in {update_end - hltb_end:0.4f} seconds")
     print(f"Total Time: {update_end - start:0.4f} seconds")
 
-  def update(self, steam_data, steamspy_data, reviews_data, cheap_shark_data, hltb_data):
+  def update(self, steam_data, reviews_data, itad_data, hltb_data):
     """Update GameDetails with data from our various API's"""
 
     # Steam
@@ -151,16 +153,24 @@ class GameDetails :
 
 
     # SteamSpy Data (tags)
-    self.tags = steamspy_data['tags']
-    self.total_reviews = steamspy_data['total_reviews']
-    self.positive_reviews = steamspy_data['total_positive']
-    self.negative_reviews = steamspy_data['total_negative']
+    # self.tags = steamspy_data['tags']
+    # self.total_reviews = steamspy_data['total_reviews']
+    # self.positive_reviews = steamspy_data['total_positive']
+    # self.negative_reviews = steamspy_data['total_negative']
 
     # Steam Reviews Data
     self.reviews = reviews_data
 
     # CheapShark Data
-    self.deals = cheap_shark_data
+    # self.deals = cheap_shark_data
+
+    # ITAD Data
+    self.deals = itad_data['deals']
+    self.tags = itad_data['tags']
+    self.is_reviews = itad_data['is_reviews']
+    self.total_reviews = itad_data['total_reviews']
+    self.positive_reviews = itad_data['total_positive']
+    self.negative_reviews = itad_data['total_negative']    
 
     # HLTB Data
     self.hltb = hltb_data
@@ -308,6 +318,51 @@ def query_cheap_shark_api(steam_id):
     del deal['storeID']
   
   return app_deals
+
+
+def query_itad_api(steam_id):
+  data = {}
+
+  # Get Deals
+  app_format =  'app/' + str(steam_id)
+  payload = [app_format]
+  res = requests.post('https://api.isthereanydeal.com/lookup/id/shop/61/v1', data=json.dumps(payload))
+  app_id = res.json()[app_format]
+
+  payload = [app_id]
+  url_params = {
+    "key": os.getenv("ITAD_API_KEY"),
+    "country": "US",
+    "nondeals": "true",
+    "vouchers": "true"
+  }
+  res = requests.post('https://api.isthereanydeal.com/games/prices/v2', data=json.dumps(payload), params=url_params)
+  deals = res.json()[0]['deals']
+  data['deals'] = deals
+
+  # Get Tags and Reviews
+  url_params = {
+    "key": os.getenv("ITAD_API_KEY"),
+    "id": app_id
+  }
+  res = requests.get('https://api.isthereanydeal.com/games/info/v2', params=url_params)
+  details = res.json()
+  data['tags'] = details['tags']
+
+  data['is_reviews'] = False
+  for reviewer in details['reviews']:
+     if reviewer['source'] == "Steam":
+        total_reviews = reviewer['count']
+        positive_percent = int(reviewer['score']) / 100
+
+        data['is_reviews'] = True
+        data['total_reviews'] = total_reviews
+        data['total_positive'] = round(positive_percent * total_reviews)
+        data['total_negative'] = total_reviews - round(positive_percent * total_reviews)
+
+        break
+  
+  return data
 
 
 def query_steam_api(steam_id):

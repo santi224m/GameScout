@@ -87,8 +87,9 @@
       <div class="body">
         <div class="left">
           {% for deal in game.deals %}
+          <!-- TODO: Add voucher information -->
           <div class="store-entry">
-            <span class="name">{{ deal.storeName }}</span>
+            <span class="name">{{ deal.shop.name }}</span>
             <div class="price-platform">
               <div class="platforms">
                 {% if game.platforms.windows %}
@@ -103,17 +104,17 @@
               </div>
               <div class="price-container">
                 <div class="display">
-                  {% if deal.savings|float|round|int != 0 %}
-                  <span class="percent">-{{ deal.savings|float|round|int }}%</span>
+                  {% if deal.cut|float|round|int != 0 %}
+                  <span class="percent">-{{ deal.cut|float|round|int }}%</span>
                   {% endif %}
                   <div class="prices">
-                    {% if deal.savings|float|round|int != 0 %}
-                    <span class="retail-price">${{ deal.retailPrice }}</span>
+                    {% if deal.cut|float|round|int != 0 %}
+                    <span class="retail-price">${{ deal.regular.amount }}</span>
                     {% endif %}
-                    <span class="price">${{ deal.price }}</span>
+                    <span class="price">${{ deal.price.amount }}</span>
                   </div>
                 </div>
-                <a href="https://www.cheapshark.com/redirect?dealID={{ deal.dealID}}" target="_blank">Purchase</a>
+                <a href="" target="_blank">Purchase</a>
               </div>
             </div>
           </div>
@@ -212,6 +213,7 @@
             </div>
           </div>
           {% endif %}
+          {% if game.achievements %}
           <div class="achievements container">
             <span class="title">Achievements</span>
             <div>
@@ -221,6 +223,7 @@
               <span class="more">+{{ game.achievements.total - 4 }}</span>
             </div>
           </div>
+          {% endif %}
           {% if game.metacritic %}
           <div class="metacritic container">
             <div class="display">
