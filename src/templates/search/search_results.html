@@ -3,6 +3,7 @@
 
 {% block content %}
 <section class="search">
+  {% if engine == "cs" %}
   <table>
     <thead>
       <tr>
@@ -14,7 +15,7 @@
       {% if res['steamAppID'] != None %}
       <tr>
         <td>
-          <a href="/game/{{ res['steamAppID'] }}">
+          <a class="entry" href="/game/{{ res['steamAppID'] }}">
             {% if res['thumb'] != None %}
             <img src="{{ res['thumb'] }}" alt="Game Thumbnail">
             {% endif %}
@@ -26,5 +27,65 @@
       {% endfor %}
     </tbody>
   </table>
+  {% endif %}
+  {% if engine == "s" %}
+  <div class="content">
+    <div class="header">
+      <span class="title">Search Results for '{{ search_term }}'</span>
+      <span class="num">Found {{ "{:,}".format(search_data.num_items) }} item{% if search_data.num_items > 1 %}s{% endif %}</span>
+    </div>
+    {% for result in search_data.results %}
+    <a class="result" href="/game/{{ result.steamid }}">
+      <div class="details">
+        <img src="{{ result.banner_img }}" alt="Game Banner">
+        <div class="info">
+          <span class="title">{{ result.title }}</span>
+          <div class="tags">
+            {% for i in range(0, 6) %}
+            <span>{{ result.tags[i] }}</span>
+            {% endfor %}
+          </div>
+          <div class="platforms-date">
+            <div class="platforms">
+              {% if result.platforms.windows %}
+                <i class="fa-brands fa-windows"></i>
+              {% endif %}
+              {% if result.platforms.mac %}
+                <i class="fa-brands fa-apple"></i>
+              {% endif %}
+              {% if result.platforms.linux %}
+                <i class="fa-brands fa-ubuntu"></i>
+              {% endif %}
+            </div>
+            <span class="date">{{ result.release_date }}</span>
+          </div>
+          {% if result.reviews %}
+          <div class="reviews">
+            <div class="display">
+              <div class="bar">
+                <span class="positive"  style="width: calc({{ result.positive_reviews / result.total_reviews }} * 134px);"></span>
+                <span class="negative"></span>
+              </div>
+              <div class="positive">
+                <span>{{ (result.positive_reviews / result.total_reviews * 100)|round|int }}%</span>
+                <i class="fa-solid fa-thumbs-up"></i>
+              </div>
+              <div class="negative">
+                <span>{{ (result.negative_reviews / result.total_reviews * 100)|round|int }}%</span>
+                <i class="fa-solid fa-thumbs-down"></i>
+              </div>
+            </div>
+            <span class="secondary">{{ "{:,}".format(result.total_reviews) }} Reviews</span>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+      <div class="actions">
+
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% endif %}
 </section>
 {% endblock %}

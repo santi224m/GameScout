@@ -5,12 +5,14 @@ import math
 import json
 from dotenv import load_dotenv
 import time
+import re
 
 load_dotenv()
 
 class SearchDetails:
   def __init__(self, search_string):
     self.results = []
+    self.num_items = 0;
 
     self.query_steam_search(search_string)
     # self.query_itad()
@@ -27,12 +29,16 @@ class SearchDetails:
           'count': 25,
     }
     res = requests.get(f'https://store.steampowered.com/search/results/', params=url_params)
-    data = res.json()['results_html']
-    soup = BeautifulSoup(data, features="html.parser")
+    data = res.json()
+    self.num_items = data['total_count']
+    soup = BeautifulSoup(data['results_html'], features="html.parser")
 
     print(f"Search Finished in: {time.perf_counter() - start:0.4f} seconds")
 
+    i = 0
     for game in soup.find_all("a"):
+      i+=1
+      if i > 10: break
       game_start = time.perf_counter()
       result = {}
       # Title
@@ -56,6 +62,20 @@ class SearchDetails:
           result['platforms']['mac'] = True
         if platform['class'][1] == "linux":
           result['platforms']['linux'] = True
+
+      review = game.find(class_="search_review_summary")
+      if review:
+        # It only does english reviews so the numbers are a little off, literally no way to fix it
+        percent_positive= re.search("([0-9]*+)(?:%)",review['data-tooltip-html'])
+        percent_positive = int(percent_positive[1]) / 100
+        total = re.search("([0-9]+,[0-9]+|[0-9]{2,}(?!%))",review['data-tooltip-html'])
+        total = int(total[0].replace(",",""))
+
+        result['reviews'] = True
+        result['total_reviews'] = total
+        result['positive_reviews'] = round(percent_positive * total)
+        result['negative_reviews'] = total - round(percent_positive * total)
+      else: result['reviews'] = False
 
       # Get Tags
       tags = []

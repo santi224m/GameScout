@@ -1408,7 +1408,7 @@ section.search {
     justify-content: center;
   }
 
-  tr, td, a {
+  tr, td, a.entry {
     display: flex;
     align-items: center;
     gap: 15px;
@@ -1420,7 +1420,7 @@ section.search {
     padding: 10px;
   }
 
-  a {
+  a.entry {
     text-decoration: none;
     color: col(primary);
 
@@ -1435,6 +1435,210 @@ section.search {
 
   img {
     height: 100px;
+  }
+
+  // Steam Search
+  div.content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-top: 45px;
+    margin-bottom: 100px;
+    width: 1300px;
+
+    div.header {
+      display: flex;
+      width: 100%;
+      padding: 25px 15px;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 5px;
+      background-color: col(bg-main);
+
+      span.title {
+        color: col(text-main);
+        @include headingLarge();
+      }
+
+      span.num {
+        color: col(text-dim);
+        @include headingSmall();
+      }
+    }
+
+    a.result {
+      text-decoration: none;
+      display: flex;
+      width: 100%;
+      padding: 15px;
+      justify-content: space-between;
+      align-items: center;
+      background-color: col(bg-main-50);
+      border-radius: 5px;
+
+      .details {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        img {
+          width: auto;
+          height: 137px;
+          border-radius: br();
+        }
+
+        .info {
+          display: flex;
+          height: 137px;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: flex-start;
+
+          span.title {
+            @include headingMedium();
+            color: col(text-main);
+          }
+
+          .tags {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: 400px;
+            overflow: hidden;
+            flex-wrap: wrap;
+            height: 30px;
+
+            span {
+              display: flex;
+              padding: 8px 13px;
+              align-items: center;
+              gap: 10px;
+              border-radius: br();
+              background-color: col(bg-main);
+              color: col(text-main);
+              @include bodySmall();
+              white-space: nowrap;
+            }
+          }
+
+          .platforms-date {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            .platforms {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+
+              i, svg {
+                height: 24px;
+                width: auto;
+                color: col(text-dim);
+              }
+            }
+
+            span.date {
+              @include bodyMedium();
+              color: col(text-dim);
+            }
+          }
+
+          .reviews {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+
+            .secondary {
+              @include bodyMedium();
+              color: col(secondary);
+            }
+
+            .display {
+              width: 138px;
+              height: 23px;
+              display: grid;
+              grid-template-rows: auto;
+              grid-template-columns: auto;
+              grid-template-areas: 
+                "positive negative"
+                "bar bar";
+              gap: 3px;
+
+              .bar {
+                display: flex;
+                width: 138px;
+                align-items: flex-start;
+                gap: 2px;
+                grid-area: bar;
+
+                span {
+                  height: 4px;
+                  border-radius: 2px;
+                  opacity: 0.8;
+
+                  &.positive {
+                    width: 124px;
+                    background-color: col(primary);
+                  }
+
+                  &.negative {
+                    flex: 1 0 0;
+                    background-color: col(accent-red);
+                  }
+                }
+              }
+
+              .positive {
+                display: inline-flex;
+                align-items: center;
+                gap: 3px;
+                grid-area: positive;
+
+                span {
+                  @include bodySmall();
+                  color: col(primary);
+                }
+
+                i, svg {
+                  opacity: 0.4;
+                  color: col(primary);
+                  width: 13px;
+                  height: auto;
+                }
+              }
+
+              .negative {
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 3px;
+                grid-area: negative;
+
+                span {
+                  @include bodySmall();
+                  color: col(accent-red);
+                }
+
+                i, svg {
+                  opacity: 0.4;
+                  color: col(accent-red);
+                  width: 13px;
+                  height: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .actions {
+
+      }
+    }
   }
 }
 

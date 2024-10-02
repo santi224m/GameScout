@@ -32,7 +32,9 @@
         <span>CaelenO42</span>
       </div>
     </nav>
-    {% block content %}{% endblock %} {% block scripts %}
+    {% block content %}
+    {% endblock %}
+    {% block scripts %}
     <script src=" {{ url_for('static', filename='js/nav_search.js') }}"></script>
     {% endblock %}
     <section class="footer">
