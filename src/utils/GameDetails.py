@@ -90,8 +90,8 @@ class GameDetails :
     cheap_shark_data = query_cheap_shark_api(self.steam_app_id)
     cheapshark_end = time.perf_counter()
 
-    hltb_data = query_hltb_manual(steam_data['name'])
-    # hltb_data = query_hltb(steam_data['name'])
+    # hltb_data = query_hltb_manual(steam_data['name'])
+    hltb_data = query_hltb(steam_data['name'])
     hltb_end = time.perf_counter()
 
     self.update(steam_data, steamspy_data, reviews_data, cheap_shark_data, hltb_data)

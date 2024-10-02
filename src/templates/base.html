@@ -19,10 +19,10 @@
   </head>
   <body>
     <nav>
-      <div class="logo">
+      <a class="logo" href="/">
         <img src="{{ url_for('static', filename='img/controller.svg') }}" alt="Controller Icon" />
-        <a href="/">GameScout</a>
-      </div>
+        GameScout
+      </a>
       <div class="search">
         <input type="text" placeholder="Search for a game..." name="nav-search" onkeydown="redirect_to_search_page(event)" />
         <i class="fa-solid fa-magnifying-glass"></i>
@@ -35,5 +35,26 @@
     {% block content %}{% endblock %} {% block scripts %}
     <script src=" {{ url_for('static', filename='js/nav_search.js') }}"></script>
     {% endblock %}
+    <section class="footer">
+      <a class="logo" href="/">
+        <img src="{{ url_for('static', filename='img/controller.svg') }}" alt="Controller Icon" />
+        GameScout
+      </a>
+      <span class="copyright">
+        &copy; 2024 GameScout. All Right Reserved. All trademarks are property of their respective owners in the US and other countries.
+      </span>
+      <div class="buttons">
+        <a href="/">Home</a>
+        <a href="/wishlist">Wishlist</a>
+        <a href="#" class=".back-to-top">Back to Top</a>
+      </div>
+    </section>
+    <script>
+      // Scroll to top
+      document.querySelector(".back-to-top").addEventListener("click", (e) => {
+          e.preventDefault();
+          window.scrollTo({top: 0});
+      })
+    </script>
   </body>
 </html>
