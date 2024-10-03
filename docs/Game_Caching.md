@@ -26,11 +26,14 @@ linux_requirements_rec: TEXT
 mac_requirements_min: TEXT
 mac_requirements_rec: TEXT
 metacritic_score: VARCHAR(3)
-metacritic_url: VARCHAR(3)
-metacritic_color: VARCHAR(3)
+metacritic_url: TEXT
+metacritic_color: TEXT
 legal_notice: TEXT
 achievements_total: INT
-
+release_date: TEXT
+esrb_rating_rating: TEXT
+esrb_rating_descriptors: TEXT
+esrb_rating_interactive_elements: TEXT
 ```
 
 * Add ```self.categories``` once it is implemnted in ```game_page.html```
