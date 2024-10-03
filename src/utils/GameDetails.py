@@ -45,7 +45,7 @@ class GameDetails :
       'recommended': None
     }
     self.metacritic = None
-    self.legal_notice = None;
+    self.legal_notice = None
     self.categories = []
     self.screenshots = []
     self.achievements = None
