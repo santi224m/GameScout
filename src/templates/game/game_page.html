@@ -40,6 +40,7 @@
           <div class="details">
             <img src="{{ game.header_img }}">
             <span class="desc">{{ game.short_description|safe }}</span>
+            {% if game.is_reviews %}
             <div class="container-item">
               <span class="title">Reviews</span>
               <div class="reviews">
@@ -61,9 +62,10 @@
                 <span class="secondary">{{ "{:,}".format(game.total_reviews) }} Reviews</span>
               </div>
             </div>
+            {% endif %}
             <div class="inline-item">
               <span class="title">Release Date</span>
-              <span class="content">{{ game.release_date }}</span>
+              <span class="content">{{ game.release_date.date }}</span>
             </div>
             <div class="inline-item">
               <span class="title">Developer</span>
@@ -86,6 +88,7 @@
       </div>
       <div class="body">
         <div class="left">
+          {% if game.deals|length  > 0 %}
           {% for deal in game.deals %}
           <!-- TODO: Add voucher information -->
           <div class="store-entry">
@@ -119,6 +122,11 @@
             </div>
           </div>
           {% endfor %}
+          {% else %}
+          <div class="store-entry">
+            <span class="name">There are no prices currently available for this game</span>
+          </div>
+          {% endif %}
           <div class="about">
             <!-- TODO: Games that have no "About This Game" in text have no header -->
             {{ game.detailed_description|safe }}
@@ -260,7 +268,7 @@
         </div>
       </div>
     </div>
-    {% if game.reviews|length > 0 %}
+    {% if game.is_reviews %}
     <div class="reviews-container">
       <span class="heading">User Reviews</span>
       <div class="inner">

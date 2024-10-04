@@ -9,6 +9,9 @@ import time
 from fake_useragent import UserAgent
 import json
 from datetime import datetime
+import redis
+import pickle
+import re
 
 load_dotenv()
 
@@ -71,43 +74,60 @@ class GameDetails :
       'completionist': None,
       'all_styles': None
     }
-
     init_end = time.perf_counter()
-
-    steam_data = query_steam_api(self.steam_app_id)
-    steam_end = time.perf_counter()
-
-    # steamspy_data = query_steamspy_api(self.steam_app_id)
-    # steamspy_end = time.perf_counter()
-
-    reviews_data = query_steam_reviews_api(self.steam_app_id)
-    reviews_end = time.perf_counter()
-
-    reviews_data = parse_steam_ids(reviews_data)
-    parse_reviews_end = time.perf_counter()
-
-    itad_data = query_itad_api(self.steam_app_id)
-    itad_end = time.perf_counter()
-
-    # cheap_shark_data = query_cheap_shark_api(self.steam_app_id)
-    # cheapshark_end = time.perf_counter()
-
-    # hltb_data = query_hltb_manual(steam_data['name'])
-    hltb_data = query_hltb(steam_data['name'])
-    hltb_end = time.perf_counter()
-
-    self.update(steam_data, reviews_data, itad_data, hltb_data)
-    update_end = time.perf_counter()
-
     print(f"Init variables in {init_end - start:0.4f} seconds")
-    print(f"Gathered Steam Data in {steam_end - init_end:0.4f} seconds")
-    # print(f"Gathered SteamSpy Data in {steamspy_end - steam_end:0.4f} seconds")
-    print(f"Gathered Reviews Data in {reviews_end - steam_end:0.4f} seconds")
-    print(f"Updated Reviews Data in {parse_reviews_end - reviews_end:0.4f} seconds")
-    print(f"Gathered ITAD Data in {itad_end - parse_reviews_end:0.4f} seconds")
-    print(f"Gathered HLTB in {hltb_end - itad_end:0.4f} seconds")
-    print(f"Update variables in {update_end - hltb_end:0.4f} seconds")
-    print(f"Total Time: {update_end - start:0.4f} seconds")
+
+    # Connect to Redis
+    redis_conn = redis.Redis(host='localhost', port=6379, db=0)
+    # See if the Steam ID is already in Redis
+    if (game_cache := redis_conn.get(steam_app_id)) is not None:
+      print("Using game cache...")
+      game = pickle.loads(game_cache)
+      # Copy Redis Data into this GameDetails Instance
+      self.__dict__ = game.__dict__.copy()
+      end = time.perf_counter()
+      print(f"Total Time: {end - start:0.4f} seconds")
+    else:
+      # If not in Redis, get it the old fashioned way
+      steam_data = query_steam_api(self.steam_app_id)
+      steam_end = time.perf_counter()
+      print(f"Gathered Steam Data in {steam_end - init_end:0.4f} seconds")
+
+      # steamspy_data = query_steamspy_api(self.steam_app_id)
+      # steamspy_end = time.perf_counter()
+      # print(f"Gathered SteamSpy Data in {steamspy_end - steam_end:0.4f} seconds")
+
+      reviews_data = query_steam_reviews_api(self.steam_app_id)
+      reviews_end = time.perf_counter()
+      print(f"Gathered Reviews Data in {reviews_end - steam_end:0.4f} seconds")
+
+      reviews_data = parse_steam_ids(reviews_data)
+      parse_reviews_end = time.perf_counter()
+      print(f"Updated Reviews Data in {parse_reviews_end - reviews_end:0.4f} seconds")
+
+      itad_data = query_itad_api(self.steam_app_id, steam_data['release_date']['coming_soon'])
+      itad_end = time.perf_counter()
+      print(f"Gathered ITAD Data in {itad_end - parse_reviews_end:0.4f} seconds")
+
+      # cheap_shark_data = query_cheap_shark_api(self.steam_app_id)
+      # cheapshark_end = time.perf_counter()
+
+      # hltb_data = query_hltb_manual(steam_data['name'])
+      hltb_data = query_hltb(steam_data['name'])
+      hltb_end = time.perf_counter()
+      print(f"Gathered HLTB in {hltb_end - itad_end:0.4f} seconds")
+
+      self.update(steam_data, reviews_data, itad_data, hltb_data)
+      update_end = time.perf_counter()
+      print(f"Update variables in {update_end - hltb_end:0.4f} seconds")
+      
+      print(f"Total Time: {update_end - start:0.4f} seconds")
+
+      # Store game_details in Redis cache
+      game_cache = pickle.dumps(self)
+      redis_conn.set(steam_app_id, game_cache)
+      HOUR_SECONDS = 3600
+      redis_conn.expire(steam_app_id, HOUR_SECONDS)
 
   def update(self, steam_data, reviews_data, itad_data, hltb_data):
     """Update GameDetails with data from our various API's"""
@@ -115,7 +135,7 @@ class GameDetails :
     # Steam
     self.title = steam_data['name']
     self.short_description = steam_data['short_description']
-    self.detailed_description = steam_data['detailed_description']
+    self.detailed_description = soupificate(steam_data['detailed_description'])
     self.header_img = steam_data['header_image']
     self.developers = ', '.join(steam_data['developers'])
     self.publishers = ', '.join(steam_data['publishers'])
@@ -143,8 +163,8 @@ class GameDetails :
     self.screenshots = steam_data['screenshots']
     if 'achievements' in steam_data:
       self.achievements = steam_data['achievements']
-    self.release_date = steam_data['release_date']['date']
-    if 'ratings' in steam_data and 'esrb' in steam_data['ratings']:
+    self.release_date = steam_data['release_date']
+    if steam_data['ratings'] and 'esrb' in steam_data['ratings']:
       self.esrb_rating = steam_data['ratings']['esrb']
       if 'interactive_elements' not in self.esrb_rating:
         self.esrb_rating['interactive_elements'] = None
@@ -168,9 +188,10 @@ class GameDetails :
     self.deals = itad_data['deals']
     self.tags = itad_data['tags']
     self.is_reviews = itad_data['is_reviews']
-    self.total_reviews = itad_data['total_reviews']
-    self.positive_reviews = itad_data['total_positive']
-    self.negative_reviews = itad_data['total_negative']    
+    if self.is_reviews:
+      self.total_reviews = itad_data['total_reviews']
+      self.positive_reviews = itad_data['total_positive']
+      self.negative_reviews = itad_data['total_negative']    
 
     # HLTB Data
     self.hltb = hltb_data
@@ -320,25 +341,30 @@ def query_cheap_shark_api(steam_id):
   return app_deals
 
 
-def query_itad_api(steam_id):
+def query_itad_api(steam_id, coming_soon):
+  """Get prices, tags, and reviews from the ITAD API"""
   data = {}
 
-  # Get Deals
+  # Get ITAD App ID
   app_format =  'app/' + str(steam_id)
   payload = [app_format]
   res = requests.post('https://api.isthereanydeal.com/lookup/id/shop/61/v1', data=json.dumps(payload))
   app_id = res.json()[app_format]
 
-  payload = [app_id]
-  url_params = {
-    "key": os.getenv("ITAD_API_KEY"),
-    "country": "US",
-    "nondeals": "true",
-    "vouchers": "true"
-  }
-  res = requests.post('https://api.isthereanydeal.com/games/prices/v2', data=json.dumps(payload), params=url_params)
-  deals = res.json()[0]['deals']
-  data['deals'] = deals
+  # Get Deals
+  if not coming_soon:
+    payload = [app_id]
+    url_params = {
+      "key": os.getenv("ITAD_API_KEY"),
+      "country": "US",
+      "nondeals": "true",
+      "vouchers": "true"
+    }
+    res = requests.post('https://api.isthereanydeal.com/games/prices/v2', data=json.dumps(payload), params=url_params)
+    deals = res.json()
+    if len(deals) > 0: data['deals'] = deals[0]['deals']
+    else: data['deals'] = None
+  else: data['deals'] = None
 
   # Get Tags and Reviews
   url_params = {
@@ -347,6 +373,7 @@ def query_itad_api(steam_id):
   }
   res = requests.get('https://api.isthereanydeal.com/games/info/v2', params=url_params)
   details = res.json()
+
   data['tags'] = details['tags']
 
   data['is_reviews'] = False
@@ -390,7 +417,6 @@ def query_steam_reviews_api(steam_id):
   }
   res = requests.get(f'https://store.steampowered.com/appreviews/{steam_id}', params=url_params)
   app_reviews = res.json()
-  
   return app_reviews['reviews']
 
 
@@ -424,6 +450,7 @@ def hltb_format(num):
 
 
 def soupify(requirement):
+  """Formats Hardware Requirements by modifying HTML"""
   soup = BeautifulSoup(requirement, features="html.parser")
   for tag in soup.find_all("strong"):
     if tag.parent.name == "li":
@@ -431,6 +458,25 @@ def soupify(requirement):
       new_tag = soup.new_tag("span")
       new_tag.string = contents
       tag.parent.contents[1].replace_with(new_tag)
-  for tag in soup.find_all("br"):
-    tag.decompose()
+    elif tag.parent.name == "[document]":
+      for br in soup.find_all("br"):
+        br.decompose()
+      for item in tag.parent.contents:
+         if item.name == None and re.search("[A-Za-z]+:", item.string):
+            new_tag = soup.new_tag("br")
+            item.insert_after(new_tag)
+      print(tag.parent.contents)
+
+  # for tag in soup.find_all("br"):
+  #   tag.decompose()
+  return str(soup)
+
+
+def soupificate(desc):
+  """Addes header to game descriptions without a header"""
+  soup = BeautifulSoup(desc, features="html.parser")
+  if soup.contents[0].name != "h1":
+    new_tag = soup.new_tag("h1")
+    new_tag.string = "About this Game"
+    soup.insert(0, new_tag)
   return str(soup)

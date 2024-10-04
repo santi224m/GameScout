@@ -869,9 +869,9 @@ section.main {
                   display: flex;
                   width: 100%;
                   flex-direction: column;
-                  justify-content: space-between;
                   align-items: flex-start;
                   gap: 15px;
+                  color: col(text-main);
 
                   strong {
                     color: col(text-dim);
@@ -1373,6 +1373,7 @@ section.main {
             span.text {
               @include bodyLarge();
               color: col(text-main);
+              white-space: pre-line;
             }
           }
         }
