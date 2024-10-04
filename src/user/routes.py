@@ -13,4 +13,4 @@ def user():
 
 @bp.route('/signup/', methods=('GET', 'POST'))
 def signup():
-    return '<h3> Sign up page </h3>'
+    return render_template('user/sign_up.html')

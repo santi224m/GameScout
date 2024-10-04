@@ -28,4 +28,7 @@ def create_app(config_class=Config):
     from src.game import bp as game_bp
     app.register_blueprint(game_bp, url_prefix='/game/')
 
+    # User blueprint
+    from src.user import bp as user_bp
+    app.register_blueprint(user_bp, url_prefix='/game/')
     return app
