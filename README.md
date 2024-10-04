@@ -180,7 +180,7 @@ flask run
     * This page should display game deals
   - [x] Game page
     * This page displays information about a particular game that the user has clicked on
-  - [ ] Search results page
+  - [x] Search results page
     * This page displays games that match the user's search term
   - [ ] Sign up page
   - [ ] Login page
