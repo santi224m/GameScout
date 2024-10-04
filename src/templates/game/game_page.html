@@ -67,14 +67,18 @@
               <span class="title">Release Date</span>
               <span class="content">{{ game.release_date.date }}</span>
             </div>
+            {% if game.developers|length > 0 %}
             <div class="inline-item">
-              <span class="title">Developer</span>
+              <span class="title">Developers</span>
               <span class="content">{{ game.developers }}</span>
             </div>
+            {% endif %}
+            {% if game.publishers|length > 0 %}
             <div class="inline-item">
-              <span class="title">Publisher</span>
+              <span class="title">Publishers</span>
               <span class="content">{{ game.publishers }}</span>
             </div>
+            {% endif %}
             <div class="container-item">
               <span class="title">Popular Tags</span>
               <div class="tags">
@@ -88,11 +92,15 @@
       </div>
       <div class="body">
         <div class="left">
-          {% if game.deals|length  > 0 %}
+          {% if game.deals %}
           {% for deal in game.deals %}
-          <!-- TODO: Add voucher information -->
           <div class="store-entry">
-            <span class="name">{{ deal.shop.name }}</span>
+            <div class="text">
+              <span class="name">{{ deal.shop.name }}</span>
+              {% if deal.voucher %}
+              <span class="voucher">Using code {{ deal.voucher }}</span>
+              {% endif %}
+            </div>
             <div class="price-platform">
               <div class="platforms">
                 {% if game.platforms.windows %}
@@ -114,7 +122,11 @@
                     {% if deal.cut|float|round|int != 0 %}
                     <span class="retail-price">${{ deal.regular.amount }}</span>
                     {% endif %}
+                    {% if deal.price.amount != 0 %}
                     <span class="price">${{ deal.price.amount }}</span>
+                    {% else %}
+                    <span class="price">Free</span>
+                    {% endif %}
                   </div>
                 </div>
                 <a href="" target="_blank">Purchase</a>
@@ -128,7 +140,6 @@
           </div>
           {% endif %}
           <div class="about">
-            <!-- TODO: Games that have no "About This Game" in text have no header -->
             {{ game.detailed_description|safe }}
           </div>
           <div class="requirements">
@@ -187,6 +198,12 @@
           <div class="features container">
             <!-- TODO: Features -->
             <span class="title">Features</span>
+            {% for category in game.categories %}
+            <div class="item">
+                {{ category.icon|safe }}
+                <span>{{ category.description }}</span>
+            </div>
+            {% endfor %}
           </div>
           {% if game.hltb %}
           <div class="hltb container">
@@ -225,10 +242,16 @@
           <div class="achievements container">
             <span class="title">Achievements</span>
             <div>
+              {% set num = namespace(c = 0)%}
               {% for i in range(0, 4) %}
+              {% if i < game.achievements.highlighted|length %}
+              {% set num.c = num.c + 1 %}
               <img src="{{ game.achievements.highlighted[i].path }}" alt="{{ game.achievements.highlighted[i].name }} Achievement Image" title="{{ game.achievements.highlighted[i].name }}">
+              {% endif %}
               {% endfor %}
-              <span class="more">+{{ game.achievements.total - 4 }}</span>
+              {% if game.achievements.total - num.c > 0 %}
+              <span class="more">+{{ game.achievements.total - num.c }}</span>
+              {% endif %}
             </div>
           </div>
           {% endif %}

@@ -74,8 +74,6 @@ class GameDetails :
       'completionist': None,
       'all_styles': None
     }
-    init_end = time.perf_counter()
-    print(f"Init variables in {init_end - start:0.4f} seconds")
 
     # Connect to Redis
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
@@ -85,13 +83,11 @@ class GameDetails :
       game = pickle.loads(game_cache)
       # Copy Redis Data into this GameDetails Instance
       self.__dict__ = game.__dict__.copy()
-      end = time.perf_counter()
-      print(f"Total Time: {end - start:0.4f} seconds")
     else:
       # If not in Redis, get it the old fashioned way
       steam_data = query_steam_api(self.steam_app_id)
       steam_end = time.perf_counter()
-      print(f"Gathered Steam Data in {steam_end - init_end:0.4f} seconds")
+      print(f"Gathered Steam Data in {steam_end - start:0.4f} seconds")
 
       # steamspy_data = query_steamspy_api(self.steam_app_id)
       # steamspy_end = time.perf_counter()
@@ -137,8 +133,10 @@ class GameDetails :
     self.short_description = steam_data['short_description']
     self.detailed_description = soupificate(steam_data['detailed_description'])
     self.header_img = steam_data['header_image']
-    self.developers = ', '.join(steam_data['developers'])
-    self.publishers = ', '.join(steam_data['publishers'])
+    if 'developers' in steam_data and len(steam_data['developers']) > 0:
+      self.developers = ', '.join(steam_data['developers'])
+    if 'developers' in steam_data and len(steam_data['publishers']) > 0:
+      self.publishers = ', '.join(steam_data['publishers'])
     self.platforms = steam_data['platforms']
     if self.platforms['windows']:
       for req in steam_data['pc_requirements']:
@@ -399,6 +397,48 @@ def query_steam_api(steam_id):
   url_params = {'appids': steam_id, 'currency': usd}
   res = requests.get('https://store.steampowered.com/api/appdetails', params=url_params)
   app_details = res.json()[steam_id]['data']
+  
+  features = {
+    "1": '<i class="fa-solid fa-user-group"></i>',                                     # Multiplayer < Cross Platform Multiplayer
+    "2": '<i class="fa-solid fa-user"></i>',                                           # Single Player
+    "8": '<i class="fa-solid fa-shield-halved"></i>',                                  # Valve Anti-Cheat enabled
+    "9": '<i class="fa-solid fa-user-group"></i>',                                     # Co-op < Online Co-op
+    "13": '<i class="fa-solid fa-closed-captioning"></i>',                             # Captions Available
+    "14": '<i class="fa-solid fa-comment"></i>',                                       # Commentary Available
+    "15": '<i class="fa-solid fa-chart-simple"></i>',                                  # Stats
+    "16": '<i class="fa-solid fa-screwdriver-wrench"></i>',                            # Includes Source SDK
+    "17": '<i class="fa-solid fa-pen"></i>',                                           # Includes Level Editor
+    "18": '<img src="/static/img/controller_blue.svg" class="icon" alt="Controller Icon">', # Partial Controller Support
+    "22": '<i class="fa-solid fa-award"></i>',                                         # Steam Achievements
+    "23": '<i class="fa-solid fa-cloud"></i>',                                         # Steam Cloud
+    "24": '<i class="fa-solid fa-user-group"></i>',                                    # Shared / Split Screen < Shared / Split Screen Co-op || Shared / Split Screen PvP
+    "27": '<i class="fa-solid fa-user-group"></i>',                                    # Cross Platform Multiplayer
+    "28": '<img src="/static/img/controller_blue.svg" class="icon" alt="Controller Icon">', # Full Controller Support
+    "29": '<img src="/static/img/cards.svg" class="icon" alt="Cards Icon">',           # Steam Trading Cards
+    "30": '<i class="fa-solid fa-hammer"></i>',                                        # Steam Workshop
+    "35": '<i class="fa-solid fa-cart-shopping"></i>',                                 # In App Purchases
+    "36": '<i class="fa-solid fa-user-group"></i>',                                    # Online PvP
+    "37": '<i class="fa-solid fa-user-group"></i>',                                    # Shared / Split Screen PvP
+    "38": '<i class="fa-solid fa-user-group"></i>',                                    # Online Co-op
+    "39": '<i class="fa-solid fa-user-group"></i>',                                    # Shared / Split Screen Co-op
+    "41": '<i class="fa-brands fa-chromecast"></i>',                                   # Remote Play on Phone
+    "42": '<i class="fa-brands fa-chromecast"></i>',                                   # Remote Play on Tablet
+    "43": '<i class="fa-brands fa-chromecast"></i>',                                   # Remote Play on TV
+    "44": '<i class="fa-brands fa-chromecast"></i>',                                   # Remote Play on Together
+    "47": '<i class="fa-solid fa-user-group"></i>',                                    # LAN PvP
+    "49": '<i class="fa-solid fa-user-group"></i>',                                    # PVP < LAN PvP < Online PvP
+    "51": '<i class="fa-solid fa-hammer"></i>',                                        # Steam Workshop (Not Used?)
+    "61": '<i class="fa-solid fa-desktop"></i>',                                       # HDR Available
+    "62": '<i class="fa-solid fa-users"></i>',                                         # Family Sharing
+    "63": '<i class="fa-solid fa-location-dot"></i>',                                  # Steam Timeline
+    "e": '<i class="fa-solid fa-xmark"></i>'
+  }
+
+  for category in app_details['categories']:
+    if str(category['id']) in features: 
+      category['icon'] = features[str(category['id'])]
+    else: category['icon'] = features['e']
+
   return app_details
 
 
@@ -465,7 +505,6 @@ def soupify(requirement):
          if item.name == None and re.search("[A-Za-z]+:", item.string):
             new_tag = soup.new_tag("br")
             item.insert_after(new_tag)
-      print(tag.parent.contents)
 
   # for tag in soup.find_all("br"):
   #   tag.decompose()

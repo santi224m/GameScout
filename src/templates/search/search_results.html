@@ -35,11 +35,13 @@
       <span class="num">Found {{ "{:,}".format(search_data.num_items) }} item{% if search_data.num_items > 1 %}s{% endif %}</span>
     </div>
     {% for result in search_data.results %}
-    <a class="result" href="/game/{{ result.steam_app_id }}">
+    <div class="result">
       <div class="details">
-        <img src="{{ result.header_img }}" alt="Game Banner">
+        <a href="/game/{{ result.steam_app_id }}">
+          <img src="{{ result.header_img }}" alt="Game Banner">
+        </a>
         <div class="info">
-          <span class="title">{{ result.title }}</span>
+            <a href="/game/{{ result.steam_app_id }}" class="title">{{ result.title }}</a>
           <div class="tags">
             {% for i in range(0, 6) %}
             <span>{{ result.tags[i] }}</span>
@@ -81,9 +83,37 @@
         </div>
       </div>
       <div class="actions">
-
+        <div class="buttons">
+          <button class="wishlist"><i class="fa-regular fa-heart"></i></button>
+          <button class="watch"><i class="fa-regular fa-eye"></i></button>
+        </div>
+        <div class="price-container">
+          {% if result.deals %}
+          {% for deal in result.deals|groupby("price.amount")|first|last %}
+          {% if deal.voucher %}
+          <span class="voucher">Using code {{ deal.voucher }}</span>
+          {% endif %}
+          <div class="display">
+            {% if deal.cut|float|round|int != 0 %}
+            <span class="percent">-{{ deal.cut|float|round|int }}%</span>
+            {% endif %}
+            <div class="prices">
+              {% if deal.cut|float|round|int != 0 %}
+              <span class="retail-price">${{ deal.regular.amount }}</span>
+              {% endif %}
+              {% if deal.price.amount != 0 %}
+              <span class="price">${{ deal.price.amount }}</span>
+              {% else %}
+              <span class="price">Free</span>
+              {% endif %}
+            </div>
+          </div>
+          <a href="{{ deal.url }}", target="_blank">Purchase</a>
+          {% endfor %}
+          {% endif %}
+        </div>
       </div>
-    </a>
+    </div>
     {% endfor %}
   </div>
   {% endif %}

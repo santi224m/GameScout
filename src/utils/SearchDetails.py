@@ -38,8 +38,12 @@ class SearchDetails:
     print(f"Search Finished in: {time.perf_counter() - start:0.4f} seconds")
 
     for game in soup.find_all("a"):
+      loop_start = time.perf_counter()
       details = GameDetails(game['data-ds-appid'])
       self.results.append(details)
+      print(f"Game Finished in: {time.perf_counter() - loop_start:0.4f} seconds")
+
+    print(f"Total Time: {time.perf_counter() - start:0.4f} seconds")
 
   def query_steam_search(self, search_string):
     start = time.perf_counter()

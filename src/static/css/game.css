@@ -423,7 +423,7 @@ section.main {
                   align-items: center;
                   gap: 10px;
                   border-radius: var(--border-radius);
-                  background-color: var(--bg-highlight);
+                  background-color: var(--bg-main);
                   color: var(--text-main);
                   font-family: var(--font);
                   font-weight: normal;
@@ -454,6 +454,17 @@ section.main {
             align-items: center;
             border-radius: 5px;
             background-color: var(--bg-main-50); }
+            section.main div.content .info .body .left .store-entry .text {
+              display: flex;
+              flex-direction: column;
+              gap: 6px;
+              align-items: flex-start;
+              justify-content: flex-start; }
+              section.main div.content .info .body .left .store-entry .text .voucher {
+                font-family: var(--font);
+                font-weight: normal;
+                font-size: 14px;
+                color: var(--primary); }
             section.main div.content .info .body .left .store-entry span.name {
               font-family: var(--font);
               font-weight: bold;
@@ -474,7 +485,9 @@ section.main {
               section.main div.content .info .body .left .store-entry .price-platform .price-container {
                 display: flex;
                 align-items: center;
-                gap: 13px; }
+                gap: 13px;
+                width: 267px;
+                justify-content: flex-end; }
                 section.main div.content .info .body .left .store-entry .price-platform .price-container .display {
                   display: flex;
                   align-items: center;
@@ -483,7 +496,7 @@ section.main {
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    width: 75px;
+                    padding: 10px;
                     height: 40px;
                     border-radius: var(--border-radius);
                     background-color: var(--accent-green);
@@ -515,7 +528,6 @@ section.main {
                   display: flex;
                   width: 100px;
                   height: 44px;
-                  padding: 16px 66px;
                   justify-content: center;
                   align-items: center;
                   gap: 10px;
@@ -688,6 +700,32 @@ section.main {
             align-self: stretch;
             border-radius: 5px;
             background-color: var(--bg-main); }
+          section.main div.content .info .body .right .features .item {
+            display: grid;
+            grid-template-columns: 25px 1fr;
+            width: 400px;
+            height: 34px;
+            padding: 0px 13px;
+            align-items: center;
+            gap: 10px;
+            border-radius: var(--border-radius);
+            background-color: rgba(30, 35, 41, 0.39);
+            color: var(--primary); }
+            section.main div.content .info .body .right .features .item i, section.main div.content .info .body .right .features .item svg {
+              width: auto;
+              height: 18px;
+              color: var(--primary);
+              justify-self: center;
+              align-self: center; }
+            section.main div.content .info .body .right .features .item img {
+              fill: var(--primary);
+              justify-self: center;
+              align-self: center; }
+            section.main div.content .info .body .right .features .item span {
+              font-family: var(--font);
+              font-weight: normal;
+              font-size: 12px;
+              color: var(--primary); }
           section.main div.content .info .body .right .hltb .item {
             display: flex;
             width: 401px;
@@ -718,8 +756,8 @@ section.main {
           section.main div.content .info .body .right .achievements div {
             display: flex;
             width: 400px;
-            justify-content: space-between;
-            align-items: center; }
+            align-items: center;
+            gap: 9px; }
           section.main div.content .info .body .right .achievements img, section.main div.content .info .body .right .achievements .more {
             width: 72px;
             height: 72px; }
@@ -1083,7 +1121,7 @@ section.search {
         font-family: var(--font);
         font-weight: bold;
         font-size: 18px; }
-    section.search div.content a.result {
+    section.search div.content div.result {
       text-decoration: none;
       display: flex;
       width: 100%;
@@ -1092,26 +1130,27 @@ section.search {
       align-items: center;
       background-color: var(--bg-main-50);
       border-radius: 5px; }
-      section.search div.content a.result .details {
+      section.search div.content div.result .details {
         display: flex;
         align-items: center;
         gap: 15px; }
-        section.search div.content a.result .details img {
+        section.search div.content div.result .details img {
           width: auto;
           height: 137px;
           border-radius: var(--border-radius); }
-        section.search div.content a.result .details .info {
+        section.search div.content div.result .details .info {
           display: flex;
           height: 137px;
           flex-direction: column;
           justify-content: space-between;
           align-items: flex-start; }
-          section.search div.content a.result .details .info span.title {
+          section.search div.content div.result .details .info a.title {
             font-family: var(--font);
             font-weight: bold;
             font-size: 22px;
-            color: var(--text-main); }
-          section.search div.content a.result .details .info .tags {
+            color: var(--text-main);
+            text-decoration: none; }
+          section.search div.content div.result .details .info .tags {
             display: flex;
             align-items: center;
             gap: 4px;
@@ -1119,7 +1158,7 @@ section.search {
             overflow: hidden;
             flex-wrap: wrap;
             height: 30px; }
-            section.search div.content a.result .details .info .tags span {
+            section.search div.content div.result .details .info .tags span {
               display: flex;
               padding: 8px 13px;
               align-items: center;
@@ -1131,34 +1170,34 @@ section.search {
               font-weight: normal;
               font-size: 12px;
               white-space: nowrap; }
-          section.search div.content a.result .details .info .platforms-date {
+          section.search div.content div.result .details .info .platforms-date {
             display: flex;
             align-items: center;
             gap: 15px; }
-            section.search div.content a.result .details .info .platforms-date .platforms {
+            section.search div.content div.result .details .info .platforms-date .platforms {
               display: flex;
               align-items: center;
               gap: 10px; }
-              section.search div.content a.result .details .info .platforms-date .platforms i, section.search div.content a.result .details .info .platforms-date .platforms svg {
+              section.search div.content div.result .details .info .platforms-date .platforms i, section.search div.content div.result .details .info .platforms-date .platforms svg {
                 height: 24px;
                 width: auto;
                 color: var(--text-dim); }
-            section.search div.content a.result .details .info .platforms-date span.date {
+            section.search div.content div.result .details .info .platforms-date span.date {
               font-family: var(--font);
               font-weight: normal;
               font-size: 14px;
               color: var(--text-dim); }
-          section.search div.content a.result .details .info .reviews {
+          section.search div.content div.result .details .info .reviews {
             display: flex;
             justify-content: center;
             align-items: center;
             gap: 15px; }
-            section.search div.content a.result .details .info .reviews .secondary {
+            section.search div.content div.result .details .info .reviews .secondary {
               font-family: var(--font);
               font-weight: normal;
               font-size: 14px;
               color: var(--secondary); }
-            section.search div.content a.result .details .info .reviews .display {
+            section.search div.content div.result .details .info .reviews .display {
               width: 138px;
               height: 23px;
               display: grid;
@@ -1166,54 +1205,154 @@ section.search {
               grid-template-columns: auto;
               grid-template-areas: "positive negative" "bar bar";
               gap: 3px; }
-              section.search div.content a.result .details .info .reviews .display .bar {
+              section.search div.content div.result .details .info .reviews .display .bar {
                 display: flex;
                 width: 138px;
                 align-items: flex-start;
                 gap: 2px;
                 grid-area: bar; }
-                section.search div.content a.result .details .info .reviews .display .bar span {
+                section.search div.content div.result .details .info .reviews .display .bar span {
                   height: 4px;
                   border-radius: 2px;
                   opacity: 0.8; }
-                  section.search div.content a.result .details .info .reviews .display .bar span.positive {
+                  section.search div.content div.result .details .info .reviews .display .bar span.positive {
                     width: 124px;
                     background-color: var(--primary); }
-                  section.search div.content a.result .details .info .reviews .display .bar span.negative {
+                  section.search div.content div.result .details .info .reviews .display .bar span.negative {
                     flex: 1 0 0;
                     background-color: var(--accent-red); }
-              section.search div.content a.result .details .info .reviews .display .positive {
+              section.search div.content div.result .details .info .reviews .display .positive {
                 display: inline-flex;
                 align-items: center;
                 gap: 3px;
                 grid-area: positive; }
-                section.search div.content a.result .details .info .reviews .display .positive span {
+                section.search div.content div.result .details .info .reviews .display .positive span {
                   font-family: var(--font);
                   font-weight: normal;
                   font-size: 12px;
                   color: var(--primary); }
-                section.search div.content a.result .details .info .reviews .display .positive i, section.search div.content a.result .details .info .reviews .display .positive svg {
+                section.search div.content div.result .details .info .reviews .display .positive i, section.search div.content div.result .details .info .reviews .display .positive svg {
                   opacity: 0.4;
                   color: var(--primary);
                   width: 13px;
                   height: auto; }
-              section.search div.content a.result .details .info .reviews .display .negative {
+              section.search div.content div.result .details .info .reviews .display .negative {
                 display: flex;
                 width: 100%;
                 justify-content: flex-end;
                 align-items: center;
                 gap: 3px;
                 grid-area: negative; }
-                section.search div.content a.result .details .info .reviews .display .negative span {
+                section.search div.content div.result .details .info .reviews .display .negative span {
                   font-family: var(--font);
                   font-weight: normal;
                   font-size: 12px;
                   color: var(--accent-red); }
-                section.search div.content a.result .details .info .reviews .display .negative i, section.search div.content a.result .details .info .reviews .display .negative svg {
+                section.search div.content div.result .details .info .reviews .display .negative i, section.search div.content div.result .details .info .reviews .display .negative svg {
                   opacity: 0.4;
                   color: var(--accent-red);
                   width: 13px;
                   height: auto; }
+      section.search div.content div.result .actions {
+        display: flex;
+        height: 137px;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end; }
+        section.search div.content div.result .actions .buttons {
+          display: flex;
+          align-items: center;
+          gap: 10px; }
+          section.search div.content div.result .actions .buttons button {
+            display: flex;
+            width: 47px;
+            height: 47px;
+            justify-content: center;
+            align-items: center;
+            border-radius: var(--border-radius);
+            background-color: var(--bg-highlight);
+            border: none;
+            cursor: pointer;
+            transition: 0.25s ease-in background-color; }
+            section.search div.content div.result .actions .buttons button:hover {
+              background-color: var(--bg-hover); }
+            section.search div.content div.result .actions .buttons button.wishlist.active {
+              background-color: var(--accent-red); }
+            section.search div.content div.result .actions .buttons button.watch.active {
+              background-color: var(--bg-hover); }
+            section.search div.content div.result .actions .buttons button i, section.search div.content div.result .actions .buttons button svg {
+              width: 24px;
+              height: auto;
+              color: var(--text-main); }
+        section.search div.content div.result .actions .price-container {
+          display: flex;
+          align-items: center;
+          gap: 13px; }
+          section.search div.content div.result .actions .price-container .voucher {
+            font-family: var(--font);
+            font-weight: normal;
+            font-size: 14px;
+            color: var(--text-dim);
+            align-self: flex-end; }
+          section.search div.content div.result .actions .price-container .display {
+            display: flex;
+            align-items: center;
+            gap: 10px; }
+            section.search div.content div.result .actions .price-container .display .percent {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 40px;
+              padding: 10px;
+              border-radius: var(--border-radius);
+              background-color: var(--accent-green);
+              color: var(--bg-main);
+              font-family: var(--font);
+              font-weight: bold;
+              font-size: 18px; }
+            section.search div.content div.result .actions .price-container .display .prices {
+              display: flex;
+              flex-direction: column;
+              align-items: center; }
+              section.search div.content div.result .actions .price-container .display .prices .retail-price {
+                font-family: var(--font);
+                font-weight: bold;
+                font-size: 18px;
+                color: var(--text-dim);
+                text-decoration: line-through;
+                text-decoration-color: rgba(200, 200, 200, 0.8);
+                text-decoration-thickness: 2px; }
+              section.search div.content div.result .actions .price-container .display .prices .price {
+                font-family: var(--font);
+                font-weight: bold;
+                font-size: 18px;
+                color: var(--text-main);
+                text-align: right; }
+                section.search div.content div.result .actions .price-container .display .prices .price.sale {
+                  color: var(--accent-green); }
+          section.search div.content div.result .actions .price-container a {
+            display: flex;
+            height: 44px;
+            width: max-content;
+            padding: 16px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border-radius: var(--border-radius);
+            background-color: var(--secondary);
+            color: var(--text-main);
+            font-family: var(--font);
+            font-weight: normal;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.25s ease-in-out background-color;
+            border: none;
+            z-index: 2; }
+            section.search div.content div.result .actions .price-container a:active, section.search div.content div.result .actions .price-container a:visited {
+              color: var(--text-main); }
+            section.search div.content div.result .actions .price-container a:hover {
+              background-color: var(--bg-tertiary); }
 
 section.error {
   background: linear-gradient(223deg, #0E141B -9.34%, #14344B 79.71%);
