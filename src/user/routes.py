@@ -5,9 +5,7 @@ from src.user import bp
 
 
 
-@bp.route('/', methods=('GET', 'POST'))
-
-
+@bp.route('/user', methods=('GET', 'POST'))
 def user():
     # return render_template
     return render_template('user/userpage.html')
