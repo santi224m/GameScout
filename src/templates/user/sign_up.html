@@ -2,26 +2,25 @@
 {% block title %}Sign Up{% endblock %}
 
 {% block content %}
-
-
-<section class ="user">
-
-<div class ="content">
-    <div class= "welcome">
-        <h1> Sign up account </h1>
+<section class="user">
+  <div class="content">
+    <div class="welcome">
+      <h1>Sign up account</h1>
     </div>
-</div>
-<div class = "form">
-    <form>
-        <email for="fname">Email Address</email><br>
-        <input type="text" id="fname" name="fname"><br>
-        <email for="fname">Confirm your Address</email><br>
-        <input type="text" id="lname" name="lname">
-      </form>
-</div>
-<div class ="Check box"></div>
-    <input name="policyagree" type="checkbox" value="1" />I am 13 years of age or older and agree to the terms and policy.<br /> 
-	<button type="continue" value="Submit">Continue</button>
   </div>
-
+  <div class="form">
+    <form>
+      <label for="email">Email Address</label><br>
+      <input type="email" id="email" name="email"><br>
+      <br>
+      <label for="confirm_email">Confirm Email Address</label><br>
+      <input type="email" id="confirm_email" name="confirm_email"><br>
+      <br>
+      <input name="policyagree" type="checkbox" value="1" />
+      <label for="policyagree">I am 13 years of age or older and agree to the terms and policy.</label><br>
+      <br>
+      <button type="continue" value="Submit">Continue</button>
+    </form>
+  </div>
 </section>
+{% endblock %}

@@ -29,8 +29,9 @@ def create_app(config_class=Config):
     app.register_blueprint(game_bp, url_prefix='/game/')
 
     # User blueprint
-    from src.user import bp as user_bp
-    app.register_blueprint(user_bp, url_prefix='/user')
-
+    from src.user import user_bp as user_bp
+    from src.user import signup_bp as signup_bp
+    user_bp.register_blueprint(signup_bp, url_prefix='/signup/')
+    app.register_blueprint(user_bp, url_prefix='/user/')
 
     return app

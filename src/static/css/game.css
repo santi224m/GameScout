@@ -1405,4 +1405,7 @@ section.error {
     border-radius: var(--border-radius);
     text-align: center; }
 
+section.user {
+  color: var(--text-main); }
+
 /*# sourceMappingURL=game.css.map */
