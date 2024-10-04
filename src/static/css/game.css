@@ -630,9 +630,11 @@ section.main {
               display: flex;
               justify-content: space-between;
               align-items: flex-start;
-              gap: 10px; }
+              gap: 10px;
+              width: 100%; }
               section.main div.content .info .body .left .requirements .body .container {
-                display: none; }
+                display: none;
+                width: 100%; }
                 section.main div.content .info .body .left .requirements .body .container.active {
                   display: flex;
                   gap: 10px; }
@@ -660,10 +662,11 @@ section.main {
                     font-size: 16px;
                     display: flex;
                     flex-direction: column;
-                    gap: 10px; }
+                    gap: 10px;
+                    min-width: 400px; }
                     section.main div.content .info .body .left .requirements .body .container div ul li:has(> strong) {
                       display: grid;
-                      grid-template-columns: 1fr 2fr;
+                      grid-template-columns: 150px 1fr;
                       grid-template-rows: auto;
                       grid-template-areas: "key value";
                       width: 100%;

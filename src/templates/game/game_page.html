@@ -147,19 +147,19 @@
               <span class="title">System Requirements</span>
               <div>
                 {% if game.platforms.windows and game.pc_requirements|length > 0 %}
-                <button class="active">Windows</button>
+                <button class="windows active" onclick="change_tab('windows')">Windows</button>
                 {% endif %}
                 {% if game.platforms.mac and game.mac_requirements|length > 0 %}
-                <button>macOS</button>
+                <button class="mac" onclick="change_tab('mac')">macOS</button>
                 {% endif %}
                 {% if game.platforms.linux and game.linux_requirements|length > 0 %}
-                <button>Linux + SteamOS</button>
+                <button class="linux " onclick="change_tab('linux')">Linux + SteamOS</button>
                 {% endif %}
               </div>
             </div>
             <div class="body">
               {% if game.platforms.windows and game.pc_requirements|length > 0 %}
-              <div class="container active">
+              <div class="container active windows">
                 {% if game.pc_requirements['minimum'] %}
                 <div>{{ game.pc_requirements['minimum']|safe }}</div>
                 {% endif %}
@@ -169,7 +169,7 @@
               </div>
               {% endif %}
               {% if game.platforms.mac and game.mac_requirements|length > 0 %}
-              <div class="container">
+              <div class="container mac">
                 {% if game.mac_requirements['minimum'] %}
                 <div>{{ game.mac_requirements['minimum']|safe }}</div>
                 {% endif %}
@@ -179,7 +179,7 @@
               </div>
               {% endif %}
               {% if game.platforms.linux and game.linux_requirements|length > 0 %}
-              <div class="container">
+              <div class="container linux">
                 {% if game.linux_requirements['minimum'] %}
                 <div>{{ game.linux_requirements['minimum']|safe }}</div>
                 {% endif %}
@@ -362,4 +362,8 @@
     {% endif %}
   </div>
 </section>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src=" {{ url_for('static', filename='js/system_requirements.js') }}"></script>
 {% endblock %}

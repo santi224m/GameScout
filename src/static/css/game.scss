@@ -870,9 +870,11 @@ section.main {
               justify-content: space-between;
               align-items: flex-start;
               gap: 10px;
+              width: 100%;
 
               .container {
                 display: none;
+                width: 100%;
                  
                 &.active {
                   display: flex;
@@ -907,10 +909,11 @@ section.main {
                     display: flex;
                     flex-direction: column;
                     gap: 10px;
+                    min-width: 400px;
 
                     li:has(> strong) {
                       display: grid;
-                      grid-template-columns: 1fr 2fr;
+                      grid-template-columns: 150px 1fr;
                       grid-template-rows: auto;
                       grid-template-areas: "key value";
                       width: 100%;
