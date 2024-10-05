@@ -1,5 +1,5 @@
 /*
-This function changes the system requirements tab on button press
+This Script handles all moving asepcts of the game page
 */
 
 let carousel_index = 1;

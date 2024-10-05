@@ -12,6 +12,7 @@ from datetime import datetime
 import redis
 import pickle
 import re
+from flask import abort
 
 load_dotenv()
 
@@ -396,10 +397,11 @@ def query_steam_api(steam_id):
   usd = 1
   url_params = {'appids': steam_id, 'currency': usd}
   res = requests.get('https://store.steampowered.com/api/appdetails', params=url_params)
+  if not 'data' in res.json()[steam_id]: abort(400) # Abort if no steam data
   app_details = res.json()[steam_id]['data']
   
   features = {
-    "1": '<i class="fa-solid fa-user-group"></i>',                                          # Multiplayer < Cross Platform Multiplayer
+    "1": '<i class="fa-solid fa-user-group"></i>',                                          # Multiplayer < Cross Platform Multiplayer || Online PvP || Online Co-op
     "2": '<i class="fa-solid fa-user"></i>',                                                # Single Player
     "8": '<i class="fa-solid fa-shield-halved"></i>',                                       # Valve Anti-Cheat enabled
     "9": '<i class="fa-solid fa-user-group"></i>',                                          # Co-op < Online Co-op
@@ -407,7 +409,7 @@ def query_steam_api(steam_id):
     "14": '<i class="fa-solid fa-comment"></i>',                                            # Commentary Available
     "15": '<i class="fa-solid fa-chart-simple"></i>',                                       # Stats
     "16": '<i class="fa-solid fa-screwdriver-wrench"></i>',                                 # Includes Source SDK
-    "17": '<i class="fa-solid fa-pen"></i>',                                                # Includes Level Editor
+    "17": '<i class="fa-solid fa-file-pen"></i>',                                           # Includes Level Editor
     "18": '<img src="/static/img/controller_blue.svg" class="icon" alt="Controller Icon">', # Partial Controller Support
     "22": '<i class="fa-solid fa-award"></i>',                                              # Steam Achievements
     "23": '<i class="fa-solid fa-cloud"></i>',                                              # Steam Cloud
@@ -424,7 +426,7 @@ def query_steam_api(steam_id):
     "41": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on Phone
     "42": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on Tablet
     "43": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on TV
-    "44": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on Together
+    "44": '<i class="fa-solid fa-wifi"></i>',                                               # Remote Play on Together
     "47": '<i class="fa-solid fa-user-group"></i>',                                         # LAN PvP
     "49": '<i class="fa-solid fa-user-group"></i>',                                         # PVP < LAN PvP < Online PvP
     "51": '<i class="fa-solid fa-hammer"></i>',                                             # Steam Workshop (Not Used?)
@@ -434,10 +436,42 @@ def query_steam_api(steam_id):
     "e": '<i class="fa-solid fa-xmark"></i>'
   }
 
-  for category in app_details['categories']:
+  categories = app_details['categories']
+
+  for category in categories:
     if str(category['id']) in features: 
       category['icon'] = features[str(category['id'])]
     else: category['icon'] = features['e']
+
+  print(str(categories))
+
+  # If CPM del M
+  if find(categories, 1) is not None and find(categories, 27):
+    del categories[find(categories, 1)]
+  # If Online Co-op del Co-op
+  if find(categories, 9) and find(categories, 38):
+    del(categories[find(categories, 9)])
+  # If SSS Co-op or SSS PvP del SSS
+  if find(categories, 24) and (find(categories, 37) or find(categories, 39)):
+    del(categories[find(categories, 24)])
+  # If LAN PvP del PVP
+  if find(categories, 49) and find(categories, 47):
+    del(categories[find(categories, 49)])
+  # If Online PvP del LAN PvP and PvP
+  if find(categories, 36) and (find(categories, 47) or find(categories, 49)):
+    if find(categories, 47): del(categories[find(categories, 47)])
+    if find(categories, 49): del(categories[find(categories, 49)])
+  # If Online PvP del M
+  if find(categories, 36) and find(categories, 1) is not None:
+    del(categories[find(categories, 1)])
+  # If Online Co-op del M
+  if find(categories, 38) and find(categories, 1) is not None:
+    del(categories[find(categories, 1)])
+  # If there are 2 steam workshops, del one
+  if find(categories, 30) and find(categories, 51):
+    del(categories[find(categories, 51)])
+     
+  app_details['categories'] = categories
 
   return app_details
 
@@ -519,3 +553,7 @@ def soupificate(desc):
     new_tag.string = "About this Game"
     soup.insert(0, new_tag)
   return str(soup)
+
+def find(categories, id):
+   print(next((i for i, item in enumerate(categories) if str(item["id"]) == str(id)), None))
+   return next((i for i, item in enumerate(categories) if str(item["id"]) == str(id)), None)
