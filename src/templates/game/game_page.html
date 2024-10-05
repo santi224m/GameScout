@@ -173,16 +173,16 @@
                 <button class="windows active" onclick="changeTab('windows')">Windows</button>
                 {% endif %}
                 {% if game.platforms.mac and game.mac_requirements|length > 0 %}
-                <button class="mac" onclick="changeTab('mac')">macOS</button>
+                <button class="mac {% if not game.platforms.windows %}active{% endif %}" onclick="changeTab('mac')">macOS</button>
                 {% endif %}
                 {% if game.platforms.linux and game.linux_requirements|length > 0 %}
-                <button class="linux " onclick="changeTab('linux')">Linux + SteamOS</button>
+                <button class="linux {% if not game.platforms.windows and not game.platforms.mac %}active{% endif %}" onclick="changeTab('linux')">Linux + SteamOS</button>
                 {% endif %}
               </div>
             </div>
             <div class="body">
               {% if game.platforms.windows and game.pc_requirements|length > 0 %}
-              <div class="container active windows">
+              <div class="container windows">
                 {% if game.pc_requirements['minimum'] %}
                 <div>{{ game.pc_requirements['minimum']|safe }}</div>
                 {% endif %}
@@ -192,7 +192,7 @@
               </div>
               {% endif %}
               {% if game.platforms.mac and game.mac_requirements|length > 0 %}
-              <div class="container mac">
+              <div class="container mac" style="{% if game.platforms.windows %}display: none;{% endif %}">
                 {% if game.mac_requirements['minimum'] %}
                 <div>{{ game.mac_requirements['minimum']|safe }}</div>
                 {% endif %}
@@ -202,7 +202,7 @@
               </div>
               {% endif %}
               {% if game.platforms.linux and game.linux_requirements|length > 0 %}
-              <div class="container linux">
+              <div class="container linux" style="{% if game.platforms.windows or game.platforms.mac %}display: none;{% endif %}">
                 {% if game.linux_requirements['minimum'] %}
                 <div>{{ game.linux_requirements['minimum']|safe }}</div>
                 {% endif %}

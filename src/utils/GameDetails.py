@@ -443,8 +443,6 @@ def query_steam_api(steam_id):
       category['icon'] = features[str(category['id'])]
     else: category['icon'] = features['e']
 
-  print(str(categories))
-
   # If CPM del M
   if find(categories, 1) is not None and find(categories, 27):
     del categories[find(categories, 1)]
@@ -554,6 +552,6 @@ def soupificate(desc):
     soup.insert(0, new_tag)
   return str(soup)
 
+
 def find(categories, id):
-   print(next((i for i, item in enumerate(categories) if str(item["id"]) == str(id)), None))
    return next((i for i, item in enumerate(categories) if str(item["id"]) == str(id)), None)

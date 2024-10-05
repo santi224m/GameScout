@@ -997,6 +997,7 @@ section.main {
                 color: col(text-dim);
                 background-color: col(bg-main-50);
                 cursor: pointer;
+                transition: 0.25s ease;
 
                 &:hover {
                   background-color: col(bg-hover);
@@ -1010,20 +1011,19 @@ section.main {
             }
 
             .body {
-              display: flex;
+              display: grid;
               justify-content: space-between;
               align-items: flex-start;
-              gap: 10px;
               width: 100%;
+              grid-template-rows: auto;
+              grid-template-columns: auto;
+              grid-template-areas: "requirements";
 
               .container {
-                display: none;
+                display: flex;
                 width: 100%;
-                 
-                &.active {
-                  display: flex;
-                  gap: 10px;
-                }
+                grid-area: requirements;
+                gap: 10px;
                 
                 div {
                   display: flex;

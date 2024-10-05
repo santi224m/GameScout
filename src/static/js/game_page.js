@@ -2,16 +2,12 @@
 This Script handles all moving asepcts of the game page
 */
 
+// Carousel and Popup
 let carousel_index = 1;
 let total_items = $('.full').length;
 let popup_index = 1;
 let total_images = $('img.full').length;
-
-
-function changeTab(tab) {
-  $(".windows, .mac, .linux").removeClass("active");
-  $(`.${tab}`).addClass("active");
-}
+let active_tab = "windows";
 
 function carouselLeft() {
   if (carousel_index > 1) {
@@ -123,4 +119,14 @@ function popupPrev() {
     popup_index = 1;
   }
   $(`.popup-text`).text( `${popup_index} of ${total_images} Screenshots`);
+}
+
+// System Requirements
+function changeTab(tab) {
+  $(`div.${active_tab}`).fadeOut(250, function() {
+    $(`div.${tab}`).fadeIn(250);
+  });
+  $(`.${active_tab}`).removeClass("active");
+  $(`button.${tab}`).addClass("active");
+  active_tab = tab;
 }
