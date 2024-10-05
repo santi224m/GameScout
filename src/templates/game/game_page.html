@@ -2,6 +2,21 @@
 {% block title %}{{ game.title }}{% endblock %}
 
 {% block content %}
+<div class="popup-container" style="display: none;">
+  <div class="popup-bg" onclick="closePopup()"><br></div>
+  <div class="popup">
+    <div class="image-container">
+      {% for sc in game.screenshots %}
+      <img class="popup-full {{ loop.index }} hidden" src="{{ sc['path_full'] }}" loading="lazy">
+      {% endfor %}
+    </div>
+    <div class="bar">
+      <button onclick="popupPrev()">Prev</button>
+      <span class="popup-text">1 of 11 Screenshots</span>
+      <button onclick="popupNext()">Next</button>
+    </div>
+  </div>
+</div>
 <section class="main">
   <img class="bg" alt="Background Image" src="{{ game.screenshots[0]['path_full'] }}">
 
@@ -17,24 +32,32 @@
         </div>
         <div class="quick-look">
           <div class="carousel">
-            <img class="active" src="{{ game.screenshots[0]['path_full'] }}">
-            <div class="images-container">
-              <i class="fa-solid fa-chevron-left"></i>
+            <div class="full-container">
+              {% for sc in game.screenshots %}
+              {% if loop.index == 1 %}
+              <img class="full {{ loop.index }}" src="{{ sc['path_full'] }}" onclick="openPopup({{ loop.index }})">
+              {% else %}
+              <img class="full {{ loop.index }} hidden" src="{{ sc['path_full'] }}" loading="lazy" onclick="openPopup({{ loop.index }})">
+              {% endif %}
+              {% endfor %}
+            </div>
+            <div class="thumbnail-container">
+              <i class="fa-solid fa-chevron-left" onclick="carouselLeft()"></i>
               <div class="images">
-                <img src="{{ game.screenshots[0]['path_thumbnail'] }}">
-                <img src="{{ game.screenshots[1]['path_thumbnail'] }}">
-                <img src="{{ game.screenshots[2]['path_thumbnail'] }}">
-                <img src="{{ game.screenshots[3]['path_thumbnail'] }}">
-                <img src="{{ game.screenshots[4]['path_thumbnail'] }}">
+                {% for sc in game.screenshots %}
+                <img src="{{ sc['path_thumbnail'] }}" class="thumbnail {{ loop.index }}" onclick="carouselGoTo({{ loop.index }})">
+                {% endfor %}
               </div>
-              <i class="fa-solid fa-chevron-right"></i>
+              <i class="fa-solid fa-chevron-right" onclick="carouselRight()"></i>
             </div>
             <div class="indicators">
-              <span class="indicator active"></span>
-              <span class="indicator"></span>
-              <span class="indicator"></span>
-              <span class="indicator"></span>
-              <span class="indicator"></span>
+              {% for sc in game.screenshots %}
+              {% if loop.index == 1 %}
+              <span class="indicator active {{ loop.index }}" onclick="carouselGoTo({{ loop.index }})"></span>
+              {% else %}
+              <span class="indicator {{ loop.index }}" onclick="carouselGoTo({{ loop.index }})"></span>
+              {% endif %}
+              {% endfor %}
             </div>
           </div>
           <div class="details">
@@ -147,13 +170,13 @@
               <span class="title">System Requirements</span>
               <div>
                 {% if game.platforms.windows and game.pc_requirements|length > 0 %}
-                <button class="windows active" onclick="change_tab('windows')">Windows</button>
+                <button class="windows active" onclick="changeTab('windows')">Windows</button>
                 {% endif %}
                 {% if game.platforms.mac and game.mac_requirements|length > 0 %}
-                <button class="mac" onclick="change_tab('mac')">macOS</button>
+                <button class="mac" onclick="changeTab('mac')">macOS</button>
                 {% endif %}
                 {% if game.platforms.linux and game.linux_requirements|length > 0 %}
-                <button class="linux " onclick="change_tab('linux')">Linux + SteamOS</button>
+                <button class="linux " onclick="changeTab('linux')">Linux + SteamOS</button>
                 {% endif %}
               </div>
             </div>
@@ -365,5 +388,5 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-<script src=" {{ url_for('static', filename='js/system_requirements.js') }}"></script>
+<script src="{{ url_for('static', filename='js/game_page.js') }}"></script>
 {% endblock %}

@@ -186,6 +186,88 @@ nav {
       font-size: 14px;
       color: var(--text-main); }
 
+div.popup-container {
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(14, 20, 27, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+  div.popup-container .popup-bg {
+    width: 100%;
+    height: 100vh;
+    z-index: 12;
+    position: absolute;
+    top: 0;
+    left: 0; }
+  div.popup-container .popup {
+    width: 70vw;
+    height: calc(((70vw / 16) * 9) + 40px + 10px);
+    background-color: var(--bg-tertiary);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    box-sizing: content-box;
+    flex-direction: column;
+    user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    border-radius: var(--border-radius);
+    z-index: 15; }
+    div.popup-container .popup .image-container {
+      width: 70vw;
+      height: calc((70vw / 16) * 9);
+      position: relative; }
+      div.popup-container .popup .image-container img.popup-full {
+        width: 70vw;
+        height: auto;
+        border-radius: var(--border-radius);
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        object-fit: cover;
+        aspect-ratio: 16 / 9;
+        user-drag: none;
+        -webkit-user-drag: none;
+        user-select: none;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        -webkit-touch-callout: none; }
+        div.popup-container .popup .image-container img.popup-full.hidden {
+          display: none; }
+    div.popup-container .popup .bar {
+      height: 40px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between; }
+      div.popup-container .popup .bar button {
+        border: none;
+        font-family: var(--font);
+        font-weight: normal;
+        font-size: 16px;
+        color: var(--text-main);
+        background-color: var(--bg-main-50);
+        border-radius: var(--border-radius);
+        cursor: pointer;
+        padding: 10px 15px;
+        transition: 0.25s ease; }
+        div.popup-container .popup .bar button:hover {
+          background-color: var(--bg-main-20); }
+      div.popup-container .popup .bar span {
+        color: var(--text-main);
+        font-family: var(--font);
+        font-weight: normal;
+        font-size: 14px; }
+
 section.main {
   width: 100%;
   height: max-content;
@@ -262,7 +344,7 @@ section.main {
         section.main div.content .info .featured .quick-look {
           display: flex;
           width: 1300px;
-          height: 657px;
+          height: 680px;
           padding: 25px;
           justify-content: space-between;
           align-items: flex-start;
@@ -272,28 +354,86 @@ section.main {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px; }
-            section.main div.content .info .featured .quick-look .carousel img.active {
+            justify-content: space-between;
+            position: relative;
+            height: 100%; }
+            section.main div.content .info .featured .quick-look .carousel div.full-container {
               width: 825px;
-              height: auto;
-              border-radius: var(--border-radius); }
-            section.main div.content .info .featured .quick-look .carousel div.images-container {
+              height: calc((825px / 16) * 9); }
+              section.main div.content .info .featured .quick-look .carousel div.full-container img.full {
+                width: 825px;
+                height: auto;
+                border-radius: var(--border-radius);
+                position: absolute;
+                left: 0;
+                top: 0;
+                object-fit: cover;
+                aspect-ratio: 16 / 9;
+                user-drag: none;
+                -webkit-user-drag: none;
+                user-select: none;
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                -webkit-touch-callout: none;
+                cursor: pointer; }
+                section.main div.content .info .featured .quick-look .carousel div.full-container img.full.hidden {
+                  display: none; }
+            section.main div.content .info .featured .quick-look .carousel div.thumbnail-container {
               display: flex;
               justify-content: space-between;
               align-items: center;
               align-self: stretch; }
-              section.main div.content .info .featured .quick-look .carousel div.images-container .images {
+              section.main div.content .info .featured .quick-look .carousel div.thumbnail-container .images {
                 display: flex;
                 width: 745px;
                 align-items: center;
                 gap: 7px;
-                overflow: hidden;
-                height: 100px; }
-                section.main div.content .info .featured .quick-look .carousel div.images-container .images img {
+                height: 120px;
+                overflow-x: scroll;
+                overflow-y: hidden;
+                /* width */
+                /* Track */
+                /* Handle */
+                /* Handle on hover */ }
+                section.main div.content .info .featured .quick-look .carousel div.thumbnail-container .images::-webkit-scrollbar {
+                  width: 5px;
+                  height: 7px;
+                  border-radius: var(--border-radius);
+                  margin-top: 5px; }
+                section.main div.content .info .featured .quick-look .carousel div.thumbnail-container .images::-webkit-scrollbar-track {
+                  background: rgba(30, 35, 41, 0.39);
+                  border-radius: var(--border-radius); }
+                section.main div.content .info .featured .quick-look .carousel div.thumbnail-container .images::-webkit-scrollbar-thumb {
+                  background-color: var(--bg-tertiary);
+                  border-radius: var(--border-radius);
+                  cursor: pointer;
+                  transition: 0.25s ease; }
+                section.main div.content .info .featured .quick-look .carousel div.thumbnail-container .images::-webkit-scrollbar-thumb:hover {
+                  background: var(--secondary);
+                  border-radius: var(--border-radius); }
+                section.main div.content .info .featured .quick-look .carousel div.thumbnail-container .images img {
                   height: 100px;
-                  width: auto; }
-              section.main div.content .info .featured .quick-look .carousel div.images-container i, section.main div.content .info .featured .quick-look .carousel div.images-container svg {
-                color: var(--text-main); }
+                  width: auto;
+                  object-fit: cover;
+                  aspect-ratio: 16 / 9;
+                  user-drag: none;
+                  -webkit-user-drag: none;
+                  user-select: none;
+                  -moz-user-select: none;
+                  -webkit-user-select: none;
+                  -ms-user-select: none;
+                  -webkit-touch-callout: none;
+                  cursor: pointer; }
+              section.main div.content .info .featured .quick-look .carousel div.thumbnail-container i, section.main div.content .info .featured .quick-look .carousel div.thumbnail-container svg {
+                color: var(--text-main);
+                cursor: pointer;
+                padding: 10px;
+                user-select: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none; }
             section.main div.content .info .featured .quick-look .carousel div.indicators {
               display: flex;
               justify-content: center;
@@ -303,9 +443,16 @@ section.main {
                 width: 35px;
                 height: 8px;
                 border-radius: 40px;
-                background-color: var(--bg-highlight); }
+                background-color: rgba(76, 88, 103, 0.5);
+                transition: .5s ease;
+                user-select: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                cursor: pointer; }
                 section.main div.content .info .featured .quick-look .carousel div.indicators .indicator.active {
-                  background-color: var(--secondary); }
+                  background-color: var(--primary); }
           section.main div.content .info .featured .quick-look .details {
             display: flex;
             height: 612px;

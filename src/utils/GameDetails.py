@@ -399,38 +399,38 @@ def query_steam_api(steam_id):
   app_details = res.json()[steam_id]['data']
   
   features = {
-    "1": '<i class="fa-solid fa-user-group"></i>',                                     # Multiplayer < Cross Platform Multiplayer
-    "2": '<i class="fa-solid fa-user"></i>',                                           # Single Player
-    "8": '<i class="fa-solid fa-shield-halved"></i>',                                  # Valve Anti-Cheat enabled
-    "9": '<i class="fa-solid fa-user-group"></i>',                                     # Co-op < Online Co-op
-    "13": '<i class="fa-solid fa-closed-captioning"></i>',                             # Captions Available
-    "14": '<i class="fa-solid fa-comment"></i>',                                       # Commentary Available
-    "15": '<i class="fa-solid fa-chart-simple"></i>',                                  # Stats
-    "16": '<i class="fa-solid fa-screwdriver-wrench"></i>',                            # Includes Source SDK
-    "17": '<i class="fa-solid fa-pen"></i>',                                           # Includes Level Editor
+    "1": '<i class="fa-solid fa-user-group"></i>',                                          # Multiplayer < Cross Platform Multiplayer
+    "2": '<i class="fa-solid fa-user"></i>',                                                # Single Player
+    "8": '<i class="fa-solid fa-shield-halved"></i>',                                       # Valve Anti-Cheat enabled
+    "9": '<i class="fa-solid fa-user-group"></i>',                                          # Co-op < Online Co-op
+    "13": '<i class="fa-solid fa-closed-captioning"></i>',                                  # Captions Available
+    "14": '<i class="fa-solid fa-comment"></i>',                                            # Commentary Available
+    "15": '<i class="fa-solid fa-chart-simple"></i>',                                       # Stats
+    "16": '<i class="fa-solid fa-screwdriver-wrench"></i>',                                 # Includes Source SDK
+    "17": '<i class="fa-solid fa-pen"></i>',                                                # Includes Level Editor
     "18": '<img src="/static/img/controller_blue.svg" class="icon" alt="Controller Icon">', # Partial Controller Support
-    "22": '<i class="fa-solid fa-award"></i>',                                         # Steam Achievements
-    "23": '<i class="fa-solid fa-cloud"></i>',                                         # Steam Cloud
-    "24": '<i class="fa-solid fa-user-group"></i>',                                    # Shared / Split Screen < Shared / Split Screen Co-op || Shared / Split Screen PvP
-    "27": '<i class="fa-solid fa-user-group"></i>',                                    # Cross Platform Multiplayer
+    "22": '<i class="fa-solid fa-award"></i>',                                              # Steam Achievements
+    "23": '<i class="fa-solid fa-cloud"></i>',                                              # Steam Cloud
+    "24": '<i class="fa-solid fa-user-group"></i>',                                         # Shared / Split Screen < Shared / Split Screen Co-op || Shared / Split Screen PvP
+    "27": '<i class="fa-solid fa-user-group"></i>',                                         # Cross Platform Multiplayer
     "28": '<img src="/static/img/controller_blue.svg" class="icon" alt="Controller Icon">', # Full Controller Support
-    "29": '<img src="/static/img/cards.svg" class="icon" alt="Cards Icon">',           # Steam Trading Cards
-    "30": '<i class="fa-solid fa-hammer"></i>',                                        # Steam Workshop
-    "35": '<i class="fa-solid fa-cart-shopping"></i>',                                 # In App Purchases
-    "36": '<i class="fa-solid fa-user-group"></i>',                                    # Online PvP
-    "37": '<i class="fa-solid fa-user-group"></i>',                                    # Shared / Split Screen PvP
-    "38": '<i class="fa-solid fa-user-group"></i>',                                    # Online Co-op
-    "39": '<i class="fa-solid fa-user-group"></i>',                                    # Shared / Split Screen Co-op
-    "41": '<i class="fa-brands fa-chromecast"></i>',                                   # Remote Play on Phone
-    "42": '<i class="fa-brands fa-chromecast"></i>',                                   # Remote Play on Tablet
-    "43": '<i class="fa-brands fa-chromecast"></i>',                                   # Remote Play on TV
-    "44": '<i class="fa-brands fa-chromecast"></i>',                                   # Remote Play on Together
-    "47": '<i class="fa-solid fa-user-group"></i>',                                    # LAN PvP
-    "49": '<i class="fa-solid fa-user-group"></i>',                                    # PVP < LAN PvP < Online PvP
-    "51": '<i class="fa-solid fa-hammer"></i>',                                        # Steam Workshop (Not Used?)
-    "61": '<i class="fa-solid fa-desktop"></i>',                                       # HDR Available
-    "62": '<i class="fa-solid fa-users"></i>',                                         # Family Sharing
-    "63": '<i class="fa-solid fa-location-dot"></i>',                                  # Steam Timeline
+    "29": '<img src="/static/img/cards.svg" class="icon" alt="Cards Icon">',                # Steam Trading Cards
+    "30": '<i class="fa-solid fa-hammer"></i>',                                             # Steam Workshop
+    "35": '<i class="fa-solid fa-cart-shopping"></i>',                                      # In App Purchases
+    "36": '<i class="fa-solid fa-user-group"></i>',                                         # Online PvP
+    "37": '<i class="fa-solid fa-user-group"></i>',                                         # Shared / Split Screen PvP
+    "38": '<i class="fa-solid fa-user-group"></i>',                                         # Online Co-op
+    "39": '<i class="fa-solid fa-user-group"></i>',                                         # Shared / Split Screen Co-op
+    "41": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on Phone
+    "42": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on Tablet
+    "43": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on TV
+    "44": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on Together
+    "47": '<i class="fa-solid fa-user-group"></i>',                                         # LAN PvP
+    "49": '<i class="fa-solid fa-user-group"></i>',                                         # PVP < LAN PvP < Online PvP
+    "51": '<i class="fa-solid fa-hammer"></i>',                                             # Steam Workshop (Not Used?)
+    "61": '<i class="fa-solid fa-desktop"></i>',                                            # HDR Available
+    "62": '<i class="fa-solid fa-users"></i>',                                              # Family Sharing
+    "63": '<i class="fa-solid fa-location-dot"></i>',                                       # Steam Timeline
     "e": '<i class="fa-solid fa-xmark"></i>'
   }
 
