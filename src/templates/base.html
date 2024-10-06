@@ -19,7 +19,8 @@
     integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
     crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/56b07f00c9.js" crossorigin="anonymous"></script>
-    <link href="{{ url_for('static', filename='css/game.css') }}" rel="stylesheet" />
+    {% block style %}
+    {% endblock %}
   </head>
   <body>
     <nav>

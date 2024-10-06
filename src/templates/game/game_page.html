@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}{{ game.title }}{% endblock %}
+{% block style %}
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/game.css') }}">
+{% endblock %}
 
 {% block content %}
 <div class="popup-container" style="display: none;">

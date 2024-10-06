@@ -1,5 +1,8 @@
 {% extends 'base.html' %}
 {% block title %}Home Page{% endblock %}
+{% block style %}
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
+{% endblock %}
 
 {% block content %}
 <h1 style="color: #fff;">Home Page</h1>

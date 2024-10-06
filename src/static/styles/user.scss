@@ -1,0 +1,7 @@
+// Include Main
+@use "main" as *;
+
+// Styles
+section.user {
+  color: col(text-main);
+}
