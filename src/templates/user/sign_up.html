@@ -26,13 +26,13 @@
     </form>
   </div>
   <div class="submit">
-      <input name="policyagree" type="checkbox" value="1"  />
+      <input name="policyagree" type="checkbox" value="1" id="check"  />
       <label for="policyagree">I am 13 years of age or older and agree to the terms and policy.</label><br>
       <br>
-      <button type="continue" id="continue_button">Continue</button>
+      <button type="button" id="continue_button">Continue</button>
   </div>
   
   
 </section>
-<script src="/home/kdleoz/GameScout/src/templates/user/sign_up.html"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/sign_up.js') }}"></script>
 {% endblock %}
