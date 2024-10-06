@@ -122,6 +122,7 @@ function popupPrev() {
 
 // System Requirements
 function changeTab(tab) {
+  if (active_tab == tab) return;
   $(`div.${active_tab}`).fadeOut(250, function() {
     $(`div.${tab}`).fadeIn(250);
   });

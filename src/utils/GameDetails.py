@@ -414,6 +414,7 @@ def query_steam_api(steam_id):
     "22": '<i class="fa-solid fa-award"></i>',                                              # Steam Achievements
     "23": '<i class="fa-solid fa-cloud"></i>',                                              # Steam Cloud
     "24": '<i class="fa-solid fa-user-group"></i>',                                         # Shared / Split Screen < Shared / Split Screen Co-op || Shared / Split Screen PvP
+    "25": '<i class="fa-solid fa-list-ol"></i>',                                            # Steam Leaderboards
     "27": '<i class="fa-solid fa-user-group"></i>',                                         # Cross Platform Multiplayer
     "28": '<img src="/static/img/controller_blue.svg" class="icon" alt="Controller Icon">', # Full Controller Support
     "29": '<img src="/static/img/cards.svg" class="icon" alt="Cards Icon">',                # Steam Trading Cards
@@ -430,6 +431,8 @@ def query_steam_api(steam_id):
     "47": '<i class="fa-solid fa-user-group"></i>',                                         # LAN PvP
     "49": '<i class="fa-solid fa-user-group"></i>',                                         # PVP < LAN PvP < Online PvP
     "51": '<i class="fa-solid fa-hammer"></i>',                                             # Steam Workshop (Not Used?)
+    "52": '<i class="fa-solid fa-wand-magic"></i>',                                         # Tracked Controller Support
+    "53": '<i class="fa-solid fa-vr-cardboard"></i>',                                       # VR Supported
     "61": '<i class="fa-solid fa-desktop"></i>',                                            # HDR Available
     "62": '<i class="fa-solid fa-users"></i>',                                              # Family Sharing
     "63": '<i class="fa-solid fa-location-dot"></i>',                                       # Steam Timeline
