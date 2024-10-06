@@ -418,7 +418,7 @@ section.main {
     position: absolute;
     z-index: -1;
     width: 100%;
-    height: 100%;
+    height: auto;
     mix-blend-mode: lighten;
     opacity: 15%;
   }
@@ -509,6 +509,7 @@ section.main {
             justify-content: space-between;
             position: relative;
             height: 100%;
+            width: 825px;
 
             div.full-container {
               width: 825px;
@@ -598,18 +599,23 @@ section.main {
               justify-content: center;
               align-items: center;
               gap: 10px;
+              width: 745px;
 
               .indicator {
                 width: 35px;
                 height: 8px;
                 border-radius: 40px;
-                background-color: hsla(213, 15%, 35%, 0.5);
+                background-color: col(bg-highlight);
                 transition: .5s ease;
                 @include noSelect();
                 cursor: pointer;
 
                 &.active {
                   background-color: col(primary);
+                }
+
+                &:hover {
+                  background-color: col(bg-hover);
                 }
               }
             }

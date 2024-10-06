@@ -7,7 +7,7 @@
   <div class="popup">
     <div class="image-container">
       {% for sc in game.screenshots %}
-      <img class="popup-full {{ loop.index }} hidden" src="{{ sc['path_full'] }}" loading="lazy">
+      <img class="popup-full {{ loop.index }} hidden" src="{{ sc['path_full'] }}" loading="lazy" alt="Game Screenshot">
       {% endfor %}
     </div>
     <div class="bar">
@@ -18,7 +18,7 @@
   </div>
 </div>
 <section class="main">
-  <img class="bg" alt="Background Image" src="{{ game.screenshots[0]['path_full'] }}">
+  <img class="bg" alt="Background Image" src="{{ game.screenshots[0]['path_full'] }}" loading="lazy">
 
   <div class="content">
     <div class="info">
@@ -34,18 +34,14 @@
           <div class="carousel">
             <div class="full-container">
               {% for sc in game.screenshots %}
-              {% if loop.index == 1 %}
-              <img class="full {{ loop.index }}" src="{{ sc['path_full'] }}" onclick="openPopup({{ loop.index }})">
-              {% else %}
-              <img class="full {{ loop.index }} hidden" src="{{ sc['path_full'] }}" loading="lazy" onclick="openPopup({{ loop.index }})">
-              {% endif %}
+              <img class="full {{ loop.index }} {% if loop.index != 1 %}hidden{% endif %}" src="{{ sc['path_full'] }}" loading="lazy" onclick="openPopup({{ loop.index }})" alt="Game Screenshot">
               {% endfor %}
             </div>
             <div class="thumbnail-container">
               <i class="fa-solid fa-chevron-left" onclick="carouselLeft()"></i>
               <div class="images">
                 {% for sc in game.screenshots %}
-                <img src="{{ sc['path_thumbnail'] }}" class="thumbnail {{ loop.index }}" onclick="carouselGoTo({{ loop.index }})">
+                <img src="{{ sc['path_thumbnail'] }}" class="thumbnail {{ loop.index }}" onclick="carouselGoTo({{ loop.index }})" alt="Game Screenshot">
                 {% endfor %}
               </div>
               <i class="fa-solid fa-chevron-right" onclick="carouselRight()"></i>
@@ -61,7 +57,7 @@
             </div>
           </div>
           <div class="details">
-            <img src="{{ game.header_img }}">
+            <img src="{{ game.header_img }}" alt="Banner Image">
             <span class="desc">{{ game.short_description|safe }}</span>
             {% if game.is_reviews %}
             <div class="container-item">
@@ -269,7 +265,7 @@
               {% for i in range(0, 4) %}
               {% if i < game.achievements.highlighted|length %}
               {% set num.c = num.c + 1 %}
-              <img src="{{ game.achievements.highlighted[i].path }}" alt="{{ game.achievements.highlighted[i].name }} Achievement Image" title="{{ game.achievements.highlighted[i].name }}">
+              <img src="{{ game.achievements.highlighted[i].path }}" alt="{{ game.achievements.highlighted[i].name }} Achievement Image" title="{{ game.achievements.highlighted[i].name }}" loading="lazy">
               {% endif %}
               {% endfor %}
               {% if game.achievements.total - num.c > 0 %}
@@ -285,7 +281,7 @@
                 {{ game.metacritic.score }}
               </span>
               <div class="logo">
-                <img src="{{ url_for('static', filename='img/metacritic.png') }}" alt="Metacritic Logo">
+                <img src="{{ url_for('static', filename='img/metacritic.png') }}" alt="Metacritic Logo" loading="lazy">
                 <div class="name">
                   <span>metacritic</span>
                   <a href="{{ game.metacritic.url }}" target="_blank">Read Critic Reviews <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
@@ -298,7 +294,7 @@
           <div class="esrb container">
             <div class="rating">
               {% set esrb_path = "img/esrb/" + game.esrb_rating.rating  + ".svg" %}
-              <img src="{{ url_for('static', filename=esrb_path) }}" alt="ESRB {{ game.esrb_rating.rating }} Rating">
+              <img src="{{ url_for('static', filename=esrb_path) }}" alt="ESRB {{ game.esrb_rating.rating }} Rating" loading="lazy">
               <div class="desc">
                 {% if game.esrb_rating.descriptors %}
                 <span>{{ game.esrb_rating.descriptors }}</span>
@@ -343,7 +339,7 @@
             <div class="header">
               <div>
                 <a href="{{ review.author.profile_url }}" target="_blank">
-                  <img src="{{ review.author.avatar }}" alt="Review Profile Picture">
+                  <img src="{{ review.author.avatar }}" alt="Review Profile Picture" loading="lazy">
                   <span class="name">{{ review.author.name }}</span>
                 </a>
                 <span class="num_reviews">{{ review.author.num_reviews }} reviews</span>
@@ -352,12 +348,12 @@
             </div>
             <div class="recomendation">
               {% if review.voted_up %}
-              <img src="{{ url_for('static', filename='img/thumbs_up.png') }}" alt="Thumbs Up">
+              <img src="{{ url_for('static', filename='img/thumbs_up.png') }}" alt="Thumbs Up" loading="lazy">
               <div class="inner">
                 <span class="text">Recommended</span>
               {% endif %}
               {% if not review.voted_up %}
-              <img src="{{ url_for('static', filename='img/thumbs_down.png') }}" alt="Thumbs Down">
+              <img src="{{ url_for('static', filename='img/thumbs_down.png') }}" alt="Thumbs Down" loading="lazy">
               <div class="inner">
                 <span class="text">Not Recommended</span>
               {% endif %}
