@@ -10,3 +10,7 @@ def user():
 @signup_bp.route('/', methods=('GET', 'POST'))
 def signup():
     return render_template('user/sign_up.html')
+
+@signin_bp.route('/', methods=('GET', 'POST'))
+def signin():
+    return render_template('user/sign_in.html')

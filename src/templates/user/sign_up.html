@@ -25,8 +25,18 @@
       <br>
     </form>
   </div>
+  
+<div id="message">
+  <h3>Password must contain the following:</h3>
+  <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
+  <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
+  <p id="number" class="invalid">Must contain <b> one digit</b> from 0-9</p>
+  <p id="length" class="invalid">Minimum <b>8 characters</b></p>
+  <p id="special" class="invalid">Must contains at least <b>one</b> special character</p>
+</div>
+
   <div class="submit">
-      <input name="policyagree" type="checkbox" value="1" id="check"  />
+      <input name="policyagree" type="checkbox" value="true" id="check"  />
       <label for="policyagree">I am 13 years of age or older and agree to the terms and policy.</label><br>
       <br>
       <button type="button" id="continue_button">Continue</button>

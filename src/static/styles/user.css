@@ -42,6 +42,51 @@ button[id="continue_button"]{
 
 button[id="continue_button"]:hover {
     background-color: rgb(49, 56, 67);
+}
+
+#enter_password {
+    display: inline-block;
+    vertical-align: top;
     
 }
+
+#message {
+    color: aliceblue;
+    display:none;
+    background: #f1f1f1;
+    color: #000;
+    position: relative;
+    padding: 20px;
+    margin-left: 10px;
+    border-radius: 10px;
+    
+  }
+
+#message p {
+    padding: 10px 35px;
+    font-size: 18px;
+}
+
+#message h3 {
+    font-size: 25px;
+}
+
+.valid {
+    color: green;
+}
+.valid:before {
+    position: relative;
+    left: -35px;
+    content: "\2714"; /* Checkmark symbol */
+}
+
+.invalid {
+    color: rgba(34, 4, 4, 0.781);
+}
+.invalid:before {
+    position: relative;
+    left: -35px;
+    content: "\2716"; /* Cross symbol */
+}
+
 
