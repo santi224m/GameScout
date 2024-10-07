@@ -137,6 +137,12 @@ STEAM_API_KEY = "{{YOUR STEAM API KEY HERE}}"
 
 You should now be able to use the SteamWebAPI
 
+### PostgreSQL Setup
+
+1. Install [PostgreSQL](https://www.postgresql.org/download/) for your operating system.
+
+1. Run the ```setup_db.py``` script located in ```database/``` to create the database and tables in the database.
+
 ### Run Flask app
 
 1. Export environment variables (macOS, Linux)
