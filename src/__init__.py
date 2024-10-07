@@ -16,9 +16,13 @@ def create_app(config_class=Config):
     app.register_error_handler(400, bad_request)
     app.register_error_handler(404, page_not_found)
 
-    # Hain blueprint
+    # Main blueprint
     from src.main import bp as main_bp
     app.register_blueprint(main_bp)
+
+    # API blueprint
+    from src.api import bp as api_bp
+    app.register_blueprint(api_bp, url_prefix='/api/')
 
     # Search blueprint
     from src.search import bp as search_bp

@@ -29,7 +29,7 @@
         <div class="header">
           <span>{{ game.title }}</span>
           <div class="buttons">
-            <button><i class="fa-regular fa-heart"></i> Wishlist</button>
+            <button id="wishlist-btn"><i class="fa-regular fa-heart"></i> Wishlist</button>
             <button><i class="fa-regular fa-eye"></i> Watch</button>
           </div>
         </div>
@@ -388,4 +388,5 @@
 {% block scripts %}
 {{ super() }}
 <script src="{{ url_for('static', filename='js/game_page.js') }}"></script>
+<script src="{{ url_for('static', filename='js/wishlist_api.js') }}"></script>
 {% endblock %}
