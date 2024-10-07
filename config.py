@@ -11,3 +11,4 @@ class Config:
     SESSION_PERMANENT = False
     SESSION_USE_SIGNER = True
     SESSION_REDIS = redis.from_url('redis://localhost:6379')
+    DB_NAME = 'gamescout'
