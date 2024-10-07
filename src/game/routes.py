@@ -1,8 +1,3 @@
-import pickle
-import time
-
-import redis
-
 from flask import render_template, redirect, url_for
 from src.game import bp
 
