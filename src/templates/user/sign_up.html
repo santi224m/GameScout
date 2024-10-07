@@ -22,9 +22,11 @@
       </label>
 
       <label for="enter_password">Enter Password</label>
-      <label class="input-field grid">
-        <span class="icon"><i class="fa-solid fa-lock"></i></span>
-        <input type="password" name="password" minlength="8" maxlength="20">
+      <div class="input-field grid">
+        <label>
+          <span class="icon"><i class="fa-solid fa-lock"></i></span>
+          <input type="password" name="password" minlength="8" maxlength="20">
+        </label>
         <div class="password-req-container">
           <div class="password-req">
             <span class="heading">Password must contain the following:</span>
@@ -35,7 +37,11 @@
             <span class="length invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>Be at least <strong>8 characters</strong></span>
           </div>
         </div>
-      </label>
+        <button class="icon right">
+          <img class="slash" src="{{ url_for('static', filename='img/eye-slash-solid.svg') }}">
+          <i class="fa-solid fa-eye active normal"></i>
+        </button>
+      </div>
 
       <label class="check">
         <input name="policyagree" type="checkbox">

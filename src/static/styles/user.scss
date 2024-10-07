@@ -28,7 +28,7 @@ section.user {
     display: flex;
     flex-direction: column;
 
-    input[type="email"], input[type="password"] {
+    input[type="email"], input[name="password"] {
       width: 450px;
       padding: 10px;
       background-color: col(bg-main-50);
@@ -36,9 +36,12 @@ section.user {
       border-radius: 0px 2px 2px 0px;
       border: none;
       @include bodyMedium();
-      grid-area: input;
       border: 1px solid transparent;
       transition: 0.25s ease;
+
+      &[name="password"] {
+        width: 410px;
+      }
 
       &::placeholder {
         color: col(text-dim);
@@ -85,9 +88,15 @@ section.user {
         grid-template-columns: auto;
         grid-template-rows: auto;
         grid-template-areas: 
-          "icon input"
-          "icon req";
+          "input icon-right"
+          "req icon-right";
         height: auto;
+      }
+
+      label {
+        grid-area: input;
+        display: flex;
+        margin-bottom: 0;
       }
     }
   
@@ -96,29 +105,54 @@ section.user {
       color: col(text-dim);
       margin-bottom: 5px;
 
-      .icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 38px;
-        width: 40px;
-        background-color: rgba(14, 20, 27, 0.7);
-        border: 1px solid transparent;
-        border-right: 1px solid col(bg-hover);
-        grid-area: icon;
-
-        i, svg {
-          width: auto;
-          height: 20px;
-        }
-      }
-
       &.check {
         @include bodyLarge();
         color: col(text-main);
         display: flex;
         margin-bottom: 15px;
         gap: 5px;
+      }
+    }
+
+    .icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 38px;
+      width: 40px;
+      background-color: rgba(14, 20, 27, 0.7);
+      border: 1px solid transparent;
+      border-right: 1px solid col(bg-hover);
+      color: col(text-main);
+
+      &.right {
+        grid-area: icon-right;
+        border: 1px solid transparent;
+        border-left: 1px solid col(bg-hover);
+        cursor: pointer;
+
+        img {
+          height: 20px;
+          filter: invert(1);
+          display: none;
+
+          &.active {
+            display: flex;
+          }
+        }
+
+        i, svg {
+          display: none;
+
+          &.active {
+            display: flex;
+          }
+        }
+      }
+
+      i, svg {
+        width: auto;
+        height: 20px;
       }
     }
   
@@ -142,6 +176,9 @@ section.user {
       max-height: 0px;
       overflow: hidden;
       transition: 0.5s ease max-height;
+      grid-area: req;
+      width: 410px;
+      justify-self: flex-end;
 
       &.active {
         max-height: 200px;
@@ -153,7 +190,6 @@ section.user {
       flex-direction: column;
       gap: 5px;
       background-color: col(bg-main-50);
-      grid-area: req;
       align-self: stretch;
       padding: 10px;
       box-sizing: border-box;

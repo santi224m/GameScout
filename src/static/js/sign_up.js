@@ -1,8 +1,10 @@
+// Variables
 const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,20}$/;
 const upperRegex = /[A-Z]/;
 const digitRegex = /(?=.*\d)/;
 const lowerRegex = /[a-z]/;
 const specialRegex = /[\W]/; 
+let passwordShown = false;
 
 // (               # Start of group
 //     (?=.*\d)    # must contains one digit from 0-9
@@ -12,8 +14,7 @@ const specialRegex = /[\W]/;
 //     {8,20}      # length at least 8 characters and maximum of 20
 //   )             # End of group
 
-//----------------------------------------------------------------------------//
-// REGEX CHECKER
+// Regex and Length Checks
 function checkAllRegex(password) {
   if (passwordRegex.test(password)) {
     console.log("Password is valid");
@@ -52,9 +53,22 @@ function checkLength(length, name) {
   }
 }
 
-//----------------------------------------------------------------------------//
-// HANDLES PASSWORD INPUT FOCUS
+// Show / Hide Password
+function togglePasswordVis() {
+  if (passwordShown) {
+    $('input[name="password"]').attr("type", "password");
+    $('.normal').addClass("active");
+    $('.slash').removeClass("active");
+    passwordShown = false;
+  } else {
+    $('input[name="password"]').attr("type", "text");
+    $('.normal').removeClass("active");
+    $('.slash').addClass("active");
+    passwordShown = true;
+  }
+}
 
+// Input Focusing
 $('input[name="password"]').on("focus", function() {
   $('.password-req-container').addClass("active");
 });
@@ -63,6 +77,12 @@ $('input[name="password"]').on("blur", function() {
   $('.password-req-container').removeClass("active");
 });
 
+$('button').on("click", function(e){
+  e.preventDefault();
+  togglePasswordVis()
+});
+
+// Regex Checking
 $('input[name="password"]').on("keyup", function() {
   checkRegex(lowerRegex, "lower")
   checkRegex(upperRegex, "upper")
@@ -71,6 +91,7 @@ $('input[name="password"]').on("keyup", function() {
   checkLength(8, "length")
 });
 
+// Check form when button pressed
 $('input[type="submit"]').on("click", function(e) {
   e.preventDefault();
   const email = $('input[name=email]').val()
