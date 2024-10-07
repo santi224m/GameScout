@@ -14,3 +14,10 @@ def get_wishlist_items():
   username = "user1"
   res = db_utils.get_user_wishlist_items(username)
   return jsonify(res)
+
+@bp.route('/is_game_wishlisted', methods=('GET', 'POST'))
+def is_game_wishlisted():
+  username = "user1"
+  steamapp_id = request.json['steamapp_id']
+  res = db_utils.is_game_wishlisted(username, steamapp_id)
+  return jsonify(res)
