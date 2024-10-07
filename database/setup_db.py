@@ -2,7 +2,7 @@ import psycopg2
 
 def exists_database(db_name):
   """Return True if database already exists, False otherwise"""
-  conn = psycopg2.connect(database='postgres')
+  conn = psycopg2.connect(database='postgres', user='postgres')
   curr = conn.cursor()
   curr.execute("SELECT 1 FROM pg_catalog.pg_database WHERE datname = %s;", (db_name,))
   res = curr.fetchall()
@@ -14,7 +14,7 @@ def exists_database(db_name):
 
 def create_database(db_name):
   """Create a database in postgres"""
-  conn = psycopg2.connect(database='postgres')
+  conn = psycopg2.connect(database='postgres', user='postgres')
   curr = conn.cursor()
   conn.autocommit = True
   curr.execute(f"CREATE DATABASE {db_name};")
@@ -22,7 +22,7 @@ def create_database(db_name):
 
 def create_tables(db_name):
   """Create tables in the database"""
-  conn = psycopg2.connect(database=db_name)
+  conn = psycopg2.connect(database=db_name, user='postgres')
   curr = conn.cursor()
 
   # User Account
@@ -43,7 +43,7 @@ def create_user(db_name, username):
   Create a user in the database
   TEMP FUNCTION WHILE WE GET SIGNUP WORKING
   """
-  conn = psycopg2.connect(database=db_name)
+  conn = psycopg2.connect(database=db_name, user='postgres')
   curr = conn.cursor()
 
   curr.execute("INSERT INTO user_account (username) VALUES (%s) ON CONFLICT (username) DO NOTHING;", (username,))
