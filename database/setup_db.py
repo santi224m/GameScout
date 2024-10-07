@@ -26,7 +26,7 @@ def create_tables(db_name):
   curr = conn.cursor()
 
   # User Account
-  curr.execute("CREATE TABLE IF NOT EXISTS user_account (id SERIAL PRIMARY KEY, user_name VARCHAR(20));")
+  curr.execute("CREATE TABLE IF NOT EXISTS user_account (id SERIAL PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL);")
 
   # Wishlist Item
   curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_account_id INT NOT NULL REFERENCES user_account(id), steam_app_id INT NOT NULL);")
@@ -35,8 +35,23 @@ def create_tables(db_name):
   conn.commit()
   conn.close()
 
+def create_user(db_name, username):
+  """
+  Create a user in the database
+  TEMP FUNCTION WHILE WE GET SIGNUP WORKING
+  """
+  conn = psycopg2.connect(database=db_name)
+  curr = conn.cursor()
+
+  curr.execute("INSERT INTO user_account (username) VALUES (%s) ON CONFLICT (username) DO NOTHING;", (username,))
+
+  conn.commit()
+  conn.close()
+
 if __name__ == "__main__":
   DB_NAME = "gamescout"
+  TEST_USER = "user1"
   if not exists_database(DB_NAME):
     create_database(DB_NAME)
   create_tables(DB_NAME)
+  create_user(DB_NAME, TEST_USER)
