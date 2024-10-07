@@ -9,7 +9,11 @@ class db_utils:
   def get_user_wishlist_items(username):
     """Return a list of steam app ids from a user's wishlist"""
     with db_conn() as curr:
-      curr.execute("SELECT steam_app_id FROM wishlist_item WHERE user_account_id = (SELECT id FROM user_account WHERE username = %s);", (username,))
+      curr.execute("SELECT wishlist_item.steam_app_id, game.title FROM wishlist_item INNER JOIN game ON game.steam_app_id = wishlist_item.steam_app_id WHERE user_account_id = (SELECT id FROM user_account WHERE username = %s);", (username,))
       res = curr.fetchall()
-      wishlist = [steamapp_id[0] for steamapp_id in res]
-      return wishlist
+      return res
+
+  def insert_game(steam_app_id, title):
+    """Insert a game into the game table"""
+    with db_conn() as curr:
+      curr.execute("INSERT INTO game (steam_app_id, title) VALUES (%s, %s) ON CONFLICT (steam_app_id) DO UPDATE SET title = %s;", (steam_app_id, title, title))

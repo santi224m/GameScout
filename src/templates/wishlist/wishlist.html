@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-{% for game in users_wishlist %}
-<a style="color: #fff;" href="/game/{{ game }}">{{ game }}</a>
+{% for (steamapp_id, title) in users_wishlist %}
+<a style="color: #fff;" href="/game/{{ game }}">{{ title }}</a>
 {% endfor %}
 {% endblock %}

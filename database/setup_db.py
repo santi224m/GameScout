@@ -29,7 +29,10 @@ def create_tables(db_name):
   curr.execute("CREATE TABLE IF NOT EXISTS user_account (id SERIAL PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL);")
 
   # Wishlist Item
-  curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_account_id INT NOT NULL REFERENCES user_account(id), steam_app_id INT NOT NULL, PRIMARY KEY (user_account_id, steam_app_id));")
+  curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_account_id INT NOT NULL REFERENCES user_account(id), steam_app_id INT NOT NULL REFERENCES game(steam_app_id), PRIMARY KEY (user_account_id, steam_app_id));")
+
+  # Game
+  curr.execute("CREATE TABLE IF NOT EXISTS game (steam_app_id INT PRIMARY KEY, title TEXT NOT NULL);")
 
   # Commit and close connection
   conn.commit()
