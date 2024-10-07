@@ -1,136 +1,101 @@
-const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{6,20}$/;
+const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,20}$/;
+const upperRegex = /[A-Z]/;
+const digitRegex = /(?=.*\d)/;
+const lowerRegex = /[a-z]/;
+const specialRegex = /[\W]/; 
 
-// (           # Start of group
-//     (?=.*\d)      #   must contains one digit from 0-9
-//     (?=.*[a-z])       #   must contains one lowercase characters
-//     (?=.*[\W])        #   must contains at least one special character
-//                 .     #     match anything with previous condition checking
-//                   {8,20}  #        length at least 8 characters and maximum of 20 
-//   )           # End of group
-
-var getInput = document.getElementById("enter_password");
-var checkDigit = document.getElementById("number");
-var checkLower = document.getElementById("letter");
-var checkUpper = document.getElementById("capital");
-var checkMin = document.getElementById("length");
-var checkSpecial = document.getElementById("special");
-var continueButton = document.getElementById('continue_button');
-
-var regexBlock = document.getElementById("message");
-let emailCheck = false;
-let passwordCheck = false;
-
-let origin = window.location.origin;
+// (               # Start of group
+//     (?=.*\d)    # must contains one digit from 0-9
+//     (?=.*[a-z]) # must contains one lowercase characters
+//     (?=.*[\W])  # must contains at least one special character
+//     .           # match anything with previous condition checking
+//     {8,20}      # length at least 8 characters and maximum of 20
+//   )             # End of group
 
 //----------------------------------------------------------------------------//
 // REGEX CHECKER
-function regexCheck(password) {
-    if(passwordRegex.test(password)){
-        console.log("Password is valid");
-        return true;
-    } else {
-        console.log("Password is invalid.");
-        return false;
-    }
+function checkAllRegex(password) {
+  if (passwordRegex.test(password)) {
+    console.log("Password is valid");
+    return true;
+  } else {
+    console.log("Password is invalid.");
+    return false;
+  }
 }
 
+function checkRegex(regex, name) {
+  if ($('input[name="password"]').val().match(regex)) {
+    $(`.${name}`).removeClass("invalid")
+    $(`.${name}`).addClass("valid")
+    $(`.${name} .fa-xmark`).removeClass("active")
+    $(`.${name} .fa-check`).addClass("active")
+  } else {
+    $(`.${name}`).addClass("invalid")
+    $(`.${name}`).removeClass("valid")
+    $(`.${name} .fa-xmark`).addClass("active")
+    $(`.${name} .fa-check`).removeClass("active")
+  }
+}
+
+function checkLength(length, name) {
+  if ($('input[name="password"]').val().length >= length) {
+    $(`.${name}`).removeClass("invalid")
+    $(`.${name}`).addClass("valid")
+    $(`.${name} .fa-xmark`).removeClass("active")
+    $(`.${name} .fa-check`).addClass("active")
+  } else {
+    $(`.${name}`).addClass("invalid")
+    $(`.${name}`).removeClass("valid")
+    $(`.${name} .fa-xmark`).addClass("active")
+    $(`.${name} .fa-check`).removeClass("active")
+  }
+}
 
 //----------------------------------------------------------------------------//
 // HANDLES PASSWORD INPUT FOCUS
 
-// when user clicks this pops up
-getInput.onfocus = function () {
-    regexBlock.style.display = "block";
-}
-// when user clicks off the password input, the block disappears
-getInput.onblur = function () {
-    regexBlock.style.display = "none";
-}
-getInput.onkeyup = function () {
-    var myInput = document.getElementById("enter_password");
-    var checkUpper = document.getElementById("capital");
-    var checkDigit = document.getElementById("number");
-    // we are gonna check
+$('input[name="password"]').on("focus", function() {
+  $('.password-req-container').addClass("active");
+});
 
-  var upperCaseLetters = /[A-Z]/g;
-  if(myInput.value.match(upperCaseLetters)) {
-    checkUpper.classList.remove("invalid");
-    checkUpper.classList.add("valid");
-  } else {
-    checkUpper.classList.remove("valid");
-    checkUpper.classList.add("invalid");
+$('input[name="password"]').on("blur", function() {
+  $('.password-req-container').removeClass("active");
+});
+
+$('input[name="password"]').on("keyup", function() {
+  checkRegex(lowerRegex, "lower")
+  checkRegex(upperRegex, "upper")
+  checkRegex(digitRegex, "digit")
+  checkRegex(specialRegex, "special")
+  checkLength(8, "length")
+});
+
+$('input[type="submit"]').on("click", function(e) {
+  e.preventDefault();
+  const email = $('input[name=email]').val()
+  const confirmEmail = $('input[name=confirm_email]').val()
+  const password = $('input[name=password]').val()
+  const checkstate = $('input[name=policyagree]').prop("checked")
+
+  console.log("Email: ", email);
+  console.log("Confirm Email: ", confirmEmail);
+  console.log("Password: ", password);
+
+  if (email.length === 0 || confirmEmail.length === 0 || password.length === 0) {
+    alert("Invalid Length");
+    return;
   }
-
-  var digitPattern = /(?=.*\d)/;
-  if(myInput.value.match(digitPattern)) {
-    checkDigit.classList.remove("invalid");
-    checkDigit.classList.add("valid");
-  } else {
-    checkDigit.classList.remove("valid");
-    checkDigit.classList.add("invalid");
+  if (email !== confirmEmail) {
+    alert("Emails do not match!");
+    return;
   }
-
-  var lowerCaseLetters = /[a-z]/g;
-  if(myInput.value.match(lowerCaseLetters)){
-    checkLower.classList.remove("invalid");
-    checkLower.classList.add("valid");
-  } else {
-    checkLower.classList.remove("valid");
-    checkLower.classList.add("invalid");
+  if (!checkAllRegex(password)) {
+    alert("Password is invalid");
+    return;
   }
-  
-  if(myInput.value.length >= 8) {
-    checkMin.classList.remove("invalid");
-    checkMin.classList.add("valid");
-  } else {
-    checkMin.classList.remove("valid");
-    checkMin.classList.add("invalid");
+  if (!checkstate) {
+    alert("You must agree to the terms")
+    return;
   }
-
-  var specialPattern = /[\W]/;
-  if(myInput.value.match(specialPattern)) {
-    checkSpecial.classList.remove("invalid");
-    checkSpecial.classList.add("valid");
-  } else {
-    checkSpecial.classList.remove("valid");
-    checkSpecial.classList.add("invalid");
-  }
-}
-    
-//----------------------------------------------------------------------------//
-// CONTINUE BUTTON
-document.getElementById('continue_button').addEventListener('click', function(){
-    //get the values
-    const email = document.getElementById('email').value;
-    const confirmEmail = document.getElementById('confirm_email').value;
-    const password = document.getElementById('enter_password').value;
-    let checkstate = document.getElementById("check").value;
-
-    console.log('Email: ', email);
-    console.log('Confirm Email: ', confirmEmail);
-    console.log('Password: ', password);
-
-    // check emails if empty
-    if(email.length === 0 || confirmEmail.length === 0 || password.length === 0){
-        alert("Invalid")
-    }
-    if (email !== confirmEmail){
-        alert("Emails do not match!");
-    }else{
-        emailCheck = true;
-    }
-    if (regexCheck(password)) {
-        alert("Password is valid!")
-        passwordCheck = true;
-    } else {
-        alert("invalid password")
-    }
-    
-
-  
-    // check if the email,confirm, and password is acceptable
-    
-
-    // if it is we send the user to the signin page. 
-
 });

@@ -2,50 +2,53 @@
 {% block title %}Sign Up{% endblock %}
 {% block style %}
 <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
-
 {% endblock %}
 
 {% block content %}
 <section class="user">
-  <div class="content">
-    <div class="welcome">
-      <h1>CREATE YOUR ACCOUNT</h1>
-    </div>
-  </div>
   <div class="form">
+    <span class="title">Create Your Account</span>
     <form>
-      <label for="email",>Email Address</label><br>
-      <input type="email" id="email" name="email" class="email_input_icon">
-      <i class="fa-regular fa-envelope"></i><br>
-      <br>
-      <label for="confirm_email">Confirm Email Address</label><br>
-      <input type="email" id="confirm_email" name="confirm_email">
-      <i class="fa-regular fa-envelope"></i><br>
-      <br>
-      <label for="enter_password">Enter Password</label><br>
-      <input type="password" id="enter_password" name="enter_password">
-      <i class="fa-solid fa-lock"></i><br>
-      <br>
+      <label for="email">Email Address</label>
+      <label class="input-field">
+        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+        <input type="email" name="email" placeholder="example@gmail.com">
+      </label>
+      
+      <label for="confirm_email">Confirm Email Address</label>
+      <label class="input-field">
+        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+        <input type="email" name="confirm_email" placeholder="example@gmail.com">
+      </label>
+
+      <label for="enter_password">Enter Password</label>
+      <label class="input-field grid">
+        <span class="icon"><i class="fa-solid fa-lock"></i></span>
+        <input type="password" name="password" minlength="8" maxlength="20">
+        <div class="password-req-container">
+          <div class="password-req">
+            <span class="heading">Password must contain the following:</span>
+            <span class="lower invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>At least <strong>one letter</strong></span>
+            <span class="upper invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>At least <strong>one capital letter</strong></span>
+            <span class="digit invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>At least <strong>one number</strong> </span>
+            <span class="special invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>At least <strong>one special character</strong></span>
+            <span class="length invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>Be at least <strong>8 characters</strong></span>
+          </div>
+        </div>
+      </label>
+
+      <label class="check">
+        <input name="policyagree" type="checkbox">
+        I am 13 years of age or older and agree to the terms and policy.
+      </label>
+      
+      <input type="submit" value="Continue">
     </form>
   </div>
-  
-<div id="message">
-  <h3>Password must contain the following:</h3>
-  <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-  <p id="capital" class="invalid">A <b>capital (uppercase)</b> letter</p>
-  <p id="number" class="invalid">Must contain <b> one digit</b> from 0-9</p>
-  <p id="length" class="invalid">Minimum <b>8 characters</b></p>
-  <p id="special" class="invalid">Must contains at least <b>one</b> special character</p>
-</div>
-
-  <div class="submit">
-      <input name="policyagree" type="checkbox" value="true" id="check"  />
-      <label for="policyagree">I am 13 years of age or older and agree to the terms and policy.</label><br>
-      <br>
-      <button type="button" id="continue_button">Continue</button>
-  </div>
-  
-  
 </section>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
 <script type="text/javascript" src="{{ url_for('static', filename='js/sign_up.js') }}"></script>
 {% endblock %}
