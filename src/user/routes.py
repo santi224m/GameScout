@@ -1,7 +1,7 @@
 import requests
 
 from flask import Blueprint, render_template, request, abort
-from src.user import user_bp, signup_bp
+from src.user import user_bp, signup_bp, signin_bp
 
 @user_bp.route('/', methods=('GET', 'POST'))
 def user():

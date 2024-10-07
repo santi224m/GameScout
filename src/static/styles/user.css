@@ -14,7 +14,7 @@
 }
 
 .form input {
-    padding: 5px;
+    padding: 10px;
     width: 450px;
     background-color:  rgb(30, 35, 41);
     color: aliceblue;
@@ -24,8 +24,10 @@
 label[for="email"],
 label[for="confirm_email"],
 label[for="enter_password"] {
-    font-size: 15px;
-    font-weight: 300px;
+
+    font-size: 20px;
+    font-weight: bold;
+    color: aliceblue;
 }
 
 .submit {
@@ -88,5 +90,22 @@ button[id="continue_button"]:hover {
     left: -35px;
     content: "\2716"; /* Cross symbol */
 }
+svg.fa-envelope {
+    width: 24px; /* Adjust the width */
+    height: 24px; /* Adjust the height */
+}
 
+svg.fa-lock {
+    width: 24px; /* Adjust the width */
+    height: 24px; /* Adjust the height */
+}
 
+.user .form .email_input_icon {
+    padding-left: 40px; /* Space for the icon */
+    height: 40px; /* Input height */
+    width: 200px; /* Input width */
+    border: 1px solid #ccc; /* Input border */
+    border-radius: 5px; /* Input border radius */
+    background: url('src/static/img/envelope-regular.svg') no-repeat 10px center; /* Background icon */
+    background-size: 200px; /* Size of the background icon */
+}

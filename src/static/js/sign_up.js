@@ -20,7 +20,10 @@ var regexBlock = document.getElementById("message");
 let emailCheck = false;
 let passwordCheck = false;
 
+let origin = window.location.origin;
 
+//----------------------------------------------------------------------------//
+// REGEX CHECKER
 function regexCheck(password) {
     if(passwordRegex.test(password)){
         console.log("Password is valid");
@@ -33,6 +36,8 @@ function regexCheck(password) {
 
 
 //----------------------------------------------------------------------------//
+// HANDLES PASSWORD INPUT FOCUS
+
 // when user clicks this pops up
 getInput.onfocus = function () {
     regexBlock.style.display = "block";
@@ -81,8 +86,8 @@ getInput.onkeyup = function () {
     checkMin.classList.remove("valid");
     checkMin.classList.add("invalid");
   }
-  var specialPattern = /[\W]/;
 
+  var specialPattern = /[\W]/;
   if(myInput.value.match(specialPattern)) {
     checkSpecial.classList.remove("invalid");
     checkSpecial.classList.add("valid");
@@ -93,6 +98,7 @@ getInput.onkeyup = function () {
 }
     
 //----------------------------------------------------------------------------//
+// CONTINUE BUTTON
 document.getElementById('continue_button').addEventListener('click', function(){
     //get the values
     const email = document.getElementById('email').value;
@@ -120,12 +126,11 @@ document.getElementById('continue_button').addEventListener('click', function(){
         alert("invalid password")
     }
     
-    window.location.href = "userpage.html";
+
+  
     // check if the email,confirm, and password is acceptable
     
 
     // if it is we send the user to the signin page. 
-
-
 
 });
