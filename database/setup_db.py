@@ -48,10 +48,13 @@ def create_user(db_name, username):
   conn.commit()
   conn.close()
 
-if __name__ == "__main__":
+def setup_db():
   DB_NAME = "gamescout"
   TEST_USER = "user1"
   if not exists_database(DB_NAME):
     create_database(DB_NAME)
   create_tables(DB_NAME)
   create_user(DB_NAME, TEST_USER)
+
+if __name__ == "__main__":
+  setup_db()
