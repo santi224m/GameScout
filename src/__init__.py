@@ -32,6 +32,10 @@ def create_app(config_class=Config):
     from src.game import bp as game_bp
     app.register_blueprint(game_bp, url_prefix='/game/')
 
+    # Wishlist blueprint
+    from src.wishlist import bp as wishlist_bp
+    app.register_blueprint(wishlist_bp, url_prefix='/wishlist')
+
     # User blueprint
     from src.user import user_bp as user_bp
     from src.user import signup_bp as signup_bp

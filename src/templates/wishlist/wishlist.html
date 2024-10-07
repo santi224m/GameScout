@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Wishlist{% endblock %}
+{% block style %}
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/search.css') }}">
+{% endblock %}
+
+{% block content %}
+{% for game in users_wishlist %}
+<a style="color: #fff;" href="/game/{{ game }}">{{ game }}</a>
+{% endfor %}
+{% endblock %}

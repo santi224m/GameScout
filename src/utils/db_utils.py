@@ -11,4 +11,5 @@ class db_utils:
     with db_conn() as curr:
       curr.execute("SELECT steam_app_id FROM wishlist_item WHERE user_account_id = (SELECT id FROM user_account WHERE username = %s);", (username,))
       res = curr.fetchall()
-      return res
+      wishlist = [steamapp_id[0] for steamapp_id in res]
+      return wishlist
