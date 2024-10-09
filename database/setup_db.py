@@ -26,7 +26,7 @@ def create_tables(db_name):
   curr = conn.cursor()
 
   # User Account
-  curr.execute("CREATE TABLE IF NOT EXISTS user_account (id SERIAL PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL);")
+  curr.execute("CREATE TABLE IF NOT EXISTS user_account (id SERIAL PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL, dob DATE, currency VARCHAR(3) DEFAULT 'usd', profile_pic_path TEXT, email TEXT, allow_alerts BOOLEAN DEFAULT FALSE, allow_notifications BOOLEAN DEFAULT FALSE);")
 
   # Game
   curr.execute("CREATE TABLE IF NOT EXISTS game (steam_app_id INT PRIMARY KEY, title TEXT NOT NULL);")
