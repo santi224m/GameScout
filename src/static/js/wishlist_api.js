@@ -10,9 +10,7 @@ $('.wishlist').on("click", function() {
 $(document).ready(async function() {
   is_wishlisted = await is_game_wishlisted();
 
-  if (is_wishlisted) {
-    $('.wishlist').addClass("active");
-  }
+  if (is_wishlisted) $('.wishlist').addClass("active");
 });
 
 /*

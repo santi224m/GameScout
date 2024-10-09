@@ -126,6 +126,7 @@ class GameDetails :
       HOUR_SECONDS = 3600
       redis_conn.expire(steam_app_id, HOUR_SECONDS)
 
+
   def update(self, steam_data, reviews_data, itad_data, hltb_data):
     """Update GameDetails with data from our various API's"""
 
