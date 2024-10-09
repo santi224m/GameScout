@@ -60,8 +60,7 @@ Helper functions
 */
 
 function get_url_steamapp_id() {
-  parsed_url = window.location.href.split('/');
-  steamapp_id = parsed_url[parsed_url.length - 1];
+  steamapp_id = $(".game-title").attr("data-steamid");
   steamapp_id = parseInt(steamapp_id);
   return steamapp_id;
 }
