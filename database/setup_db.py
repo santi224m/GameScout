@@ -26,7 +26,7 @@ def create_tables(db_name):
   curr = conn.cursor()
 
   # User Account
-  curr.execute("CREATE TABLE IF NOT EXISTS user_account (id SERIAL PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL, dob DATE, currency VARCHAR(3) DEFAULT 'usd', profile_pic_path TEXT, email TEXT, allow_alerts BOOLEAN DEFAULT FALSE, allow_notifications BOOLEAN DEFAULT FALSE);")
+  curr.execute("CREATE TABLE IF NOT EXISTS user_account (id SERIAL PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL, password_hash TEXT NOT NULL, dob DATE, currency VARCHAR(3) DEFAULT 'usd', profile_pic_path TEXT, email TEXT, allow_alerts BOOLEAN DEFAULT FALSE, allow_notifications BOOLEAN DEFAULT FALSE);")
 
   # Game
   curr.execute("CREATE TABLE IF NOT EXISTS game (steam_app_id INT PRIMARY KEY, title TEXT NOT NULL);")
@@ -46,7 +46,7 @@ def create_user(db_name, username):
   conn = psycopg2.connect(database=db_name, user='postgres')
   curr = conn.cursor()
 
-  curr.execute("INSERT INTO user_account (username) VALUES (%s) ON CONFLICT (username) DO NOTHING;", (username,))
+  curr.execute("INSERT INTO user_account (username, password_hash) VALUES (%s, 'temp_hash') ON CONFLICT (username) DO NOTHING;", (username,))
 
   conn.commit()
   conn.close()
