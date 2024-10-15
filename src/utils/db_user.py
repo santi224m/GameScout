@@ -20,6 +20,12 @@ class db_user:
     """Update a user in the database"""
     raise NotImplementedError
 
-  def get_user(username):
-    """Return user info"""
-    raise NotImplementedError
+  def get_user_full(username):
+    """
+    Return all user details from the database.
+    username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications
+    """
+    with db_conn() as curr:
+      curr.execute("SELECT username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications FROM user_account WHERE username = %s;", (username,))
+      res = curr.fetchall()
+      return res
