@@ -12,7 +12,9 @@ class db_user:
 
   def insert_user(username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
     """Insert a new user to the database"""
-    raise NotImplementedError
+    with db_conn() as curr:
+      curr.execute("INSERT INTO user_account (username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications) VALUES (%s, %s, %s, %s, %s, %s, %s);",
+                   (username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications))
 
   def update_user(original_username, new_username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
     """Update a user in the database"""
