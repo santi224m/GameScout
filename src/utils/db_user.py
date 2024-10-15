@@ -1,3 +1,5 @@
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from src.utils.db_conn import db_conn
 
 class db_user:
@@ -13,8 +15,9 @@ class db_user:
   def insert_user(username, password, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
     """Insert a new user to the database"""
     with db_conn() as curr:
+      password_hash = generate_password_hash(password)
       curr.execute("INSERT INTO user_account (username, password_hash, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);",
-                   (username, password, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications))
+                   (username, password_hash, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications))
 
   def update_user(original_username, new_username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
     """Update a user in the database"""
