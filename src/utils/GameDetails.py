@@ -17,7 +17,7 @@ from flask import abort
 load_dotenv()
 
 class GameDetails :
-  def __init__(self, steam_app_id):
+  def __init__(self, steam_app_id, api_res):
     start = time.perf_counter()
 
     if isinstance(steam_app_id, str) and not steam_app_id.isdigit():
@@ -25,6 +25,7 @@ class GameDetails :
     
     # Steam Info
     self.steam_app_id = str(steam_app_id)
+    self.api_res = api_res
     self.title = None
     self.short_description = None
     self.detailed_description = None
@@ -86,7 +87,7 @@ class GameDetails :
       self.__dict__ = game.__dict__.copy()
     else:
       # If not in Redis, get it the old fashioned way
-      steam_data = query_steam_api(self.steam_app_id)
+      steam_data = query_steam_api(self.steam_app_id, self.api_res)
       steam_end = time.perf_counter()
       print(f"Gathered Steam Data in {steam_end - start:0.4f} seconds")
 
@@ -94,7 +95,7 @@ class GameDetails :
       # steamspy_end = time.perf_counter()
       # print(f"Gathered SteamSpy Data in {steamspy_end - steam_end:0.4f} seconds")
 
-      reviews_data = query_steam_reviews_api(self.steam_app_id)
+      reviews_data = query_steam_reviews_api(self.steam_app_id, self.api_res)
       reviews_end = time.perf_counter()
       print(f"Gathered Reviews Data in {reviews_end - steam_end:0.4f} seconds")
 
@@ -102,7 +103,7 @@ class GameDetails :
       parse_reviews_end = time.perf_counter()
       print(f"Updated Reviews Data in {parse_reviews_end - reviews_end:0.4f} seconds")
 
-      itad_data = query_itad_api(self.steam_app_id, steam_data['release_date']['coming_soon'])
+      itad_data = query_itad_api(self.steam_app_id, steam_data['release_date']['coming_soon'], self.api_res)
       itad_end = time.perf_counter()
       print(f"Gathered ITAD Data in {itad_end - parse_reviews_end:0.4f} seconds")
 
@@ -341,14 +342,15 @@ def query_cheap_shark_api(steam_id):
   return app_deals
 
 
-def query_itad_api(steam_id, coming_soon):
+def query_itad_api(steam_id, coming_soon, api_res):
   """Get prices, tags, and reviews from the ITAD API"""
   data = {}
 
   # Get ITAD App ID
   app_format =  'app/' + str(steam_id)
   payload = [app_format]
-  res = requests.post('https://api.isthereanydeal.com/lookup/id/shop/61/v1', data=json.dumps(payload))
+  res = api_res.ITAD_api_1_res
+
   app_id = res.json()[app_format]
 
   # Get Deals
@@ -366,12 +368,7 @@ def query_itad_api(steam_id, coming_soon):
     else: data['deals'] = None
   else: data['deals'] = None
 
-  # Get Tags and Reviews
-  url_params = {
-    "key": os.getenv("ITAD_API_KEY"),
-    "id": app_id
-  }
-  res = requests.get('https://api.isthereanydeal.com/games/info/v2', params=url_params)
+  res = api_res.ITAD_api_3_res
   details = res.json()
 
   data['tags'] = details['tags']
@@ -392,12 +389,9 @@ def query_itad_api(steam_id, coming_soon):
   return data
 
 
-def query_steam_api(steam_id):
+def query_steam_api(steam_id, api_res):
   """Update game details using Steam API"""
-  # Make API call
-  usd = 1
-  url_params = {'appids': steam_id, 'currency': usd}
-  res = requests.get('https://store.steampowered.com/api/appdetails', params=url_params)
+  res = api_res.steam_api_res
   if not 'data' in res.json()[steam_id]: abort(400) # Abort if no steam data
   app_details = res.json()[steam_id]['data']
   
@@ -478,20 +472,11 @@ def query_steam_api(steam_id):
   return app_details
 
 
-def query_steam_reviews_api(steam_id):
+def query_steam_reviews_api(steam_id, api_res):
   """Get Steam Reviews using Steam Reviews API"""
 
   # Get english reviews for display
-  url_params = {
-    'appids': steam_id,
-    'json': 1,
-    'filter': 'all',
-    'language': 'english',
-    'purchase_type': 'all',
-    'review_type': 'all',
-    'num_per_page': 10
-  }
-  res = requests.get(f'https://store.steampowered.com/appreviews/{steam_id}', params=url_params)
+  res = api_res.steam_reviews_api_res
   app_reviews = res.json()
   return app_reviews['reviews']
 
