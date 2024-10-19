@@ -11,13 +11,13 @@
       <span class="title">{{ wishlist.username }}'s Wishlist</span>
       <span class="num">{{ "{:,}".format(wishlist.num_items) }} item{% if wishlist.num_items > 1 %}s{% endif %}</span>
     </div>
-    <div id="games">
+    <div class="games">
       {% for item in wishlist.items %}
       <div class="game">
         <div class="details">
           <div class="drag">
             <i class="fa-solid fa-grip-lines"></i>
-            <input value="0" type="number">
+            <input class="position" value="{{ loop.index }}" type="number">
           </div>
           <a href="/game/{{ item.steam_app_id }}">
             <img src="{{ item.header_img }}" alt="Game Banner">

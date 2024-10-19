@@ -1,8 +1,14 @@
 $(document).ready(function() {
-  $("#games").sortable({
+  $(".games").sortable({
     axis: "y",
     handle: ".fa-grip-lines",
-    tolerance: "pointer"
+    tolerance: "pointer",
+    deactivate: function(event, ui) {
+      inputs = $(".position")
+      $.each(inputs, function(i) {
+        $(this).attr("value", i+1)
+      })
+    }
   })
 })
 

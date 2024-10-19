@@ -39,7 +39,7 @@ section.list {
       }
     }
 
-    #games {
+    .games {
       display: flex;
       flex-direction: column;
       gap: 15px;
@@ -62,6 +62,10 @@ section.list {
         display: flex;
         align-items: center;
         gap: 15px;
+
+        a {
+          height: 137px;
+        }
 
         .drag {
           display: flex;
@@ -133,6 +137,7 @@ section.list {
             @include headingMedium();
             color: col(text-main);
             text-decoration: none;
+            height: auto;
           }
 
           .tags {
