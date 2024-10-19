@@ -1,9 +1,11 @@
 """The GameDetails class collects and stores game info using various APIs"""
 import json
+import logging
 import os
 import pickle
 import re
 import requests
+import threading
 import time
 from datetime import datetime
 
@@ -13,8 +15,12 @@ from flask import abort
 
 from src.utils.HLTBHelper import HLTB
 
+format = "%(asctime)s: %(message)s"
+logging.basicConfig(format=format, level=logging.INFO,
+                    datefmt="%H:%M:%S")
+
 class GameDetails :
-  def __init__(self, steam_app_id, api_res):
+  def __init__(self, steam_app_id):
     start = time.perf_counter()
 
     if isinstance(steam_app_id, str) and not steam_app_id.isdigit():
@@ -22,7 +28,6 @@ class GameDetails :
 
     # Steam Info
     self.steam_app_id = str(steam_app_id)
-    self.api_res = api_res
     self.title = None
     self.short_description = None
     self.detailed_description = None
@@ -82,19 +87,28 @@ class GameDetails :
       self.__dict__ = game.__dict__.copy()  # Set self to game cache
     else:
       # If not in Redis, get it the old fashioned way
-      steam_data = query_steam_api(self.steam_app_id, self.api_res)
+      self.steam_api_res = None
+      self.steam_reviews_api_res = None
+      self.ITAD_api_1_res = None
+      self.ITAD_api_2_res = None
+      self.ITAD_api_3_res = None
+      self.steamplayers_api_res = None
+
+      self.call_apis_w_threads()
+
+      steam_data = query_steam_api(self.steam_app_id, self.steam_api_res)
       steam_end = time.perf_counter()
       print(f"Gathered Steam Data in {steam_end - start:0.4f} seconds")
 
-      reviews_data = query_steam_reviews_api(self.steam_app_id, self.api_res)
+      reviews_data = query_steam_reviews_api(self.steam_reviews_api_res)
       reviews_end = time.perf_counter()
       print(f"Gathered Reviews Data in {reviews_end - steam_end:0.4f} seconds")
 
-      reviews_data = parse_steam_ids(reviews_data)
+      reviews_data = parse_steam_ids(reviews_data, self.steamplayers_api_res)
       parse_reviews_end = time.perf_counter()
       print(f"Updated Reviews Data in {parse_reviews_end - reviews_end:0.4f} seconds")
 
-      itad_data = query_itad_api(self.steam_app_id, steam_data['release_date']['coming_soon'], self.api_res)
+      itad_data = query_itad_api(self.steam_app_id, steam_data['release_date']['coming_soon'], self.ITAD_api_1_res, self.ITAD_api_2_res, self.ITAD_api_3_res)
       itad_end = time.perf_counter()
       print(f"Gathered ITAD Data in {itad_end - parse_reviews_end:0.4f} seconds")
 
@@ -113,6 +127,120 @@ class GameDetails :
       redis_conn.set(steam_app_id, game_cache)
       HOUR_SECONDS = 3600
       redis_conn.expire(steam_app_id, HOUR_SECONDS)
+
+  def call_apis_w_threads(self):
+    """Make all api calls using threads to reduce wait time"""
+    start = time.perf_counter()
+    thread_ITAD_api_1 = threading.Thread(target=self.get_ITAD_api_1)
+    thread_ITAD_api_1.start()
+    thread_steamapi = threading.Thread(target=self.get_steamapi)
+    thread_steamapi.start()
+    thread_steamreviewsapi = threading.Thread(target=self.get_steam_reviews_api)
+    thread_steamreviewsapi.start()
+    thread_ITAD_api_2 = threading.Thread(target=self.get_ITAD_api_2)
+    thread_ITAD_api_3 = threading.Thread(target=self.get_ITAD_api_3)
+    thread_ITAD_api_1.join()
+    thread_ITAD_api_2.start()
+    thread_ITAD_api_3.start()
+    thread_steamplayers_api = threading.Thread(target=self.get_steamplayers_api)
+    thread_steamapi.join()
+    thread_steamplayers_api.start()
+
+    thread_steamreviewsapi.join()
+    thread_ITAD_api_2.join()
+    thread_ITAD_api_3.join()
+    thread_steamplayers_api.join()
+    end = time.perf_counter()
+    logging.info(f"GDThreadedAPI: Total time {end - start:0.4f} seconds")
+
+  def get_steamapi(self):
+    logging.info("SteamAPI: Starting request")
+    start = time.perf_counter()
+    usd = 1
+    url_params = {'appids': self.steam_app_id, 'currency': usd}
+    self.steam_api_res = requests.get('https://store.steampowered.com/api/appdetails', params=url_params)
+    end = time.perf_counter()
+    logging.info("SteamAPI: Received response")
+    logging.info(f"SteamAPI: Total time {end - start:0.4f} seconds")
+
+  def get_steam_reviews_api(self):
+    logging.info("SteamReviewsAPI: Starting request")
+    start = time.perf_counter()
+    url_params = {
+      'appids': self.steam_app_id,
+      'json': 1,
+      'filter': 'all',
+      'language': 'english',
+      'purchase_type': 'all',
+      'review_type': 'all',
+      'num_per_page': 10
+    }
+    self.steam_reviews_api_res = requests.get(f'https://store.steampowered.com/appreviews/{self.steam_app_id}', params=url_params)
+    end = time.perf_counter()
+    logging.info("SteamReviewsAPI: Received Response")
+    logging.info(f"SteamReviewAPI: Total time {end - start:0.4f} seconds")
+
+  def get_ITAD_api_1(self):
+    logging.info("ITADapi1: Starting request")
+    start = time.perf_counter()
+    app_format =  'app/' + str(self.steam_app_id)
+    payload = [app_format]
+    self.ITAD_api_1_res = requests.post('https://api.isthereanydeal.com/lookup/id/shop/61/v1', data=json.dumps(payload))
+    end = time.perf_counter()
+    logging.info("ITADapi1: Received Response")
+    logging.info(f"ITADapi1: Total time {end - start:0.4f} seconds")
+
+  def get_ITAD_api_2(self):
+    logging.info("ITADapi2: Starting request")
+    start = time.perf_counter()
+
+    app_format =  'app/' + str(self.steam_app_id)
+    payload = [app_format]
+    print(self.steam_api_res.json()[self.steam_app_id])
+    coming_soon = self.steam_api_res.json()[self.steam_app_id]['release_date']['coming_soon']
+    app_id = self.ITAD_api_1_res.json()[app_format]
+    # Get Deals
+    if not coming_soon:
+      payload = [app_id]
+      url_params = {
+        "key": os.getenv("ITAD_API_KEY"),
+        "country": "US",
+        "nondeals": "true",
+        "vouchers": "true"
+      }
+      self.ITAD_api_2_res = requests.post('https://api.isthereanydeal.com/games/prices/v2', data=json.dumps(payload), params=url_params)
+    end = time.perf_counter()
+    logging.info("ITADapi2: Received Response")
+    logging.info(f"ITADapi2: Total time {end - start:0.4f} seconds")
+
+  def get_ITAD_api_3(self):
+    logging.info("ITADapi3: Starting request")
+    start = time.perf_counter()
+    app_format =  'app/' + str(self.steam_app_id)
+    appid = self.ITAD_api_1_res.json()[app_format]
+    url_params = {
+      "key": os.getenv("ITAD_API_KEY"),
+      "id": appid
+    }
+    self.ITAD_api_3_res = requests.get('https://api.isthereanydeal.com/games/info/v2', params=url_params)
+    end = time.perf_counter()
+    logging.info("ITADapi3: Received Response")
+    logging.info(f"ITADapi3: Total time {end - start:0.4f} seconds")
+
+  def get_steamplayers_api(self):
+    logging.info("SteamPlayersAPI: Starting request")
+    start = time.perf_counter()
+
+    data = self.steam_reviews_api_res.json()['reviews']
+    url_params = {
+      'key': os.getenv("STEAM_API_KEY"),
+      'steamids': ','.join([d['author']['steamid'] for d in data])
+    }
+    self.steamplayers_api_res = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/', params=url_params)
+
+    end = time.perf_counter()
+    logging.info("SteamPlayersAPI: Received Response")
+    logging.info(f"SteamPlayersAPI: Total time {end - start:0.4f} seconds")
 
   def update(self, steam_data, reviews_data, itad_data, hltb_data):
     """Update GameDetails with data from our various API's"""
@@ -173,33 +301,25 @@ class GameDetails :
     # HLTB Data
     self.hltb = hltb_data.package()
 
-def query_itad_api(steam_id, coming_soon, api_res):
+def query_itad_api(steam_id, coming_soon, ITAD_api_1_res, ITAD_api_2_res, ITAD_api_3_res):
   """Get prices, tags, and reviews from the ITAD API"""
   data = {}
 
   # Get ITAD App ID
   app_format =  'app/' + str(steam_id)
   payload = [app_format]
-  res = api_res.ITAD_api_1_res
+  res = ITAD_api_1_res
 
   app_id = res.json()[app_format]
 
   # Get Deals
   if not coming_soon:
-    payload = [app_id]
-    url_params = {
-      "key": os.getenv("ITAD_API_KEY"),
-      "country": "US",
-      "nondeals": "true",
-      "vouchers": "true"
-    }
-    res = requests.post('https://api.isthereanydeal.com/games/prices/v2', data=json.dumps(payload), params=url_params)
-    deals = res.json()
+    deals = ITAD_api_2_res.json()
     if len(deals) > 0: data['deals'] = deals[0]['deals']
     else: data['deals'] = None
   else: data['deals'] = None
 
-  res = api_res.ITAD_api_3_res
+  res = ITAD_api_3_res
   details = res.json()
 
   data['tags'] = details['tags']
@@ -219,13 +339,12 @@ def query_itad_api(steam_id, coming_soon, api_res):
   
   return data
 
-
-def query_steam_api(steam_id, api_res):
+def query_steam_api(steam_id, steam_api_res):
   """Update game details using Steam API"""
-  res = api_res.steam_api_res
+  res = steam_api_res
   if not 'data' in res.json()[steam_id]: abort(400) # Abort if no steam data
   app_details = res.json()[steam_id]['data']
-  
+
   features = {
     "1": '<i class="fa-solid fa-user-group"></i>',                                          # Multiplayer < Cross Platform Multiplayer || Online PvP || Online Co-op
     "2": '<i class="fa-solid fa-user"></i>',                                                # Single Player
@@ -301,15 +420,15 @@ def query_steam_api(steam_id, api_res):
   app_details['categories'] = categories
   return app_details
 
-def query_steam_reviews_api(steam_id, api_res):
+def query_steam_reviews_api(steam_reviews_api_res):
   """Get Steam Reviews using Steam Reviews API"""
 
   # Get english reviews for display
-  res = api_res.steam_reviews_api_res
+  res = steam_reviews_api_res
   app_reviews = res.json()
   return app_reviews['reviews']
 
-def parse_steam_ids(data):
+def parse_steam_ids(data, steamplayers_api_res):
   """Get the display name and profile pictures for the steam ids in reviews"""
   if os.getenv('STEAM_API_KEY') is None: 
       raise ValueError('STEAM_API_KEY is not set properly in your .env file')
@@ -318,8 +437,7 @@ def parse_steam_ids(data):
     'key': os.getenv("STEAM_API_KEY"),
     'steamids': ','.join([d['author']['steamid'] for d in data])
   }
-  res = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/', params=url_params)
-  app_ids = res.json()['response']['players']
+  app_ids = steamplayers_api_res.json()['response']['players']
 
   for review in data:
       author = next((item for item in app_ids if item['steamid'] == review['author']['steamid']), None)
