@@ -1,8 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import os
-import math
-import json
 from dotenv import load_dotenv
 import time
 import re
@@ -16,10 +13,7 @@ class SearchDetails:
     self.results = []
     self.num_items = 0;
 
-    # self.query_steam_search(search_string)
     self.query_game_details(search_string)
-    # self.query_itad()
-    # self.query_steamspy()
 
   def query_game_details(self, search_string):
     start = time.perf_counter()
@@ -44,8 +38,6 @@ class SearchDetails:
       print(f"Game Finished in: {time.perf_counter() - loop_start:0.4f} seconds")
 
     print(f"Total Time: {time.perf_counter() - start:0.4f} seconds")
-
-  def query_steam_search(self, search_string):
     start = time.perf_counter()
     url_params = {
           'term': search_string,
@@ -118,28 +110,3 @@ class SearchDetails:
       print(f"Game Finished in: {time.perf_counter() - game_start:0.4f} seconds")
     
     print(f"Total Time: {time.perf_counter() - start:0.4f} seconds")
-
-
-  # def query_steamspy(self):
-  #   for result in self.results:
-  #     url_params = {'request': 'appdetails', 'appid':result['steamid']}
-  #     res = requests.get('https://steamspy.com/api.php', params=url_params)
-  #     app_data = res.json()
-
-  #     result['tags'] = [tag for tag in app_data['tags']]
-  #     result['total_reviews'] = app_data['positive'] + app_data['negative']
-  #     result['total_positive'] = app_data['positive']
-  #     result['total_negative'] = app_data['negative']
-
-  # def query_itad(self):
-  #   payload = ["app/" + result['steamid'] for result in self.results]
-  #   res = requests.post('https://api.isthereanydeal.com/lookup/id/shop/61/v1', data=json.dumps(payload))
-  #   app_data = res.json()
-    
-  #   url_params = {
-  #     'key': os.getenv("ITAD_API_KEY"),
-  #     'id': app_data['app/400']
-  #   }
-  #   res = requests.get('https://api.isthereanydeal.com/games/info/v2', params=url_params)
-  #   data = res.json()
-  #   print(str(data))

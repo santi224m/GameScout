@@ -166,6 +166,9 @@ section.main {
               grid-template-columns: auto;
               grid-template-rows: auto;
               grid-template-areas: "icon text";
+              transition: 0.5s ease all;
+              max-width: 200px;
+              overflow: hidden;
 
               i, svg {
                 width: 16px;
@@ -181,15 +184,14 @@ section.main {
                 @include bodyLarge(); 
                 color: col(text-main);
                 grid-area: text;
+                opacity: 1;
+                transition: 0.5s ease all;
               }
 
               &.wishlist.active {
                 background-color: col(accent-red);
                 gap: 0px;
-
-                span {
-                  display: none;
-                }
+                max-width: 56px;
 
                 .solid {
                   display: flex;
@@ -197,6 +199,10 @@ section.main {
 
                 .outline {
                   display: none;
+                }
+
+                span {
+                  opacity: 0;
                 }
               }
 
