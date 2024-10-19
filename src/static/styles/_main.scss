@@ -146,6 +146,32 @@ body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    border-radius: br();
+    margin-top: 5px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: col(bg-main-20);
+    border-radius: br();
+  }
+  
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background-color: col(bg-tertiary);
+    border-radius: br();
+    cursor: pointer;
+    transition: 0.25s ease;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: col(secondary); 
+    border-radius: br();
+  }
 }
 
 body {
@@ -164,7 +190,7 @@ nav {
   display: flex;
   width: 100%;
   height: 60px;
-  padding: 0px 20px;
+  padding: 0px 10px;
   box-sizing: border-box;
   justify-content: space-between;
   align-items: center;
@@ -273,6 +299,7 @@ section.footer {
   align-self: stretch;
   background-color: col(bg-main);
   height: 66px;
+  gap: 10px;
 
   .logo {
     display: flex;
@@ -293,6 +320,7 @@ section.footer {
   span {
     @include bodyLarge();
     color: col(text-dim);
+    flex-shrink: 4;
   }
 
   div.buttons {
@@ -311,6 +339,7 @@ section.footer {
       color: col(text-main);
       text-decoration: none;
       transition: 0.25s ease-in-out background-color;
+      text-wrap: nowrap;
 
       &:hover {
         background-color: col(bg-tertiary);
