@@ -3,14 +3,12 @@ from src.game import bp
 
 from src.utils.GameDetails import GameDetails
 from src.utils.db_utils import db_utils
-from src.utils.GDThreadedAPI import GDThreadedAPI
 
 @bp.route('/<steam_app_id>')
 def game(steam_app_id):
     # Redirect user to home page if steam_app_id is invalid
     if not steam_app_id.isdigit():
         return redirect(url_for('main.index'))
-    # api_res = GDThreadedAPI(steam_app_id)
     game_details = GameDetails(steam_app_id)
     db_utils.insert_game(steam_app_id, game_details.title)
     return render_template('game/game_page.html', game=game_details)
