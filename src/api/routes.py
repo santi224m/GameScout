@@ -9,6 +9,13 @@ def add_wishlist_item():
   db_utils.insert_wishlist_item(username, steamapp_id)
   return jsonify({'status': 'success'})
 
+@bp.route('/delete_wishlist_item', methods=('GET', 'POST'))
+def delete_wishlist_item():
+  steamapp_id = request.json['steamapp_id']
+  username = "user1"
+  db_utils.delete_wishlist_item(username, steamapp_id)
+  return jsonify({'status': 'success'})
+
 @bp.route('/get_wishlist_items', methods=('GET', 'POST'))
 def get_wishlist_items():
   username = "user1"

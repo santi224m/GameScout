@@ -6,6 +6,11 @@ class db_utils:
     with db_conn() as curr:
       curr.execute("INSERT INTO wishlist_item (user_account_id, steam_app_id) VALUES ((SELECT id FROM user_account WHERE username = %s), %s) ON CONFLICT (user_account_id, steam_app_id) DO NOTHING;", (username, steamapp_id))
 
+  def delete_wishlist_item(username, steamapp_id):
+    """Remove a wishlisted item from a user's account"""
+    with db_conn() as curr:
+      curr.execute("DELETE FROM wishlist_item WHERE user_account_id = (SELECT id FROM user_account WHERE username =%s) AND steam_app_id = %s;", (username, steamapp_id))
+
   def get_user_wishlist_items(username):
     """Return a list of steam app ids from a user's wishlist"""
     with db_conn() as curr:

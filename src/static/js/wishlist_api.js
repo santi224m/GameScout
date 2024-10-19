@@ -2,9 +2,16 @@
 Add the current game to the user's wishlist
 */
 
-$('.wishlist').on("click", function() {
-  $(this).addClass("active");
-  add_to_wishlist();
+$('.wishlist').on("click", async function() {
+  // Wishlist if not wishlisted, remove from wishlist otherwise
+  is_wishlisted = await is_game_wishlisted();
+  if (!is_wishlisted) {
+    $(this).addClass("active");
+    add_to_wishlist();
+  } else {
+    $(this).removeClass("active");
+    delete_from_wishlist();
+  }
 })
 
 $(document).ready(async function() {
@@ -19,7 +26,7 @@ Async Functions
 
 async function add_to_wishlist() {
   // Add current game to user's wishlist
-  steamapp_id = get_url_steamapp_id();
+  steamapp_id = get_steamapp_id();
 
   const response = await fetch('/api/add_wishlist_item', {
     method: 'POST',
@@ -30,8 +37,21 @@ async function add_to_wishlist() {
   const data = await response.json();
 }
 
+async function delete_from_wishlist() {
+  // Delete current game from user's wishlist
+  steamapp_id = get_steamapp_id();
+
+  const response = await fetch('/api/delete_wishlist_item', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({steamapp_id: steamapp_id})
+  });
+
+  const data = await response.json();
+}
+
 async function is_game_wishlisted() {
-  steam_app_id = get_url_steamapp_id();
+  steam_app_id = get_steamapp_id();
   const response = await fetch('/api/is_game_wishlisted', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
@@ -57,7 +77,7 @@ async function get_wishlist() {
 Helper functions
 */
 
-function get_url_steamapp_id() {
+function get_steamapp_id() {
   steamapp_id = $(".game-title").attr("data-steamid");
   steamapp_id = parseInt(steamapp_id);
   return steamapp_id;
