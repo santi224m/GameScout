@@ -1,21 +1,17 @@
 """The GameDetails class collects and stores game info using various APIs"""
-import requests
-import math
-import os
-from howlongtobeatpy import HowLongToBeat
-from dotenv import load_dotenv
-from bs4 import BeautifulSoup
-import time
-from fake_useragent import UserAgent
 import json
-from datetime import datetime
-import redis
+import os
 import pickle
 import re
-from flask import abort
-from src.utils.HLTBHelper import HLTB
+import requests
+import time
+from datetime import datetime
 
-load_dotenv()
+import redis
+from bs4 import BeautifulSoup
+from flask import abort
+
+from src.utils.HLTBHelper import HLTB
 
 class GameDetails :
   def __init__(self, steam_app_id, api_res):
@@ -23,7 +19,7 @@ class GameDetails :
 
     if isinstance(steam_app_id, str) and not steam_app_id.isdigit():
       raise ValueError("Steam App ID must be a digit")
-    
+
     # Steam Info
     self.steam_app_id = str(steam_app_id)
     self.api_res = api_res
@@ -77,23 +73,18 @@ class GameDetails :
       'all_styles': None
     }
 
-    # Connect to Redis
+    # Redis game cache
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     # See if the Steam ID is already in Redis
     if (game_cache := redis_conn.get(steam_app_id)) is not None:
       print("Using game cache...")
       game = pickle.loads(game_cache)
-      # Copy Redis Data into this GameDetails Instance
-      self.__dict__ = game.__dict__.copy()
+      self.__dict__ = game.__dict__.copy()  # Set self to game cache
     else:
       # If not in Redis, get it the old fashioned way
       steam_data = query_steam_api(self.steam_app_id, self.api_res)
       steam_end = time.perf_counter()
       print(f"Gathered Steam Data in {steam_end - start:0.4f} seconds")
-
-      # steamspy_data = query_steamspy_api(self.steam_app_id)
-      # steamspy_end = time.perf_counter()
-      # print(f"Gathered SteamSpy Data in {steamspy_end - steam_end:0.4f} seconds")
 
       reviews_data = query_steam_reviews_api(self.steam_app_id, self.api_res)
       reviews_end = time.perf_counter()
@@ -107,10 +98,6 @@ class GameDetails :
       itad_end = time.perf_counter()
       print(f"Gathered ITAD Data in {itad_end - parse_reviews_end:0.4f} seconds")
 
-      # cheap_shark_data = query_cheap_shark_api(self.steam_app_id)
-      # cheapshark_end = time.perf_counter()
-
-      # hltb_data = query_hltb_manual(steam_data['name'])
       hltb_data = HLTB(steam_data['name'])
       hltb_end = time.perf_counter()
       print(f"Gathered HLTB in {hltb_end - itad_end:0.4f} seconds")
@@ -126,7 +113,6 @@ class GameDetails :
       redis_conn.set(steam_app_id, game_cache)
       HOUR_SECONDS = 3600
       redis_conn.expire(steam_app_id, HOUR_SECONDS)
-
 
   def update(self, steam_data, reviews_data, itad_data, hltb_data):
     """Update GameDetails with data from our various API's"""
@@ -313,9 +299,7 @@ def query_steam_api(steam_id, api_res):
     del(categories[find(categories, 51)])
      
   app_details['categories'] = categories
-
   return app_details
-
 
 def query_steam_reviews_api(steam_id, api_res):
   """Get Steam Reviews using Steam Reviews API"""
@@ -324,7 +308,6 @@ def query_steam_reviews_api(steam_id, api_res):
   res = api_res.steam_reviews_api_res
   app_reviews = res.json()
   return app_reviews['reviews']
-
 
 def parse_steam_ids(data):
   """Get the display name and profile pictures for the steam ids in reviews"""
@@ -346,14 +329,12 @@ def parse_steam_ids(data):
       review['post_date'] = datetime.fromtimestamp(int(review['timestamp_created'])).strftime("%B %d %Y")
   return data
 
-
 def soupify(requirement):
   """Formats Hardware Requirements by modifying HTML"""
   soup = BeautifulSoup(requirement, features="html.parser")
   for tag in soup.find_all("strong"):
     if tag.parent.name == "li" and tag.parent.contents[1].name != "span":
       contents = tag.parent.contents[1]
-      print(contents)
       new_tag = soup.new_tag("span")
       new_tag.string = contents
       tag.parent.contents[1].replace_with(new_tag)
@@ -364,11 +345,7 @@ def soupify(requirement):
          if item.name == None and re.search("[A-Za-z]+:", item.string):
             new_tag = soup.new_tag("br")
             item.insert_after(new_tag)
-
-  # for tag in soup.find_all("br"):
-  #   tag.decompose()
   return str(soup)
-
 
 def soupificate(desc):
   """Addes header to game descriptions without a header"""
@@ -378,7 +355,6 @@ def soupificate(desc):
     new_tag.string = "About this Game"
     soup.insert(0, new_tag)
   return str(soup)
-
 
 def find(categories, id):
    return next((i for i, item in enumerate(categories) if str(item["id"]) == str(id)), None)
