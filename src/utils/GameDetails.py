@@ -13,6 +13,7 @@ import redis
 import pickle
 import re
 from flask import abort
+from src.utils.HLTBHelper import HLTB
 
 load_dotenv()
 
@@ -70,7 +71,6 @@ class GameDetails :
     
     # HowLongToBeat
     self.hltb = {
-      'link': None,
       'main': None,
       'main_extra': None,
       'completionist': None,
@@ -111,7 +111,7 @@ class GameDetails :
       # cheapshark_end = time.perf_counter()
 
       # hltb_data = query_hltb_manual(steam_data['name'])
-      hltb_data = query_hltb(steam_data['name'])
+      hltb_data = HLTB(steam_data['name'])
       hltb_end = time.perf_counter()
       print(f"Gathered HLTB in {hltb_end - itad_end:0.4f} seconds")
 
@@ -172,18 +172,8 @@ class GameDetails :
       if 'descriptors' not in self.esrb_rating:
          self.esrb_rating['descriptors'] = None
 
-
-    # SteamSpy Data (tags)
-    # self.tags = steamspy_data['tags']
-    # self.total_reviews = steamspy_data['total_reviews']
-    # self.positive_reviews = steamspy_data['total_positive']
-    # self.negative_reviews = steamspy_data['total_negative']
-
     # Steam Reviews Data
     self.reviews = reviews_data
-
-    # CheapShark Data
-    # self.deals = cheap_shark_data
 
     # ITAD Data
     self.deals = itad_data['deals']
@@ -195,152 +185,7 @@ class GameDetails :
       self.negative_reviews = itad_data['total_negative']    
 
     # HLTB Data
-    self.hltb = hltb_data
-
-
-def query_hltb(title):
-  """Update HowLongToBeat data using howlongtobeatpy"""
-  results_list = HowLongToBeat().search(title.lower())
-  hltb_data = {}
-  if results_list is not None and len(results_list) > 0:
-      best_element = max(results_list, key=lambda element: element.similarity)
-      hltb_data['link'] = best_element.game_web_link
-      hltb_data['main'] = hltb_format(best_element.main_story)
-      hltb_data['main_extra'] = hltb_format(best_element.main_extra)
-      hltb_data['completionist'] = hltb_format(best_element.completionist)
-      hltb_data['all_styles'] = hltb_format(best_element.all_styles)
-  else: hltb_data = None
-
-  return hltb_data
-
-  
-def query_hltb_manual(title):
-    """
-    Get HLTB Data without howlongtobeatpy, sometimes faster, sometimes still slow, 
-    also will die if they change the key
-    """
-    hltb_data = {}
-
-    ua = UserAgent()
-    headers = {
-            'content-type': 'application/json',
-            'accept': '*/*',
-            'User-Agent': ua.random.strip(),
-            'referer': 'https://howlongtobeat.com/'
-    }
-    payload = {
-        "searchType": "games",
-        "searchTerms": title.split(" "),
-        "searchPage": 1,
-        "size": 1,
-        "searchOptions": {
-            "games": {
-                "userId": 0,
-                "platform": "",
-                "sortCategory": "popular",
-                "rangeCategory": "main",
-                "rangeTime": {"min": 0, "max": 0},
-                "gameplay": {"perspective": "", "flow": "", "genre": ""},
-                "rangeYear": {"min": "", "max": ""},
-                "modifier": ""
-            },
-            "users": {"sortCategory": "postcount"},
-            "lists": {"sortCategory": "follows"},
-            "filter": "",
-            "sort": 0,
-            "randomizer": 0
-        }
-    }
-    res = requests.post("https://howlongtobeat.com/api/search/21fda17e4a1d49be", headers=headers, data=json.dumps(payload))
-    try:
-      data = res.json()['data'][0]
-    except IndexError:
-       return None
-    
-    # hltb_data['link'] = data.game_web_link
-    hltb_data['main'] = hltb_format(data['comp_main'] / 3600)
-    hltb_data['main_extra'] = hltb_format(data['comp_plus'] / 3600)
-    hltb_data['completionist'] = hltb_format(data['comp_100'] / 3600)
-    hltb_data['all_styles'] = hltb_format(data['comp_all'] / 3600)
-
-    return hltb_data
-
-
-def query_steamspy_api(steam_id):
-  """Update tags using the SteamSpy API"""
-  url_params = {'request': 'appdetails', 'appid':steam_id}
-  res = requests.get('https://steamspy.com/api.php', params=url_params)
-  app_data = res.json()
-
-  steamspy = {
-     'tags': [tag for tag in app_data['tags']],
-     'total_reviews': app_data['positive'] + app_data['negative'],
-     'total_positive': app_data['positive'],
-     'total_negative': app_data['negative']
-  }
-
-  return steamspy
-
-
-def query_cheap_shark_api(steam_id):
-  """Update deals details using CheapShark API"""
-  # Convert Steam App ID into CheapShark ID
-  url_params = {'steamAppID':steam_id, 'limit': 1}
-  res = requests.get('https://www.cheapshark.com/api/1.0/games', params=url_params)
-
-  # Take the CheapShark ID we just got and make it a list of prices
-  res = requests.get('https://www.cheapshark.com/api/1.0/games', params={'id':res.json()[0]['gameID']})
-  app_deals = res.json()['deals']
-
-  # Massive switch to remove to set storeName based on storeID (only uses active CheapShark stores which is why numbers are skipped)
-  for deal in app_deals:
-    match int(deal['storeID']):
-      case 1:
-          deal['storeName'] = "Steam"
-      case 2:
-          deal['storeName'] = "GamersGate"
-      case 3:
-          deal['storeName'] = "GreenManGaming"
-      case 7:
-          deal['storeName'] = "GOG"
-      case 8:
-          deal['storeName'] = "Origin"
-      case 11:
-          deal['storeName'] = "Humble Store"
-      case 13:
-          deal['storeName'] = "Uplay"
-      case 14:
-          deal['storeName'] = "IndieGameStand"
-      case 15:
-          deal['storeName'] = "Fanatical"
-      case 21:
-          deal['storeName'] = "WinGameStore"
-      case 23:
-          deal['storeName'] = "GameBillet"
-      case 24:
-          deal['storeName'] = "Voidu"
-      case 25:
-          deal['storeName'] = "Epic Games Store"
-      case 27:
-          deal['storeName'] = "Gamesplanet"
-      case 28:
-          deal['storeName'] = "Gamesload"
-      case 29:
-          deal['storeName'] = "2Game"
-      case 30:
-          deal['storeName'] = "IndieGala"
-      case 31:
-          deal['storeName'] = "Blizzard Shop"
-      case 33:
-          deal['storeName'] = "DLGamer"
-      case 34:
-          deal['storeName'] = "Noctre"
-      case 35:
-          deal['storeName'] = "DreamGame"
-    del deal['storeID']
-  
-  return app_deals
-
+    self.hltb = hltb_data.package()
 
 def query_itad_api(steam_id, coming_soon, api_res):
   """Get prices, tags, and reviews from the ITAD API"""
@@ -502,20 +347,13 @@ def parse_steam_ids(data):
   return data
 
 
-def hltb_format(num):
-  """Format HowLongToBeat hours by round to the nearest half hour and adding the 1/2 symbol"""
-  norm_num = round(num * 2) / 2
-
-  if norm_num%1==0: return str(int(norm_num))
-  else: return str(math.floor(norm_num)) + "½"
-
-
 def soupify(requirement):
   """Formats Hardware Requirements by modifying HTML"""
   soup = BeautifulSoup(requirement, features="html.parser")
   for tag in soup.find_all("strong"):
-    if tag.parent.name == "li":
+    if tag.parent.name == "li" and tag.parent.contents[1].name != "span":
       contents = tag.parent.contents[1]
+      print(contents)
       new_tag = soup.new_tag("span")
       new_tag.string = contents
       tag.parent.contents[1].replace_with(new_tag)
