@@ -5,9 +5,106 @@
 {% endblock %}
 
 {% block content %}
-<section class="content">
-  {% for (steamapp_id, title) in users_wishlist %}
-  <a href="/game/{{ steamapp_id }}">{{ title }}</a>
-  {% endfor %}
+<section class="list">
+  <div class="content">
+    <div class="header">
+      <span class="title">{{ wishlist.username }}'s Wishlist</span>
+      <span class="num">{{ "{:,}".format(wishlist.num_items) }} item{% if wishlist.num_items > 1 %}s{% endif %}</span>
+    </div>
+    <div id="games">
+      {% for item in wishlist.items %}
+      <div class="game">
+        <div class="details">
+          <div class="drag">
+            <i class="fa-solid fa-grip-lines"></i>
+            <input value="0" type="number">
+          </div>
+          <a href="/game/{{ item.steam_app_id }}">
+            <img src="{{ item.header_img }}" alt="Game Banner">
+          </a>
+          <div class="info">
+              <a href="/game/{{ item.steam_app_id }}" class="game-title">{{ item.title }}</a>
+            <div class="tags">
+              {% for i in range(0, 6) %}
+              {% if item.tags[i] %}<span>{{ item.tags[i] }}</span>{% endif %}
+              {% endfor %}
+            </div>
+            <div class="platforms-date">
+              <div class="platforms">
+                {% if item.platforms.windows %}
+                  <i class="fa-brands fa-windows"></i>
+                {% endif %}
+                {% if item.platforms.mac %}
+                  <i class="fa-brands fa-apple"></i>
+                {% endif %}
+                {% if item.platforms.linux %}
+                  <i class="fa-brands fa-ubuntu"></i>
+                {% endif %}
+              </div>
+              <span class="date">{{ item.release_date.date }}</span>
+            </div>
+            {% if item.is_reviews %}
+            <div class="reviews">
+              <div class="display">
+                <div class="bar">
+                  <span class="positive"  style="width: calc({{ item.positive_reviews / item.total_reviews }} * 134px);"></span>
+                  <span class="negative"></span>
+                </div>
+                <div class="positive">
+                  <span>{{ (item.positive_reviews / item.total_reviews * 100)|round|int }}%</span>
+                  <i class="fa-solid fa-thumbs-up"></i>
+                </div>
+                <div class="negative">
+                  <span>{{ (item.negative_reviews / item.total_reviews * 100)|round|int }}%</span>
+                  <i class="fa-solid fa-thumbs-down"></i>
+                </div>
+              </div>
+              <span class="secondary">{{ "{:,}".format(item.total_reviews) }} Reviews</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        <div class="actions">
+          <div class="buttons">
+            <span class="confirm">Press again to confirm</span>
+            <button class="wishlist" data-steamid="{{ item.steam_app_id }}"><i class="fa-solid fa-heart solid"></i></button>
+            <button class="watch"><i class="fa-regular fa-eye"></i></button>
+          </div>
+          <span class="add-date">Added on January 1, 1990</span>
+          <div class="price-container">
+            {% if item.deals %}
+            {% for deal in item.deals|groupby("price.amount")|first|last %}
+            {% if deal.voucher %}
+            <span class="voucher">Using code {{ deal.voucher }}</span>
+            {% endif %}
+            <div class="display">
+              {% if deal.cut|float|round|int != 0 %}
+              <span class="percent">-{{ deal.cut|float|round|int }}%</span>
+              {% endif %}
+              <div class="prices">
+                {% if deal.cut|float|round|int != 0 %}
+                <span class="retail-price">${{ deal.regular.amount }}</span>
+                {% endif %}
+                {% if deal.price.amount != 0 %}
+                <span class="price">${{ deal.price.amount }}</span>
+                {% else %}
+                <span class="price">Free</span>
+                {% endif %}
+              </div>
+            </div>
+            <a href="{{ deal.url }}", target="_blank">Purchase</a>
+            {% endfor %}
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 </section>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="https://code.jquery.com/ui/1.14.0/jquery-ui.min.js" integrity="sha256-Fb0zP4jE3JHqu+IBB9YktLcSjI1Zc6J2b6gTjB0LpoM=" crossorigin="anonymous"></script>
+<script src="{{ url_for('static', filename='js/wishlist_wishlist_api.js') }}"></script>
 {% endblock %}

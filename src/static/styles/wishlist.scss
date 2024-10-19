@@ -1,25 +1,433 @@
 // Include Main
 @use "main" as *;
 
-// Styles
-section.content {
+// Temp Search Styling
+section.list {
   background: linear-gradient(223deg, #0E141B -9.34%, #14344B 79.71%);
+  width: 100%;
+  min-height: calc(100vh - 60px - 66px);
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-  align-self: stretch;
-  height: calc(100vh - 60px - 66px);
-  padding: 100px;
+  justify-content: center;
 
-  a {
-    color: col(primary);
-    @include headingMedium();
-    text-decoration: none;
-    transition: 0.25s ease;
+  // Steam Search
+  div.content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+    margin-top: 45px;
+    margin-bottom: 100px;
+    width: 1300px;
 
-    &:hover {
-      color: col(secondary);
+    div.header {
+      display: flex;
+      width: 100%;
+      padding: 25px 15px;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 5px;
+      background-color: col(bg-main);
+
+      span.title {
+        color: col(text-main);
+        @include headingLarge();
+      }
+
+      span.num {
+        color: col(text-dim);
+        @include headingSmall();
+      }
+    }
+
+    #games {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      position: relative;
+    }
+
+    div.game {
+      text-decoration: none;
+      display: flex;
+      width: 100%;
+      padding: 15px;
+      justify-content: space-between;
+      align-items: center;
+      background-color: col(bg-main-50);
+      border-radius: 5px;
+      position: relative;
+
+      .details {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+
+        .drag {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+          align-items: center;
+          align-self: flex-end;
+          gap: 30px;
+
+          i, svg {
+            width: 24px;
+            height: 24px;
+            color: col(text-dim);
+            transition: 0.25s ease;
+            cursor: pointer;
+
+            &:hover {
+              color: col(text-main);
+            }
+          }
+
+          input {
+            display: flex;
+            width: 28px;
+            height: 28px;
+            justify-content: center;
+            align-items: center;
+            appearance: textfield;
+            -moz-appearance: textfield;
+            border-radius: br();
+            background-color: col(bg-main);
+            border: 1px solid col(bg-highlight);
+            @include bodyMedium();
+            color: col(text-dim);
+            transition: 0.25s ease;
+            text-align: center;
+
+            &::-webkit-outer-spin-button,
+            &::-webkit-inner-spin-button {
+              -webkit-appearance: none;
+              margin: 0;
+            }
+
+            &:hover, &:focus {
+              color: col(text-main);
+            }
+
+            &:focus {
+              outline: none;
+              border: 1px solid col(secondary);
+            }
+          }
+        }
+
+        img {
+          width: auto;
+          height: 137px;
+          border-radius: br();
+        }
+
+        .info {
+          display: flex;
+          height: 137px;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: flex-start;
+
+          a.game-title {
+            @include headingMedium();
+            color: col(text-main);
+            text-decoration: none;
+          }
+
+          .tags {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: 400px;
+            overflow: hidden;
+            flex-wrap: wrap;
+            height: 30px;
+
+            span {
+              display: flex;
+              padding: 8px 13px;
+              align-items: center;
+              gap: 10px;
+              border-radius: br();
+              background-color: col(bg-main);
+              color: col(text-dim);
+              @include bodySmall();
+              white-space: nowrap;
+            }
+          }
+
+          .platforms-date {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            .platforms {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+
+              i, svg {
+                height: 24px;
+                width: auto;
+                color: col(text-dim);
+              }
+            }
+
+            span.date {
+              @include bodyMedium();
+              color: col(text-dim);
+            }
+          }
+
+          .reviews {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+
+            .secondary {
+              @include bodyMedium();
+              color: col(secondary);
+            }
+
+            .display {
+              width: 138px;
+              height: 23px;
+              display: grid;
+              grid-template-rows: auto;
+              grid-template-columns: auto;
+              grid-template-areas: 
+                "positive negative"
+                "bar bar";
+              gap: 3px;
+
+              .bar {
+                display: flex;
+                width: 138px;
+                align-items: flex-start;
+                gap: 2px;
+                grid-area: bar;
+
+                span {
+                  height: 4px;
+                  border-radius: 2px;
+                  opacity: 0.8;
+
+                  &.positive {
+                    width: 124px;
+                    background-color: col(primary);
+                  }
+
+                  &.negative {
+                    flex: 1 0 0;
+                    background-color: col(accent-red);
+                  }
+                }
+              }
+
+              .positive {
+                display: inline-flex;
+                align-items: center;
+                gap: 3px;
+                grid-area: positive;
+
+                span {
+                  @include bodySmall();
+                  color: col(primary);
+                }
+
+                i, svg {
+                  opacity: 0.4;
+                  color: col(primary);
+                  width: 13px;
+                  height: auto;
+                }
+              }
+
+              .negative {
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+                align-items: center;
+                gap: 3px;
+                grid-area: negative;
+
+                span {
+                  @include bodySmall();
+                  color: col(accent-red);
+                }
+
+                i, svg {
+                  opacity: 0.4;
+                  color: col(accent-red);
+                  width: 13px;
+                  height: auto;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .actions {
+        display: flex;
+        height: 100%;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-end;
+
+        .buttons {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          .confirm {
+            color: col(accent-red);
+            @include bodyMedium();
+            text-align: right;
+            max-width: 0px;
+            transition: 0.5s ease;
+            overflow: hidden;
+            text-wrap: nowrap;
+            opacity: 0;
+
+            &.active {
+              max-width: 200px;
+              opacity: 1;
+            }
+          }
+
+          button {
+            width: 47px;
+            height: 47px;
+            justify-content: center;
+            align-items: center;
+            border-radius: br();
+            background-color: col(bg-highlight);
+            border: none;
+            cursor: pointer;
+            transition: 0.5s ease all;
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: auto;
+            grid-template-areas: "icon";
+
+            &:hover {
+              background-color: col(bg-hover);
+            }
+
+            &.wishlist {
+              background-color: col(accent-red);
+
+              .solid {
+                display: flex;
+              }
+            }
+
+            &.watch.active {
+              background-color: col(bg-hover);
+            }
+
+            i, svg {
+              width: 24px;
+              height: auto;
+              color: col(text-main);
+              grid-area: icon;
+
+              &.solid {
+                display: none;
+              }
+            }
+          }
+        }
+
+        .add-date {
+          @include bodyMedium();
+          color: col(text-dim);
+        }
+
+        .price-container {
+          display: flex;
+          align-items: center;
+          gap: 13px;
+
+          .voucher {
+            @include bodyMedium();
+            color: col(text-dim);
+            align-self: flex-end;
+          }
+
+          .display {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            .percent {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 40px;
+              padding: 10px;
+              border-radius: br();
+              background-color: col(accent-green);
+              color: col(bg-main);
+              @include headingSmall();
+            }
+
+            .prices {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+
+              .retail-price {
+                @include headingSmall();
+                color: col(text-dim);
+                text-decoration: line-through;
+                text-decoration-color: rgba(200, 200, 200, 0.8);
+                text-decoration-thickness: 2px;
+              }
+
+              .price {
+                @include headingSmall();
+                color: col(text-main);
+                text-align: right;
+
+                &.sale {
+                  color: col(accent-green);
+                }
+              }
+            }
+          }
+
+          a {
+            display: flex;
+            height: 44px;
+            width: max-content;
+            padding: 16px;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            border-radius: br();
+            background-color: col(secondary);
+            color: col(text-main);
+            @include bodyLarge();
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.25s ease-in-out background-color;
+            border: none;
+            z-index: 2;
+  
+            &:active, &:visited {
+              color: col(text-main);
+            }
+  
+            &:hover {
+              background-color: col(bg-tertiary);
+            }
+          }
+        }
+      }
     }
   }
 }
