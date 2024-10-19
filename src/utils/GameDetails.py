@@ -1,6 +1,7 @@
 """The GameDetails class collects and stores game info using various APIs"""
 import json
 import logging
+import multiprocessing
 import os
 import pickle
 import re
@@ -93,6 +94,7 @@ class GameDetails :
       self.ITAD_api_2_res = None
       self.ITAD_api_3_res = None
       self.steamplayers_api_res = None
+      self.hltb_data = None
 
       self.call_apis_w_threads()
 
@@ -113,14 +115,11 @@ class GameDetails :
       itad_end = time.perf_counter()
       print(f"Gathered ITAD Data in {itad_end - parse_reviews_end:0.4f} seconds")
 
-      hltb_data = HLTB(steam_data['name'])
-      hltb_end = time.perf_counter()
-      print(f"Gathered HLTB in {hltb_end - itad_end:0.4f} seconds")
-
-      self.update(steam_data, reviews_data, itad_data, hltb_data)
+      update_start = time.perf_counter()
+      self.update(steam_data, reviews_data, itad_data, self.hltb_data)
       update_end = time.perf_counter()
-      print(f"Update variables in {update_end - hltb_end:0.4f} seconds")
-      
+      print(f"Update variables in {update_end - update_start:0.4f} seconds")
+
       print(f"Total Time: {update_end - start:0.4f} seconds")
 
       # Store game_details in Redis cache
@@ -146,13 +145,27 @@ class GameDetails :
     thread_steamplayers_api = threading.Thread(target=self.get_steamplayers_api)
     thread_steamapi.join()
     thread_steamplayers_api.start()
+    q = multiprocessing.Queue()
+    hltb_proc = multiprocessing.Process(target=self.get_htlb_data, args=(q,))
+    hltb_proc.start()
 
     thread_steamreviewsapi.join()
     thread_ITAD_api_2.join()
     thread_ITAD_api_3.join()
     thread_steamplayers_api.join()
+    hltb_proc.join()
+    self.hltb_data = q.get()
     end = time.perf_counter()
     logging.info(f"call_apis_w_threads: Total time {end - start:0.4f} seconds")
+
+  def get_htlb_data(self, q):
+    logging.info("HLTB: Calling Helper")
+    start = time.perf_counter()
+    hltb_data = HLTB(self.steam_api_res.json()[self.steam_app_id]['data']['name'])
+    q.put(hltb_data)
+    end = time.perf_counter()
+    logging.info("HLTB: Helper returned")
+    logging.info(f"HLTB Helper: Total time {end - start:0.4f} seconds")
 
   def get_steamapi(self):
     logging.info("SteamAPI: Starting request")
