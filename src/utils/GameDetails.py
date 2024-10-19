@@ -96,9 +96,10 @@ class GameDetails :
 
       self.call_apis_w_threads()
 
+      steam_start = time.perf_counter()
       steam_data = query_steam_api(self.steam_app_id, self.steam_api_res)
       steam_end = time.perf_counter()
-      print(f"Gathered Steam Data in {steam_end - start:0.4f} seconds")
+      print(f"Gathered Steam Data in {steam_end - steam_start:0.4f} seconds")
 
       reviews_data = query_steam_reviews_api(self.steam_reviews_api_res)
       reviews_end = time.perf_counter()
@@ -151,7 +152,7 @@ class GameDetails :
     thread_ITAD_api_3.join()
     thread_steamplayers_api.join()
     end = time.perf_counter()
-    logging.info(f"GDThreadedAPI: Total time {end - start:0.4f} seconds")
+    logging.info(f"call_apis_w_threads: Total time {end - start:0.4f} seconds")
 
   def get_steamapi(self):
     logging.info("SteamAPI: Starting request")
