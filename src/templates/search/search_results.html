@@ -47,7 +47,7 @@
             <a href="/game/{{ result.steam_app_id }}" class="title">{{ result.title }}</a>
           <div class="tags">
             {% for i in range(0, 6) %}
-            <span>{{ result.tags[i] }}</span>
+            {% if result.tags[i] %}<span>{{ result.tags[i] }}</span>{% endif %}
             {% endfor %}
           </div>
           <div class="platforms-date">
