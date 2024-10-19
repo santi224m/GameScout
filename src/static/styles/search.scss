@@ -114,7 +114,7 @@ section.search {
           justify-content: space-between;
           align-items: flex-start;
 
-          a.title {
+          a.game-title {
             @include headingMedium();
             color: col(text-main);
             text-decoration: none;
@@ -268,7 +268,6 @@ section.search {
           gap: 10px;
 
           button {
-            display: flex;
             width: 47px;
             height: 47px;
             justify-content: center;
@@ -277,7 +276,11 @@ section.search {
             background-color: col(bg-highlight);
             border: none;
             cursor: pointer;
-            transition: 0.25s ease-in background-color;
+            transition: 0.5s ease all;
+            display: grid;
+            grid-template-columns: auto;
+            grid-template-rows: auto;
+            grid-template-areas: "icon";
 
             &:hover {
               background-color: col(bg-hover);
@@ -285,6 +288,14 @@ section.search {
 
             &.wishlist.active {
               background-color: col(accent-red);
+
+              .solid {
+                display: flex;
+              }
+
+              .outline {
+                display: none;
+              }
             }
 
             &.watch.active {
@@ -295,6 +306,11 @@ section.search {
               width: 24px;
               height: auto;
               color: col(text-main);
+              grid-area: icon;
+
+              &.solid {
+                display: none;
+              }
             }
           }
         }

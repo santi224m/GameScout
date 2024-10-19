@@ -44,7 +44,7 @@
           <img src="{{ result.header_img }}" alt="Game Banner">
         </a>
         <div class="info">
-            <a href="/game/{{ result.steam_app_id }}" class="title">{{ result.title }}</a>
+            <a href="/game/{{ result.steam_app_id }}" class="game-title">{{ result.title }}</a>
           <div class="tags">
             {% for i in range(0, 6) %}
             {% if result.tags[i] %}<span>{{ result.tags[i] }}</span>{% endif %}
@@ -87,7 +87,7 @@
       </div>
       <div class="actions">
         <div class="buttons">
-          <button class="wishlist"><i class="fa-regular fa-heart"></i></button>
+          <button class="wishlist" data-steamid="{{ result.steam_app_id }}"><i class="fa-solid fa-heart solid"></i><i class="fa-regular fa-heart"></i></button>
           <button class="watch"><i class="fa-regular fa-eye"></i></button>
         </div>
         <div class="price-container">
@@ -121,4 +121,8 @@
   </div>
   {% endif %}
 </section>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/search_wishlist_api.js') }}"></script>
 {% endblock %}
