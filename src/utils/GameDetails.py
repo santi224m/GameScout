@@ -196,8 +196,7 @@ class GameDetails :
 
     app_format =  'app/' + str(self.steam_app_id)
     payload = [app_format]
-    print(self.steam_api_res.json()[self.steam_app_id])
-    coming_soon = self.steam_api_res.json()[self.steam_app_id]['release_date']['coming_soon']
+    coming_soon = self.steam_api_res.json()[self.steam_app_id]['data']['release_date']['coming_soon']
     app_id = self.ITAD_api_1_res.json()[app_format]
     # Get Deals
     if not coming_soon:
