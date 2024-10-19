@@ -355,6 +355,7 @@ def query_steam_api(steam_id, steam_api_res):
     "16": '<i class="fa-solid fa-screwdriver-wrench"></i>',                                 # Includes Source SDK
     "17": '<i class="fa-solid fa-file-pen"></i>',                                           # Includes Level Editor
     "18": '<img src="/static/img/controller_blue.svg" class="icon" alt="Controller Icon">', # Partial Controller Support
+    "20": '<i class="fa-solid fa-user-group"></i>',                                         # MMO
     "22": '<i class="fa-solid fa-award"></i>',                                              # Steam Achievements
     "23": '<i class="fa-solid fa-cloud"></i>',                                              # Steam Cloud
     "24": '<i class="fa-solid fa-user-group"></i>',                                         # Shared / Split Screen < Shared / Split Screen Co-op || Shared / Split Screen PvP
@@ -373,6 +374,7 @@ def query_steam_api(steam_id, steam_api_res):
     "43": '<i class="fa-brands fa-chromecast"></i>',                                        # Remote Play on TV
     "44": '<i class="fa-solid fa-wifi"></i>',                                               # Remote Play on Together
     "47": '<i class="fa-solid fa-user-group"></i>',                                         # LAN PvP
+    "48": '<i class="fa-solid fa-user-group"></i>',                                         # LAN Co-op
     "49": '<i class="fa-solid fa-user-group"></i>',                                         # PVP < LAN PvP < Online PvP
     "51": '<i class="fa-solid fa-hammer"></i>',                                             # Steam Workshop (Not Used?)
     "52": '<i class="fa-solid fa-wand-magic"></i>',                                         # Tracked Controller Support
@@ -384,11 +386,6 @@ def query_steam_api(steam_id, steam_api_res):
   }
 
   categories = app_details['categories']
-
-  for category in categories:
-    if str(category['id']) in features: 
-      category['icon'] = features[str(category['id'])]
-    else: category['icon'] = features['e']
 
   # If CPM del M
   if find(categories, 1) is not None and find(categories, 27):
@@ -415,6 +412,11 @@ def query_steam_api(steam_id, steam_api_res):
   # If there are 2 steam workshops, del one
   if find(categories, 30) and find(categories, 51):
     del(categories[find(categories, 51)])
+
+  for category in categories:
+    if str(category['id']) in features: 
+      category['icon'] = features[str(category['id'])]
+    else: category['icon'] = features['e']
      
   app_details['categories'] = categories
   return app_details
