@@ -28,7 +28,7 @@ section.user {
     display: flex;
     flex-direction: column;
 
-    input[type="email"], input[name="password"], input[type="text"] {
+    input[type="email"], input[name="password"] {
       width: 450px;
       padding: 10px;
       background-color: col(bg-main-50);
@@ -164,61 +164,19 @@ section.user {
       @include bodyLarge();
       cursor: pointer;
       border: none;
-      width: fit-content;
+      width: 490px;
+      height: 35px;
       transition: 0.25s ease;
   
       &:hover{
         background-color: col(bg-hover);
       }
     }
-  
-    .password-req-container {
-      max-height: 0px;
-      overflow: hidden;
-      transition: 0.5s ease max-height;
-      grid-area: req;
-      width: 410px;
-      justify-self: flex-end;
-
-      &.active {
-        max-height: 200px;
-      }
+    a[href="/support/"] {
+      color: col(text-dim);
+      text-align: center;
+      margin-top: 10px;
     }
-
-    div.password-req {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-      background-color: col(bg-main-50);
-      align-self: stretch;
-      padding: 10px;
-      box-sizing: border-box;
-
-      span {
-        @include bodyMedium();
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        transition: 0.25s ease;
-
-        &.invalid {
-          color: col(accent-red);
-        }
-
-        &.valid {
-          color: col(accent-green);
-        }
-
-        i, svg {
-          margin-right: 5px;
-          display: none;
-          width: 12px;
-
-          &.active {
-            display: inline;
-          }
-        }
-      }
-    }
+    
   }
 }

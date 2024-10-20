@@ -1,19 +1,20 @@
 {% extends 'base.html' %}
-{% block title %}support{% endblock %}
+{% block title %}Support{% endblock %}
 {% block style %}
-
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/support.css') }}">
 {% endblock %}
 
 {% block content %}
-<section class="ticket-support">
-<div class="form">
-  <span class="title"> GameScout Support </span>
-<button class="forgot"> I forgot my Account or password </button>
-  
-</div>
-
+<section class="support">
+  <div class="form">
+    <span class="title"> Welcome to GameScout Support</span>
+    <div class="choices">
+      <input type="submit" name="forgot-password-user" value="placeholder"> 
+      <input type="submit" value="placeholder">
+      <input type="submit" value="placeholder">
+    </div>
+  </div>
 </section>
-
 {% endblock %}
 {% block scripts %}
 {{ super() }}

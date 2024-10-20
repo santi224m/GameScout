@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Sign In{% endblock %}
 {% block style %}
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/sign_in.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -14,8 +14,6 @@
         <span class="icon"><i class="fa-solid fa-envelope"></i></span>
         <input type="email" name="email" placeholder="example@gmail.com">
       </label>
-      <div class="pass-word grid">
-
       <label for="enter_password">Enter Password</label>
       <div class="input-field grid">
         <label>
@@ -27,8 +25,9 @@
           <i class="fa-solid fa-eye active normal"></i>
         </button>
       </div>
-      
       <input type="submit" value="Continue">
+      <a href="/support/" name="support_link"> Can't sign in?</a>
+      
     </form>
   </div>
 </section>

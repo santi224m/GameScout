@@ -1,0 +1,45 @@
+@use "main" as *;
+
+section.support {
+    background: linear-gradient(223deg, #0E141B -9.34%, #14344B 79.71%);
+    width: 100%;
+    color: col(text-main);
+    min-height: calc(100vh - 60px - 66px);
+    display: flex;
+    justify-content: center;
+
+    div.form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+        margin-top: 45px;
+        width: 1300px;
+    }
+
+    .title {
+        gap: 20px;
+        @include headingLarge();
+        font-size: 35px;
+    }
+ 
+
+
+    input[type="submit"] {
+        color: col(text-maim);
+        padding: 7px 13px;
+        background-color: col(bg-main);
+        border-radius: br();
+        @include bodyLarge();
+        cursor: pointer;
+        border: none;
+        width: fit-content;
+        transition: 0.25s ease;
+        display: flex;
+        margin-bottom: 10px;
+        &:hover{
+            background-color: col(bg-hover);
+        }
+    
+    }
+}

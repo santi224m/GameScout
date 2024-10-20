@@ -40,10 +40,11 @@ def create_app(config_class=Config):
     from src.user import user_bp as user_bp
     from src.user import signup_bp as signup_bp
     from src.user import signin_bp as signin_bp
+    from src.user import support_bp as support_bp
 
     app.register_blueprint(signup_bp, url_prefix='/signup/')
     app.register_blueprint(signin_bp, url_prefix='/signin/')
     app.register_blueprint(user_bp, url_prefix='/user/')
-    
+    app.register_blueprint(support_bp, url_prefix='/support/')
 
     return app
