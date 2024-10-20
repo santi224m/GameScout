@@ -33,7 +33,10 @@ class SearchDetails:
 
     for game in soup.find_all("a"):
       loop_start = time.perf_counter()
-      details = GameDetails(game['data-ds-appid'])
+      try:
+        details = GameDetails(game['data-ds-appid'])
+      except:
+        print("Error trying to load steam app id: ", game['data-ds-appid'])
       self.results.append(details)
       print(f"Game Finished in: {time.perf_counter() - loop_start:0.4f} seconds")
 
