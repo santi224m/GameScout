@@ -452,7 +452,6 @@ def parse_steam_ids(data, steamplayers_api_res):
     'key': os.getenv("STEAM_API_KEY"),
     'steamids': ','.join([d['author']['steamid'] for d in data])
   }
-  print(steamplayers_api_res)
   app_ids = steamplayers_api_res.json()['response']['players']
 
   for review in data:
@@ -467,11 +466,24 @@ def soupify(requirement):
   """Formats Hardware Requirements by modifying HTML"""
   soup = BeautifulSoup(requirement, features="html.parser")
   for tag in soup.find_all("strong"):
-    if tag.parent.name == "li" and tag.parent.contents[1].name != "span":
+    if tag.parent.name == "li" and tag.parent.contents[1].name == None and tag.contents[0] != "Additional Notes":
       contents = tag.parent.contents[1]
       new_tag = soup.new_tag("span")
       new_tag.string = contents
       tag.parent.contents[1].replace_with(new_tag)
+    elif tag.parent.name == "li" and tag.contents[0] == "Additional Notes":
+      wrapper = soup.new_tag("li")
+      header = soup.new_tag("strong")
+      header.string = tag.contents[0]
+      wrapper.append(header)
+      new_tag = soup.new_tag("span")
+
+      new_tag.append(tag.parent)
+      new_tag.li.unwrap()
+      new_tag.contents[0].decompose()
+
+      wrapper.append(new_tag)
+      soup.ul.append(wrapper)
     elif tag.parent.name == "[document]":
       for br in soup.find_all("br"):
         br.decompose()

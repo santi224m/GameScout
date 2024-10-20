@@ -795,7 +795,18 @@ section.main {
                       }
 
                       span {
-                        grid-area: value
+                        grid-area: value;
+                        color: col(text-main);
+                        @include bodyLarge();
+
+                        ul {
+                          margin: 5px 0;
+                        }
+
+                        * {
+                          color: col(text-main);
+                          @include bodyLarge();
+                        }
                       }
                     }
                   }
