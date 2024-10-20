@@ -6,28 +6,34 @@
 
 {% block content %}
 <section class="user">
-  <div class="content">
-    <div class="welcome">
-      <h1>SIGN IN</h1>
-    </div>
-  </div>
-  <div class ="form">
+  <div class="form">
+    <span class="title"> Sign In </span>
     <form>
-      <label for="email",>Email Address</label><br>
-      <input type="email" id="email" name="email" class="email_input_icon">
-      <i class="fa-regular fa-envelope"></i><br>
-      <br>
+      <label for="email">Email Address</label>
+      <label class="input-field">
+        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
+        <input type="email" name="email" placeholder="example@gmail.com">
+      </label>
+      <div class="pass-word grid">
+
+      <label for="enter_password">Enter Password</label>
+      <div class="input-field grid">
+        <label>
+          <span class="icon"><i class="fa-solid fa-lock"></i></span>
+          <input type="password" name="password" minlength="8" maxlength="20">
+        </label>
+        <button class="icon right">
+          <img class="slash" src="{{ url_for('static', filename='img/eye-slash-solid.svg') }}">
+          <i class="fa-solid fa-eye active normal"></i>
+        </button>
+      </div>
       
-      <br>
-      <label for="enter_password">Enter Password</label><br>
-      <input type="password" id="enter_password" name="enter_password">
-      <i class="fa-solid fa-lock"></i><br>
-      <br>
+      <input type="submit" value="Continue">
     </form>
-
-
-
   </div>
 </section>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
 <script type="text/javascript" src="{{ url_for('static', filename='js/sign_up.js') }}"></script>
 {% endblock %}
