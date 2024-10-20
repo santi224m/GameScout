@@ -13,7 +13,7 @@
     </div>
     <div class="games">
       {% for item in wishlist.items %}
-      <div class="game">
+      <div class="game" data-pos="{{ loop.index }}">
         <div class="details">
           <div class="drag">
             <i class="fa-solid fa-grip-lines"></i>

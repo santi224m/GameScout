@@ -3,19 +3,37 @@ $(document).ready(function() {
     axis: "y",
     handle: ".fa-grip-lines",
     tolerance: "pointer",
-    deactivate: function(event, ui) {
-      inputs = $(".position")
-      $.each(inputs, function(i) {
-        $(this).attr("value", i+1)
-      })
-    }
+    deactivate: function(event, ui) {renumber()}
   })
 })
 
+$(".position").on('keypress',function(e) {
+  if(e.which == 13) {
+    val = parseInt(e.target.value)
+    parent = $(e.currentTarget.parentElement.parentElement.parentElement)
+    pos = parseInt(parent.attr("data-pos"))
+
+    if (val == 0) val = 1
+    else if (val < 0) {
+      renumber()
+      return
+    } else if (val > $(".game").length) val = $(".game").length
+
+    if (val < pos) parent.insertBefore($(`[data-pos=${val}]`))
+    else parent.insertAfter($(`[data-pos=${val}]`))
+    renumber()
+  }
+});
 
 
-
-
+function renumber() {
+  let inputs = $(".position")
+  $.each(inputs, function(i) {
+    $(this).attr("value", i+1)
+    $(this).val(i+1)
+    $(this).parent().parent().parent().attr("data-pos", i+1)
+  })
+}
 
 /*
 Add the current game to the user's wishlist
