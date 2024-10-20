@@ -228,6 +228,8 @@ nav {
       color: col(text-main);
       @include bodyMedium();
       border-radius: br();
+      border: 1px solid transparent;
+      transition: 0.25s ease all;
 
       &::placeholder {
         color: col(secondary);
@@ -268,6 +270,30 @@ nav {
       padding: 0;
       left: -32px;
       color: col(secondary);
+    }
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    a {
+      display: flex;
+      padding: 13px 29px;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      border-radius: 3px;
+      background-color: col(bg-main-20);
+      transition: 0.25s ease all;
+      @include bodyLarge();
+      color: col(text-main);
+
+      &:hover {
+        background-color: col(bg-main-50);
+      }
     }
   }
 

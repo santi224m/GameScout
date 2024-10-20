@@ -32,9 +32,12 @@
         <input type="text" placeholder="Search for a game..." name="nav-search" onkeydown="redirect_to_search_page(event)" />
         <i class="fa-solid fa-magnifying-glass"></i>
       </div>
-      <div class="account">
-        <img src="{{ url_for('static', filename='img/pfp_placeholder.png') }}" alt="Profile Picture" />
-        <span>CaelenO42</span>
+      <div class="right">
+        <a href="/wishlist/">Wishlist</a>
+        <div class="account">
+          <img src="{{ url_for('static', filename='img/pfp_placeholder.png') }}" alt="Profile Picture" />
+          <span>CaelenO42</span>
+        </div>
       </div>
     </nav>
     {% block content %}
