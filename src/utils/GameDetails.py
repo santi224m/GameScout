@@ -452,6 +452,7 @@ def parse_steam_ids(data, steamplayers_api_res):
     'key': os.getenv("STEAM_API_KEY"),
     'steamids': ','.join([d['author']['steamid'] for d in data])
   }
+  print(steamplayers_api_res)
   app_ids = steamplayers_api_res.json()['response']['players']
 
   for review in data:
