@@ -14,6 +14,11 @@ def signup():
 
 @signin_bp.route('/', methods=('GET', 'POST'))
 def signin():
+    if request.method == 'POST':
+        print(request.form)
+        user = request.form['email']
+        res = db_user.exists_user(user)
+        print(res)
     return render_template('user/sign_in.html')
 
 @support_bp.route('/', methods=('GET', 'POST'))
