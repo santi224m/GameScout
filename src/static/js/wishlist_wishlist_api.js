@@ -9,22 +9,29 @@ $(document).ready(function() {
 
 $(".position").on('keypress',function(e) {
   if(e.which == 13) {
-    val = parseInt(e.target.value)
-    parent = $(e.currentTarget.parentElement.parentElement.parentElement)
-    pos = parseInt(parent.attr("data-pos"))
-
-    if (val == 0) val = 1
-    else if (val < 0) {
-      renumber()
-      return
-    } else if (val > $(".game").length) val = $(".game").length
-
-    if (val < pos) parent.insertBefore($(`[data-pos=${val}]`))
-    else parent.insertAfter($(`[data-pos=${val}]`))
-    renumber()
+    changePos(e);
   }
 });
 
+$(".position").on('blur', function(e) {
+  changePos(e);
+})
+
+function changePos(e) {
+  val = parseInt(e.target.value)
+  parent = $(e.currentTarget.parentElement.parentElement.parentElement)
+  pos = parseInt(parent.attr("data-pos"))
+
+  if (val == 0) val = 1
+  else if (val < 0) {
+    renumber()
+    return
+  } else if (val > $(".game").length) val = $(".game").length
+
+  if (val < pos) parent.insertBefore($(`[data-pos=${val}]`))
+  else parent.insertAfter($(`[data-pos=${val}]`))
+  renumber()
+}
 
 function renumber() {
   let inputs = $(".position")
@@ -47,6 +54,7 @@ $('.wishlist').on("click", async function() {
     // Remove game entry (ik its a bit janky but it'll work every time)
     $(this).parent().parent().parent().slideUp(500, function() {$(this).remove()})
     delete_from_wishlist(id);
+    setTimeout(function() {renumber()}, 600)
   } else {
     wishlist_halfconfirm[id] = true;
     $(this).parent().children().first().addClass("active")
