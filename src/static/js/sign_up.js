@@ -93,7 +93,7 @@ $('input[name="password"]').on("keyup", function() {
 
 // Check form when button pressed
 $('input[type="submit"]').on("click", function(e) {
-  e.preventDefault();
+  
   const email = $('input[name=email]').val()
   const confirmEmail = $('input[name=confirm_email]').val()
   const password = $('input[name=password]').val()
@@ -105,18 +105,22 @@ $('input[type="submit"]').on("click", function(e) {
 
   if (email.length === 0 || confirmEmail.length === 0 || password.length === 0) {
     alert("Invalid Length");
+    e.preventDefault();
     return;
   }
   if (email !== confirmEmail) {
     alert("Emails do not match!");
+    e.preventDefault();
     return;
   }
   if (!checkAllRegex(password)) {
     alert("Password is invalid");
+    e.preventDefault();
     return;
   }
   if (!checkstate) {
-    alert("You must agree to the terms")
+    alert("You must agree to the terms");
+    e.preventDefault();
     return;
   }
 });

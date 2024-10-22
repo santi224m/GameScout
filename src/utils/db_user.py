@@ -11,6 +11,15 @@ class db_user:
       if res:
         return True
       return False
+    
+  def exists_email(email):
+    """Returns True if email exists in the database, False otherwise"""
+    with db_conn() as curr:
+      curr.execute("SELECT 6 FROM user_account WHERE username = %s;", (email,))
+      res = curr.fetchall()
+      if res:
+        return True
+      return False
 
   def insert_user(username, password, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
     """Insert a new user to the database"""

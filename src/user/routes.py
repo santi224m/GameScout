@@ -10,14 +10,33 @@ def user():
 
 @signup_bp.route('/', methods=('GET', 'POST'))
 def signup():
-    return render_template('user/sign_up.html')
+    username_exists = False
+    
+    if request.method == 'POST':
+        print(request.form)
+        user = request.form['username']
+        password_input = request.form["password"]
+        dob = request.form.get('dob', None)
+        currency = request.form.get('currency', 'USD')
+        profile_pic_path = request.form.get('profile_pic_path', None)
+        email = request.form["email"]
+        allow_alerts = request.form.get('allow_alerts', False)
+        allow_notifications = request.form.get('allow_notifications', False)
+        if db_user.exists_user(user):
+            username_exists = True
+
+        db_user.insert_user(user, password_input, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications)
+    return render_template('user/sign_up.html', username_exists=username_exists)
 
 @signin_bp.route('/', methods=('GET', 'POST'))
 def signin():
     if request.method == 'POST':
-        print(request.form)
-        user = request.form['email']
-        res = db_user.exists_user(user)
+        # print(request.form)
+        # user = request.form['email']
+        # res = db_user.exists_user(user)
+        # print(res)
+        email = request.form['email']
+        res = db_user.exists_email(email)
         print(res)
     return render_template('user/sign_in.html')
 
