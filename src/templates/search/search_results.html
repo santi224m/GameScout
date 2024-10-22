@@ -93,6 +93,7 @@
         <div class="price-container">
           {% if result.deals %}
           {% for deal in result.deals|groupby("price.amount")|first|last %}
+          {% if loop.index == 1 %}
           {% if deal.voucher %}
           <span class="voucher">Using code {{ deal.voucher }}</span>
           {% endif %}
@@ -112,6 +113,7 @@
             </div>
           </div>
           <a href="{{ deal.url }}", target="_blank">Purchase</a>
+          {% endif %}
           {% endfor %}
           {% endif %}
         </div>
