@@ -23,7 +23,6 @@ let passwordShown = false;
 
 function togglePasswordVis() {
     if (passwordShown) { 
-      print("hello")
       $('input[name="password"]').attr("type", "password");
       $('.normal').addClass("active");
       $('.slash').removeClass("active");
@@ -35,3 +34,8 @@ function togglePasswordVis() {
       passwordShown = true;
     }
   }
+
+  $('button').on("click", function(e){
+    e.preventDefault();
+    togglePasswordVis()
+  });
