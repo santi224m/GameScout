@@ -1,6 +1,6 @@
 import requests
 
-from flask import Blueprint, render_template, request, abort
+from flask import Blueprint, render_template, request, abort, flash, redirect, url_for
 from src.user import user_bp, signup_bp, signin_bp, support_bp
 from src.utils.db_user import db_user
 
@@ -10,8 +10,8 @@ def user():
 
 @signup_bp.route('/', methods=('GET', 'POST'))
 def signup():
-    username_exists = False
-    
+    error = None
+  
     if request.method == 'POST':
         print(request.form)
         user = request.form['username']
@@ -20,15 +20,23 @@ def signup():
         currency = request.form.get('currency', 'USD')
         profile_pic_path = request.form.get('profile_pic_path', None)
         email = request.form["email"]
-        allow_alerts = request.form.get('allow_alerts', False)
-        allow_notifications = request.form.get('allow_notifications', False)
-        #newnew!234!Q
+
+        allow_alerts = 'allow_alerts' in request.form
+        allow_notifications = 'allow_notifications' in request.form
+
+
         if db_user.exists_email(email):
-            return "False"
+            error = "Email already exists!"
+
+        # Check if the username already exists
+        elif db_user.exists_user(user):
+            error = "Username already exists!"
         else:
             db_user.insert_user(user, password_input, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications)
+            success_message = "User successfully created!"
+            return render_template('user/sign_in.html', success=success_message)
 
-    return render_template('user/sign_up.html', username_exists=username_exists)
+    return render_template('user/sign_up.html', error=error)
 
 @signin_bp.route('/', methods=('GET', 'POST'))
 def signin():

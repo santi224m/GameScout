@@ -22,6 +22,12 @@ section.support {
         @include headingLarge();
         font-size: 35px;
     }
+    .choices {
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
+
+    }
  
 
 

@@ -40,4 +40,3 @@ function togglePasswordVis() {
     togglePasswordVis()
   });
 
-// Check to see emailbutton
