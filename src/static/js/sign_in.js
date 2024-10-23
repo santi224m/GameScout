@@ -39,3 +39,5 @@ function togglePasswordVis() {
     e.preventDefault();
     togglePasswordVis()
   });
+
+// Check to see emailbutton

@@ -155,6 +155,8 @@ section.user {
         height: 20px;
       }
     }
+    
+
   
     input[type="submit"] {
       color: col(text-maim);
@@ -172,6 +174,23 @@ section.user {
         background-color: col(bg-hover);
       }
     }
+    
+    .error {
+      color: col(accent-red);
+      text-align: center;
+      padding: 7px 13px;
+      display: none;
+      
+
+      &.active{
+        width:auto;
+        height:20px;
+      }
+
+    }
+  
+
+
     a[href="/support/"] {
       color: col(text-dim);
       text-align: center;

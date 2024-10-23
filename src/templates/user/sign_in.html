@@ -25,7 +25,11 @@
           <i class="fa-solid fa-eye active normal"></i>
         </button>
       </div>
+
       <input type="submit" value="Continue">
+      {% if error %}
+        <div class="error">{{ error }}</div>
+      {% endif %}
       <a href="/support/" name="support_link"> Can't sign in?</a>
       
     </form>

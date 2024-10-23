@@ -22,22 +22,24 @@ def signup():
         email = request.form["email"]
         allow_alerts = request.form.get('allow_alerts', False)
         allow_notifications = request.form.get('allow_notifications', False)
-        if db_user.exists_user(user):
-            username_exists = True
+        #newnew!234!Q
+        if db_user.exists_email(email):
+            return "False"
+        else:
+            db_user.insert_user(user, password_input, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications)
 
-        db_user.insert_user(user, password_input, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications)
     return render_template('user/sign_up.html', username_exists=username_exists)
 
 @signin_bp.route('/', methods=('GET', 'POST'))
 def signin():
     if request.method == 'POST':
-        # print(request.form)
-        # user = request.form['email']
-        # res = db_user.exists_user(user)
-        # print(res)
+        print(request.form)
         email = request.form['email']
         res = db_user.exists_email(email)
-        print(res)
+        if not res: #if email is not in the database
+            return render_template('user/sign_in.html', error="Email doesn't exist!")
+        else:
+            pass
     return render_template('user/sign_in.html')
 
 @support_bp.route('/', methods=('GET', 'POST'))
