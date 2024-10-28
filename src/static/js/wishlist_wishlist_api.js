@@ -33,13 +33,25 @@ function changePos(e) {
   renumber()
 }
 
-function renumber() {
+async function renumber() {
   let inputs = $(".position")
   $.each(inputs, function(i) {
     $(this).attr("value", i+1)
     $(this).val(i+1)
     $(this).parent().parent().parent().attr("data-pos", i+1)
   })
+  // Update game ranks in database
+  game_pos_dict = {}
+  for (let i = 0; i < inputs.length; i++) {
+    let pos = inputs[i].value;
+    let steamid = inputs[i].parentElement.parentElement.parentElement.querySelector('button[data-steamid]').dataset.steamid;
+    game_pos_dict[steamid] = parseInt(pos);
+  }
+  const response = await fetch('/api/update_wishlist_rank', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(game_pos_dict)
+  });
 }
 
 /*

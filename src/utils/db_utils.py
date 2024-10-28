@@ -31,3 +31,8 @@ class db_utils:
       if res:
         return True
       return False
+
+  def update_wishlist_rank(username, steamappid, rank):
+    """Update the rank for a game in the wishlist"""
+    with db_conn() as curr:
+      curr.execute("UPDATE wishlist_item SET rank = %s WHERE user_account_id = (SELECT id FROM user_account WHERE username = %s) AND steam_app_id = %s;", (rank, username, steamappid))

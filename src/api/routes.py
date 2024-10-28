@@ -28,3 +28,10 @@ def is_game_wishlisted():
   steamapp_id = request.json['steamapp_id']
   res = db_utils.is_game_wishlisted(username, steamapp_id)
   return jsonify(res)
+
+@bp.route('/update_wishlist_rank', methods=('GET', 'POST'))
+def update_wishlist_rank():
+  username = 'user1'
+  for steamappid, rank in request.json.items():
+    db_utils.update_wishlist_rank(username, steamappid, rank)
+  return jsonify({'status': 'success'})
