@@ -32,7 +32,12 @@ def create_tables(db_name):
   curr.execute("CREATE TABLE IF NOT EXISTS game (steam_app_id INT PRIMARY KEY, title TEXT NOT NULL);")
 
   # Wishlist Item
-  curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_account_id INT NOT NULL REFERENCES user_account(id), steam_app_id INT NOT NULL REFERENCES game(steam_app_id), added_date DATE DEFAULT now(), PRIMARY KEY (user_account_id, steam_app_id));")
+  curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_account_id INT NOT NULL REFERENCES user_account(id), steam_app_id INT NOT NULL REFERENCES game(steam_app_id), added_date DATE DEFAULT now(), rank INT, PRIMARY KEY (user_account_id, steam_app_id));")
+
+  # Trigger function to update rank
+  curr.execute("CREATE OR REPLACE FUNCTION set_new_wishlist_rank() RETURNS TRIGGER AS $$ BEGIN SELECT COALESCE(COUNT(*), 0) + 1 FROM wishlist_item WHERE user_account_id = NEW.user_account_id INTO NEW.rank; RETURN NEW; END; $$ LANGUAGE plpgsql;")
+  curr.execute("DROP TRIGGER IF EXISTS wishlist_rank_trigger ON wishlist_item;")
+  curr.execute("CREATE TRIGGER wishlist_rank_trigger BEFORE INSERT ON wishlist_item FOR EACH ROW EXECUTE FUNCTION set_new_wishlist_rank();")
 
   # Commit and close connection
   conn.commit()
