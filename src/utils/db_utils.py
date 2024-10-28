@@ -14,7 +14,7 @@ class db_utils:
   def get_user_wishlist_items(username):
     """Return a list of steam app ids from a user's wishlist"""
     with db_conn() as curr:
-      curr.execute("SELECT wishlist_item.steam_app_id, game.title FROM wishlist_item INNER JOIN game ON game.steam_app_id = wishlist_item.steam_app_id WHERE user_account_id = (SELECT id FROM user_account WHERE username = %s);", (username,))
+      curr.execute("SELECT wishlist_item.steam_app_id, added_date FROM wishlist_item INNER JOIN game ON game.steam_app_id = wishlist_item.steam_app_id WHERE user_account_id = (SELECT id FROM user_account WHERE username = %s);", (username,))
       res = curr.fetchall()
       return res
 

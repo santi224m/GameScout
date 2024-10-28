@@ -70,7 +70,7 @@
             <button class="wishlist" data-steamid="{{ item.steam_app_id }}"><i class="fa-solid fa-heart solid"></i></button>
             <button class="watch"><i class="fa-regular fa-eye"></i></button>
           </div>
-          <span class="add-date">Added on January 1, 1990</span>
+          <span class="add-date">Added on {{ wishlist.added_date_dict[item.steam_app_id|int] }}</span>
           <div class="price-container">
             {% if item.deals %}
             {% for deal in item.deals|groupby("price.amount")|first|last %}
