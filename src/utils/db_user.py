@@ -15,7 +15,7 @@ class db_user:
   def exists_email(email):
     """Returns True if email exists in the database, False otherwise"""
     with db_conn() as curr:
-      curr.execute("SELECT 6 FROM user_account WHERE username = %s;", (email,))
+      curr.execute("SELECT 1 FROM user_account WHERE email = %s;", (email,))
       res = curr.fetchall()
       if res:
         return True

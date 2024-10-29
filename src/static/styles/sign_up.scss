@@ -110,6 +110,17 @@ section.user {
           }
         }
 
+        span.invalid, span.taken {
+          color: col(accent-red);
+          @include bodySmall();
+          display: none;
+          transition: 0.25s ease all;
+
+          &.visible {
+            display: flex;
+          }
+        }
+
         label {
           @include bodyMedium();
           font-size: 14px;

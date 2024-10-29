@@ -6,6 +6,7 @@
 {% block nav %}{% endblock %}
 {% block content %}
 <section class="user">
+  {{ error }}
   <a class="logo" href="/">
     <img src="{{ url_for('static', filename='img/controller.svg') }}" alt="Controller Icon" />
     GameScout
@@ -24,13 +25,15 @@
         <path d="M0.5 1H135" stroke="#76808C"/>
       </svg>
     </div>
-    <form action="/signup" method="POST">
+    <form method="POST">
       <div class="field">
         <label for="email">Email Address</label>
         <label class="input-field">
           <input type="email" name="email" placeholder="example@gmail.com" required>
           <i class="fa-regular fa-envelope"></i>
         </label>
+        <span class="invalid email">Invalid email address</span>
+        <span class="taken email">This email adress has been taken</span>
       </div>
       <div class="field">
         <label for="username">Username</label>
@@ -38,6 +41,8 @@
           <input type="text" name="username" placeholder="JohnDoe" required>
           <i class="fa-regular fa-user"></i>
         </label>
+        <span class="invalid username">Invalid username</span>
+        <span class="taken username">This username has been taken</span>
       </div>
       <div class="password-container">
         <div class="field">
@@ -52,6 +57,7 @@
               <i class="fa-solid fa-eye active normal"></i>
             </button>
           </div>
+          <span class="invalid password">Invalid password</span>
         </div>
         <div class="requirements">
           <div class="strength-bg">

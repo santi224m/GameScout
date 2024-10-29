@@ -69,6 +69,11 @@ function calculateEntropy() {
   else $('.strength-current').addClass("none")
 }
 
+function validForm() {
+  if ($('input[name="email"]').val().match(emailRegex) && $('input[name="username"]').val().length != 0 && $('input[name="password"]').val().length != 0 && $('input[name="tos"]').is(":checked")) return true;
+  else return false;
+}
+
 // Toggle password visibility
 $('button').on("click", function(e){
   e.preventDefault();
@@ -91,6 +96,8 @@ $('input[type="email"]').on("blur", function() {
 });
 
 $('input[type="email"]').on("keyup", function() {
+  $(".email.taken").removeClass("visible");
+  $(".email.invalid").removeClass("visible");
   if ($(this).val().match(emailRegex)) $(this).parent().parent().removeClass("invalid")
 });
 
@@ -100,6 +107,8 @@ $('input[name="username"]').on("blur", function() {
 });
 
 $('input[name="username"]').on("keyup", function() {
+  $(".username.taken").removeClass("visible");
+  $(".username.invalid").removeClass("visible");
   if ($(this).val().length != 0) $(this).parent().parent().removeClass("invalid")
 });
 
@@ -109,6 +118,7 @@ $('input[name="password"]').on("blur", function() {
 });
 
 $('input[name="password"]').on("keyup", function() {
+  $(".password.invalid").removeClass("visible");
   if ($(this).val().length != 0) $(this).parent().parent().parent().removeClass("invalid")
 });
 
@@ -122,3 +132,51 @@ $('input[name="password"]').on("keyup", function() {
 
   calculateEntropy()
 });
+
+$('input[type=submit]').on("click", function(e) {
+  if (!validForm()) return;
+  e.preventDefault();
+
+  const form = new FormData();
+  form.append("username", $('input[name="username"]').val());
+  form.append("password", $('input[name="password"]').val());
+  form.append("email", $('input[name="email"]').val().toLowerCase());
+
+  const settings = {
+    "async": true,
+    "crossDomain": true,
+    "url": "/signup",
+    "method": "POST",
+    "data": form,
+    "processData": false,
+    "contentType": false,
+  }
+
+  $.ajax(settings)
+  .done(function (res) {
+    console.log(res.status);
+    // Do Success stuff
+  })
+  .fail(function (res) {
+    console.log(res.status);
+    console.log(res.responseJSON);
+
+    let json = res.responseJSON;
+
+    if (json.username.taken) $(".username.taken").addClass("visible");
+    if (json.username.invalid) $(".username.invalid").addClass("visible");
+    if (json.email.taken) $(".email.taken").addClass("visible");
+    if (json.email.invalid) $(".email.invalid").addClass("visible");
+    if (json.password.invalid) $(".password.invalid").addClass("visible");
+  })
+})
+
+function formSuccess(event, xhr, options) {
+  console.log(event);
+  console.log(xhr);
+  console.log(options);
+}
+
+function formError(event, xhr, options) {
+  
+}
