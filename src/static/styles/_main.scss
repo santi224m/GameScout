@@ -28,6 +28,7 @@ $secondary: rgb(75, 97, 155);
 
 $accent-green: rgb(102, 204, 51);
 $accent-red: rgb(255, 104, 59);
+$accent-orange: rgb(252, 134, 0);
 
 $metascore-green: rgb(129, 201, 66);
 $metascore-yellow: rgb(243, 207, 72);
@@ -55,6 +56,7 @@ $font: "Motiva Sans", Arial, Helvetica, sans-serif;
 
   --accent-green: #{$accent-green};
   --accent-red: #{$accent-red};
+  --accent-orange: #{$accent-orange};
 
   --metascore-green: #{$metascore-green};
   --metascore-yellow: #{$metascore-yellow};

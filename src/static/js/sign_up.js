@@ -4,7 +4,15 @@ const upperRegex = /[A-Z]/;
 const digitRegex = /(?=.*\d)/;
 const lowerRegex = /[a-z]/;
 const specialRegex = /[\W]/; 
+
+const emailRegex = /.+[@].+(?<![.])$/;
+
 let passwordShown = false;
+let passwordEntropy = 0;
+
+let e = false;
+let u = false;
+let p = false;
 
 // (               # Start of group
 //     (?=.*\d)    # must contains one digit from 0-9
@@ -15,16 +23,6 @@ let passwordShown = false;
 //   )             # End of group
 
 // Regex and Length Checks
-function checkAllRegex(password) {
-  if (passwordRegex.test(password)) {
-    console.log("Password is valid");
-    return true;
-  } else {
-    console.log("Password is invalid.");
-    return false;
-  }
-}
-
 function checkRegex(regex, name) {
   if ($('input[name="password"]').val().match(regex)) {
     $(`.${name}`).removeClass("invalid")
@@ -53,6 +51,27 @@ function checkLength(length, name) {
   }
 }
 
+function calculateEntropy() {
+  let password = $('input[name="password"]').val();
+  let length = password.length;
+  let currentPoolSize = 0;
+  if (password.match(upperRegex)) currentPoolSize += 26;
+  if (password.match(lowerRegex)) currentPoolSize += 26;
+  if (password.match(digitRegex)) currentPoolSize += 10;
+  if (password.match(specialRegex)) currentPoolSize += 32;
+
+  passwordEntropy = length * Math.log2(currentPoolSize);
+
+  $('.strength-current').removeClass("great good ok weak veryweak none")
+
+  if (passwordEntropy >= 60) $('.strength-current').addClass("great")
+  else if (passwordEntropy >= 40) $('.strength-current').addClass("good")
+  else if (passwordEntropy >= 20) $('.strength-current').addClass("ok")
+  else if (passwordEntropy >= 10) $('.strength-current').addClass("weak")
+  else if (passwordEntropy > 0) $('.strength-current').addClass("veryweak")
+  else $('.strength-current').addClass("none")
+}
+
 // Show / Hide Password
 function togglePasswordVis() {
   if (passwordShown) {
@@ -68,59 +87,46 @@ function togglePasswordVis() {
   }
 }
 
-// Input Focusing
-$('input[name="password"]').on("focus", function() {
-  $('.password-req-container').addClass("active");
-});
-
-$('input[name="password"]').on("blur", function() {
-  $('.password-req-container').removeClass("active");
-});
-
+// Toggle password visibility
 $('button').on("click", function(e){
   e.preventDefault();
   togglePasswordVis()
 });
 
-// Regex Checking
+// Check for valid email (not repeats, handled by db)
+$('input[type="email"]').on("blur", function() {
+  if (!$(this).val().match(emailRegex)) $(this).parent().parent().addClass("invalid")
+});
+
+$('input[type="email"]').on("keyup", function() {
+  if ($(this).val().match(emailRegex)) $(this).parent().parent().removeClass("invalid")
+});
+
+// Check if there is a valid username
+$('input[name="username"]').on("blur", function() {
+  if ($(this).val().length == 0) $(this).parent().parent().addClass("invalid")
+});
+
+$('input[name="username"]').on("keyup", function() {
+  if ($(this).val().length != 0) $(this).parent().parent().removeClass("invalid")
+});
+
+// Check if there is a password
+$('input[name="password"]').on("blur", function() {
+  if ($(this).val().length == 0) $(this).parent().parent().parent().addClass("invalid")
+});
+
+$('input[name="password"]').on("keyup", function() {
+  if ($(this).val().length != 0) $(this).parent().parent().parent().removeClass("invalid")
+});
+
+// Regex and Entropy Checking
 $('input[name="password"]').on("keyup", function() {
   checkRegex(lowerRegex, "lower")
   checkRegex(upperRegex, "upper")
   checkRegex(digitRegex, "digit")
   checkRegex(specialRegex, "special")
   checkLength(8, "length")
-});
 
-// Check form when button pressed
-$('input[type="submit"]').on("click", function(e) {
-  
-  const email = $('input[name=email]').val()
-  const confirmEmail = $('input[name=confirm_email]').val()
-  const password = $('input[name=password]').val()
-  const checkstate = $('input[name=policyagree]').prop("checked")
-
-  console.log("Email: ", email);
-  console.log("Confirm Email: ", confirmEmail);
-  console.log("Password: ", password);
-
-  if (email.length === 0 || confirmEmail.length === 0 || password.length === 0) {
-    alert("Invalid Length");
-    e.preventDefault();
-    return;
-  }
-  if (email !== confirmEmail) {
-    alert("Emails do not match!");
-    e.preventDefault();
-    return;
-  }
-  if (!checkAllRegex(password)) {
-    alert("Password is invalid");
-    e.preventDefault();
-    return;
-  }
-  if (!checkstate) {
-    alert("You must agree to the terms");
-    e.preventDefault();
-    return;
-  }
+  calculateEntropy()
 });

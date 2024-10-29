@@ -1,13 +1,80 @@
 {% extends 'base.html' %}
 {% block title %}Sign Up{% endblock %}
 {% block style %}
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/user.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/sign_up.css') }}">
 {% endblock %}
-
+{% block nav %}{% endblock %}
 {% block content %}
 <section class="user">
+  <a class="logo" href="/">
+    <img src="{{ url_for('static', filename='img/controller.svg') }}" alt="Controller Icon" />
+    GameScout
+  </a>
   <div class="form">
-    <span class="title">Create Your Account</span>
+    <div class="header">
+      <span>Create Account</span>
+      <button><i class="fa-brands fa-google"></i><span>Sign In With Google</span></button>
+    </div>
+    <div class="hr">
+      <svg xmlns="http://www.w3.org/2000/svg" width="135" height="2" viewBox="0 0 135 2" fill="none">
+        <path d="M0.5 1H135" stroke="#76808C"/>
+      </svg>
+      <span>Or sign up with email</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="135" height="2" viewBox="0 0 135 2" fill="none">
+        <path d="M0.5 1H135" stroke="#76808C"/>
+      </svg>
+    </div>
+    <form action="/signup" method="POST">
+      <div class="field">
+        <label for="email">Email Address</label>
+        <label class="input-field">
+          <input type="email" name="email" placeholder="example@gmail.com" required>
+          <i class="fa-regular fa-envelope"></i>
+        </label>
+      </div>
+      <div class="field">
+        <label for="username">Username</label>
+        <label class="input-field">
+          <input type="text" name="username" placeholder="JohnDoe" required>
+          <i class="fa-regular fa-user"></i>
+        </label>
+      </div>
+      <div class="password-container">
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-container">
+            <label class="input-field">
+              <input type="password" name="password" required>
+              <i class="fa-solid fa-lock"></i>
+            </label>
+            <button class="password-visibility">
+              <img class="slash" src="{{ url_for('static', filename='img/eye-slash-solid.svg') }}">
+              <i class="fa-solid fa-eye active normal"></i>
+            </button>
+          </div>
+        </div>
+        <div class="requirements">
+          <div class="strength-bg">
+            <div class="strength-current"></div>
+          </div>
+          <div class="text">
+            <span class="upper invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>Upper case</span>
+            <span class="lower invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>Lower case</span>
+            <span class="digit invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>Number</span>
+            <span class="special invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>Symbol</span>
+            <span class="length invalid"><i class="fa-solid fa-xmark active"></i><i class="fa-solid fa-check"></i>8 characters</span>
+          </div>
+        </div>
+      </div>
+      <div class="tos-submit">
+        <label class="tos">
+          <input name="tos" type="checkbox" required>
+          I agree to GameScout's Terms and Privacy Policy.
+        </label>
+        <input type="submit" value="Create Account">
+      </div>
+    </form>
+    <!-- <span class="title">Create Your Account</span>
     <form action="/signup" method="POST">
 
       <label for="username""> Username </label>
@@ -56,11 +123,11 @@
       </label>
       
       <input type="submit" value="Continue">
-    </form>
+    </form> -->
   </div>
 </section>
 {% endblock %}
-
+{% block footer %}{% endblock %}
 {% block scripts %}
 {{ super() }}
 <script type="text/javascript" src="{{ url_for('static', filename='js/sign_up.js') }}"></script>

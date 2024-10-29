@@ -23,6 +23,7 @@
     {% endblock %}
   </head>
   <body>
+    {% block nav %}
     <nav>
       <a class="logo" href="/">
         <img src="{{ url_for('static', filename='img/controller.svg') }}" alt="Controller Icon" />
@@ -40,8 +41,10 @@
         </div>
       </div>
     </nav>
+    {% endblock %}
     {% block content %}
     {% endblock %}
+    {% block footer %}
     <section class="footer">
       <a class="logo" href="/">
         <img src="{{ url_for('static', filename='img/controller.svg') }}" alt="Controller Icon" />
@@ -56,6 +59,7 @@
         <a href="#" class=".back-to-top">Back to Top</a>
       </div>
     </section>
+    {% endblock %}
     {% block scripts %}
     <script src=" {{ url_for('static', filename='js/nav_search.js') }}"></script>
     <script src=" {{ url_for('static', filename='js/scroll_top.js') }}"></script>
