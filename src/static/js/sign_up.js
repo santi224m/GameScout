@@ -10,10 +10,6 @@ const emailRegex = /.+[@].+(?<![.])$/;
 let passwordShown = false;
 let passwordEntropy = 0;
 
-let e = false;
-let u = false;
-let p = false;
-
 // (               # Start of group
 //     (?=.*\d)    # must contains one digit from 0-9
 //     (?=.*[a-z]) # must contains one lowercase characters
@@ -51,6 +47,7 @@ function checkLength(length, name) {
   }
 }
 
+// Calculate password entropy
 function calculateEntropy() {
   let password = $('input[name="password"]').val();
   let length = password.length;
@@ -72,8 +69,9 @@ function calculateEntropy() {
   else $('.strength-current').addClass("none")
 }
 
-// Show / Hide Password
-function togglePasswordVis() {
+// Toggle password visibility
+$('button').on("click", function(e){
+  e.preventDefault();
   if (passwordShown) {
     $('input[name="password"]').attr("type", "password");
     $('.normal').addClass("active");
@@ -85,12 +83,6 @@ function togglePasswordVis() {
     $('.slash').addClass("active");
     passwordShown = true;
   }
-}
-
-// Toggle password visibility
-$('button').on("click", function(e){
-  e.preventDefault();
-  togglePasswordVis()
 });
 
 // Check for valid email (not repeats, handled by db)
@@ -102,7 +94,7 @@ $('input[type="email"]').on("keyup", function() {
   if ($(this).val().match(emailRegex)) $(this).parent().parent().removeClass("invalid")
 });
 
-// Check if there is a valid username
+// Check if there is a valid username (not repeats, handled by db)
 $('input[name="username"]').on("blur", function() {
   if ($(this).val().length == 0) $(this).parent().parent().addClass("invalid")
 });
