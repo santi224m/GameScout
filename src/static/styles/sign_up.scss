@@ -369,5 +369,20 @@ section.user {
         }
       }
     }
+
+    span.redirect {
+      @include bodyMedium();
+      color: col(text-main);
+
+      a {
+        text-decoration: none;
+        color: col(primary);
+        transition: 0.25s ease all;
+
+        &:hover {
+          color: col(secondary);
+        }
+      }
+    }
   }
 }
