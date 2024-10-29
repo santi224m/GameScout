@@ -370,7 +370,7 @@ section.footer {
       @include bodyLarge();
       color: col(text-main);
       text-decoration: none;
-      transition: 0.25s ease-in-out background-color;
+      transition: 0.25s ease background-color;
       text-wrap: nowrap;
 
       &:hover {
