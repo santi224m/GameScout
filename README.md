@@ -192,7 +192,7 @@ flask run
   - [ ] Login page
   - [ ] Edit user profile page
     * This page allows users to update their profile information
-  - [ ] Wishlist page
+  - [x] Wishlist page
     * This page allows users to view and update their game wishlist
 - [ ] Database
   - [ ] Database Conceptual Design
