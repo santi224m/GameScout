@@ -68,8 +68,8 @@ def signin():
     password = request.form["password"]
     if user == "" or email == "": return render_template('user/sign_in.html', error=True)
     if not db_user.correct_login(email, password): return render_template('user/sign_in.html', error=True)
-    else: return render_template('user/sign_in.html', success=True)
-  else: return render_template('user/sign_in.html')
+    else: return redirect(url_for('main.index'))
+  else: return render_template('user/sign_in.html', referrer=request.referrer)
 
 @support_bp.route('/', methods=('GET', 'POST'))
 def support():

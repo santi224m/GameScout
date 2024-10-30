@@ -170,13 +170,3 @@ $('input[type=submit]').on("click", function(e) {
     if (json.password.invalid) $(".password.invalid").addClass("visible");
   })
 })
-
-function formSuccess(event, xhr, options) {
-  console.log(event);
-  console.log(xhr);
-  console.log(options);
-}
-
-function formError(event, xhr, options) {
-  
-}
