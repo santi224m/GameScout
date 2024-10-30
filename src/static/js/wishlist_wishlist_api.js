@@ -1,9 +1,10 @@
 $(document).ready(function() {
+  renumber()
   $(".games").sortable({
     axis: "y",
     handle: ".fa-grip-lines",
     tolerance: "pointer",
-    deactivate: function(event, ui) {renumber()}
+    deactivate: function(event, ui) {renumber(); update_db()}
   })
 })
 
@@ -31,6 +32,7 @@ function changePos(e) {
   if (val < pos) parent.insertBefore($(`[data-pos=${val}]`))
   else parent.insertAfter($(`[data-pos=${val}]`))
   renumber()
+  update_db()
 }
 
 async function renumber() {
@@ -40,6 +42,10 @@ async function renumber() {
     $(this).val(i+1)
     $(this).parent().parent().parent().attr("data-pos", i+1)
   })
+}
+
+async function update_db() {
+  let inputs = $(".position")
   // Update game ranks in database
   game_pos_dict = {}
   for (let i = 0; i < inputs.length; i++) {
@@ -81,17 +87,6 @@ $('.wishlist').on("click", async function() {
 Async Functions
 */
 
-async function add_to_wishlist(id) {
-  // Add current game to user's wishlist
-  const response = await fetch('/api/add_wishlist_item', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({steamapp_id: id})
-  });
-
-  const data = await response.json();
-}
-
 async function delete_from_wishlist(id) {
   // Delete current game from user's wishlist
   const response = await fetch('/api/delete_wishlist_item', {
@@ -101,39 +96,4 @@ async function delete_from_wishlist(id) {
   });
 
   const data = await response.json();
-}
-
-async function is_game_wishlisted(id) {
-  const response = await fetch('/api/is_game_wishlisted', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({steamapp_id: id})
-  });
-
-  const data = await response.json();
-  return data;
-}
-
-async function are_games_wishlisted(steamids) {
-  let data = {}
-  
-  for(id in steamids) {
-    if (steamids[id] == "") continue;
-    data[steamids[id]] = await is_game_wishlisted(steamids[id]);
-  }
-
-  return data
-}
-
-/*
-Helper functions
-*/
-
-function get_steamapp_ids() {
-  buttons = $(".wishlist")
-  steamids = []
-  $.each(buttons, function() {
-    steamids.push(parseInt($(this).attr("data-steamid")))
-  });
-  return steamids
 }
