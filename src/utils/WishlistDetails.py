@@ -2,8 +2,8 @@ from src.utils.GameDetails import GameDetails
 from src.utils.db_utils import db_utils
 
 class WishlistDetails:
-  def __init__(self):
-    self.username = "user1"
+  def __init__(self, username):
+    self.username = username
     wishlist_data = db_utils.get_user_wishlist_items(self.username)
     self.items = []
     self.num_items = 0

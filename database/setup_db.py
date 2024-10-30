@@ -43,26 +43,11 @@ def create_tables(db_name):
   conn.commit()
   conn.close()
 
-def create_user(db_name, username):
-  """
-  Create a user in the database
-  TEMP FUNCTION WHILE WE GET SIGNUP WORKING
-  """
-  conn = psycopg2.connect(database=db_name)
-  curr = conn.cursor()
-
-  curr.execute("INSERT INTO user_account (username, password_hash) VALUES (%s, 'temp_hash') ON CONFLICT (username) DO NOTHING;", (username,))
-
-  conn.commit()
-  conn.close()
-
 def setup_db():
   DB_NAME = "gamescout"
-  TEST_USER = "user1"
   if not exists_database(DB_NAME):
     create_database(DB_NAME)
   create_tables(DB_NAME)
-  create_user(DB_NAME, TEST_USER)
 
 if __name__ == "__main__":
   setup_db()
