@@ -334,6 +334,16 @@ section.user {
         align-items: flex-start;
         gap: 10px;
 
+        span.error {
+          color: col(accent-red);
+          @include bodyMedium();
+        }
+
+        span.success {
+          color: col(accent-green);
+          @include bodyMedium();
+        }
+
         label.tos {
           display: flex;
           width: 400px;

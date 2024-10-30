@@ -58,6 +58,12 @@
       </div>
       <a class="forgot-password" href="#">Forgot Password</a>
       <div class="tos-submit">
+        {% if error %}
+        <span class="error">Invalid Username / Password</span>
+        {% endif %}
+        {% if success %}
+        <span class="success">Log in success!</span>
+        {% endif %}
         <input type="submit" value="Sign in">
       </div>
     </form>

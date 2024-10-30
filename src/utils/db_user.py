@@ -20,6 +20,14 @@ class db_user:
       if res:
         return True
       return False
+    
+  def correct_login(email, password):
+    with db_conn() as curr:
+      curr.execute("SELECT password_hash FROM user_account WHERE email = %s", (email,))
+      res = curr.fetchall()
+      if not res: return False
+      if not check_password_hash(res[0][0], password): return False
+      else: return True
 
   def insert_user(username, password, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
     """Insert a new user to the database"""

@@ -34,4 +34,3 @@ $('button').on("click", function(e){
     passwordShown = true;
   }
 });
-

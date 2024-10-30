@@ -62,16 +62,15 @@ def signup():
 
 @signin_bp.route('/', methods=('GET', 'POST'))
 def signin():
-    if request.method == 'POST':
-        print(request.form)
-        email = request.form['email']
-        res = db_user.exists_email(email)
-        if not res: #if email is not in the database
-            return render_template('user/sign_in.html', error="Email doesn't exist!")
-        else:
-            pass
-    return render_template('user/sign_in.html')
+  if request.method == 'POST':
+    print(request.form)
+    email = request.form["email"]
+    password = request.form["password"]
+    if user == "" or email == "": return render_template('user/sign_in.html', error=True)
+    if not db_user.correct_login(email, password): return render_template('user/sign_in.html', error=True)
+    else: return render_template('user/sign_in.html', success=True)
+  else: return render_template('user/sign_in.html')
 
 @support_bp.route('/', methods=('GET', 'POST'))
 def support():
-    return render_template('user/support.html')
+  return render_template('user/support.html')
