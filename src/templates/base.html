@@ -34,11 +34,15 @@
         <a onclick="redirect_to_search_page(event, true)"><i class="fa-solid fa-magnifying-glass"></i></a>
       </div>
       <div class="right">
+        {% if session['user'] %}
         <a href="/wishlist/">Wishlist</a>
         <div class="account">
           <img src="{{ url_for('static', filename='img/pfp_placeholder.png') }}" alt="Profile Picture" />
-          <span>CaelenO42</span>
+          <span>{{ session.user.username }}</span>
         </div>
+        {% else %}
+        <a href="/signin/">Sign In</a>
+        {% endif %}
       </div>
     </nav>
     {% endblock %}
@@ -55,7 +59,10 @@
       </span>
       <div class="buttons">
         <a href="/">Home</a>
+        {% if session.user %}
         <a href="/wishlist">Wishlist</a>
+        <a href="/user/signout">Sign out</a>
+        {% endif %}
         <a href="#" class=".back-to-top">Back to Top</a>
       </div>
     </section>

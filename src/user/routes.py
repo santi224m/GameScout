@@ -1,6 +1,4 @@
-import requests
-
-from flask import Blueprint, render_template, request, abort, flash, redirect, url_for
+from flask import render_template, request, session, redirect, url_for
 from src.user import user_bp, signup_bp, signin_bp, support_bp
 from src.utils.db_user import db_user
 
@@ -63,13 +61,21 @@ def signup():
 @signin_bp.route('/', methods=('GET', 'POST'))
 def signin():
   if request.method == 'POST':
-    print(request.form)
     email = request.form["email"]
     password = request.form["password"]
-    if user == "" or email == "": return render_template('user/sign_in.html', error=True)
+    if password == "" or email == "": return render_template('user/sign_in.html', error=True)
     if not db_user.correct_login(email, password): return render_template('user/sign_in.html', error=True)
-    else: return render_template('user/sign_in.html', success=True)
+    else:
+      user = db_user.get_user_full(email)
+      session['user'] = user
+      return redirect(url_for('main.index'))
   else: return render_template('user/sign_in.html')
+
+@user_bp.route('/signout', methods=('GET', 'POST'))
+def signout():
+  if 'user' in session:
+    del session['user']
+  return redirect(url_for('main.index'))
 
 @support_bp.route('/', methods=('GET', 'POST'))
 def support():

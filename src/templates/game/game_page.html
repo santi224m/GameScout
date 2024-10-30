@@ -28,10 +28,12 @@
       <div class="featured">
         <div class="header">
           <span class="game-title" data-steamid="{{ game.steam_app_id }}">{{ game.title }}</span>
+          {% if session.user %}
           <div class="buttons">
             <button class="wishlist"><i class="fa-solid fa-heart solid"></i><i class="fa-regular fa-heart outline"></i><span>Wishlist</span></button>
             <button><i class="fa-regular fa-eye"></i><span>Watch</span></button>
           </div>
+          {% endif %}
         </div>
         <div class="quick-look">
           <div class="carousel">

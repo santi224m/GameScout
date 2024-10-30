@@ -1,4 +1,5 @@
 from flask import Flask, render_template
+from flask_session import Session
 
 from config import Config
 
@@ -11,6 +12,8 @@ def page_not_found(e):
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+
+    server_session = Session(app)
 
     # Register Pages for 400 and 404 Errors
     app.register_error_handler(400, bad_request)
