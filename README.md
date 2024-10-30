@@ -40,6 +40,7 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#setting-up-steamwebapi">Setting up SteamWebAPI</a></li>
+        <li><a href="#setting-up-postgresql">Setting up PostgreSQL</a></li>
         <li><a href="#run-flask-app">Run Flask App</a></li>
       </ul>
     </li>
@@ -137,7 +138,7 @@ STEAM_API_KEY = "{{YOUR STEAM API KEY HERE}}"
 
 You should now be able to use the SteamWebAPI
 
-### PostgreSQL Setup
+### Setting up PostgreSQL
 
 1. Install [PostgreSQL](https://www.postgresql.org/download/) for your operating system.
 
