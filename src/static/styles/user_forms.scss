@@ -370,6 +370,18 @@ section.user {
       }
     }
 
+    a.forgot-password {
+      text-decoration: none;
+      color: col(primary);
+      transition: 0.25s ease all;
+      @include bodyMedium();
+      align-self: flex-start;
+
+      &:hover {
+        color: col(secondary);
+      }
+    }
+
     span.redirect {
       @include bodyMedium();
       color: col(text-main);

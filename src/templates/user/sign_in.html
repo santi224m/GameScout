@@ -1,38 +1,71 @@
 {% extends 'base.html' %}
 {% block title %}Sign In{% endblock %}
 {% block style %}
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/sign_in.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/user_forms.css') }}">
 {% endblock %}
-
+{% block nav %}{% endblock %}
 {% block content %}
 <section class="user">
+  <a class="logo" href="/">
+    <img src="{{ url_for('static', filename='img/controller.svg') }}" alt="Controller Icon" />
+    GameScout
+  </a>
   <div class="form">
-    <span class="title"> Sign In </span>
+    <div class="header">
+      <span>Sign in</span>
+      <button><i class="fa-brands fa-google"></i><span>Sign In With Google</span></button>
+    </div>
+    <div class="hr">
+      <svg xmlns="http://www.w3.org/2000/svg" width="135" height="2" viewBox="0 0 135 2" fill="none">
+        <path d="M0.5 1H135" stroke="#76808C"/>
+      </svg>
+      <span>Or sign in with email</span>
+      <svg xmlns="http://www.w3.org/2000/svg" width="135" height="2" viewBox="0 0 135 2" fill="none">
+        <path d="M0.5 1H135" stroke="#76808C"/>
+      </svg>
+    </div>
     <form method="POST">
-      <label for="email">Email Address</label>
-      <label class="input-field">
-        <span class="icon"><i class="fa-solid fa-envelope"></i></span>
-        <input type="email" name="email" placeholder="example@gmail.com">
-      </label>
-      <label for="enter_password">Enter Password</label>
-      <div class="input-field grid">
-        <label>
-          <span class="icon"><i class="fa-solid fa-lock"></i></span>
-          <input type="password" name="password" minlength="8" maxlength="20">
+      <div class="field">
+        <label for="email">Email Address</label>
+        <label class="input-field">
+          <input type="email" name="email" placeholder="example@gmail.com" required>
+          <i class="fa-regular fa-envelope"></i>
         </label>
-        <button class="icon right">
-          <img class="slash" src="{{ url_for('static', filename='img/eye-slash-solid.svg') }}">
-          <i class="fa-solid fa-eye active normal"></i>
-        </button>
       </div>
-
-      <input type="submit" value="Continue">      
-      <a href="/support/" name="support_link"> Can't sign in?</a>
-      
+      <!-- <div class="field">
+        <label for="username">Username</label>
+        <label class="input-field">
+          <input type="text" name="username" placeholder="JohnDoe" required>
+          <i class="fa-regular fa-user"></i>
+        </label>
+        <span class="invalid username">Invalid username</span>
+        <span class="taken username">This username has been taken</span>
+      </div> -->
+      <div class="password-container">
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="input-container">
+            <label class="input-field">
+              <input type="password" name="password" required>
+              <i class="fa-solid fa-lock"></i>
+            </label>
+            <button class="password-visibility">
+              <img class="slash" src="{{ url_for('static', filename='img/eye-slash-solid.svg') }}">
+              <i class="fa-solid fa-eye active normal"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <a class="forgot-password" href="#">Forgot Password</a>
+      <div class="tos-submit">
+        <input type="submit" value="Sign in">
+      </div>
     </form>
+    <span class="redirect">No account? <a href="/signup">Sign up</a></span>
   </div>
 </section>
 {% endblock %}
+{% block footer %}{% endblock %}
 {% block scripts %}
 {{ super() }}
 <script type="text/javascript" src="{{ url_for('static', filename='js/sign_in.js') }}"></script>

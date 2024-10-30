@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Sign Up{% endblock %}
 {% block style %}
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/sign_up.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/user_forms.css') }}">
 {% endblock %}
 {% block nav %}{% endblock %}
 {% block content %}
@@ -37,7 +37,7 @@
       <div class="field">
         <label for="username">Username</label>
         <label class="input-field">
-          <input type="text" name="username" placeholder="JohnDoe" required>
+          <input type="text" name="username" required>
           <i class="fa-regular fa-user"></i>
         </label>
         <span class="invalid username">Invalid username</span>

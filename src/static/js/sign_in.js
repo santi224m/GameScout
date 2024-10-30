@@ -20,23 +20,22 @@
 // }
 let passwordShown = false;
 
-
 function togglePasswordVis() {
-    if (passwordShown) { 
-      $('input[name="password"]').attr("type", "password");
-      $('.normal').addClass("active");
-      $('.slash').removeClass("active");
-      passwordShown = false;
-    } else {
-      $('input[name="password"]').attr("type", "text");
-      $('.normal').removeClass("active");
-      $('.slash').addClass("active");
-      passwordShown = true;
-    }
+  if (passwordShown) { 
+    $('input[name="password"]').attr("type", "password");
+    $('.normal').addClass("active");
+    $('.slash').removeClass("active");
+    passwordShown = false;
+  } else {
+    $('input[name="password"]').attr("type", "text");
+    $('.normal').removeClass("active");
+    $('.slash').addClass("active");
+    passwordShown = true;
   }
+}
 
-  $('button').on("click", function(e){
-    e.preventDefault();
-    togglePasswordVis()
-  });
+$('button').on("click", function(e){
+  e.preventDefault();
+  togglePasswordVis();
+});
 
