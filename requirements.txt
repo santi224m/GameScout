@@ -27,3 +27,4 @@ urllib3==2.2.3
 Werkzeug==3.0.4
 wrapt==1.16.0
 yarl==1.13.1
+mailersend==0.5.8
