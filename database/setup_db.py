@@ -26,16 +26,16 @@ def create_tables(db_name):
   curr = conn.cursor()
 
   # User Account
-  curr.execute("CREATE TABLE IF NOT EXISTS user_account (id SERIAL PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL, password_hash TEXT NOT NULL, dob DATE, currency VARCHAR(3) DEFAULT 'usd', profile_pic_path TEXT, email TEXT, allow_alerts BOOLEAN DEFAULT FALSE, allow_notifications BOOLEAN DEFAULT FALSE);")
+  curr.execute("CREATE TABLE IF NOT EXISTS user_account (uuid uuid DEFAULT gen_random_uuid() PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL, password_hash TEXT NOT NULL, dob DATE, currency VARCHAR(3) DEFAULT 'usd', profile_pic_path TEXT, email TEXT, allow_alerts BOOLEAN DEFAULT FALSE, allow_notifications BOOLEAN DEFAULT FALSE);")
 
   # Game
   curr.execute("CREATE TABLE IF NOT EXISTS game (steam_app_id INT PRIMARY KEY, title TEXT NOT NULL);")
 
   # Wishlist Item
-  curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_account_id INT NOT NULL REFERENCES user_account(id), steam_app_id INT NOT NULL REFERENCES game(steam_app_id), added_date DATE DEFAULT now(), rank INT, PRIMARY KEY (user_account_id, steam_app_id));")
+  curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_uuid uuid NOT NULL REFERENCES user_account(uuid), steam_app_id INT NOT NULL REFERENCES game(steam_app_id), added_date DATE DEFAULT now(), rank INT, PRIMARY KEY (user_uuid, steam_app_id));")
 
   # Trigger function to update rank
-  curr.execute("CREATE OR REPLACE FUNCTION set_new_wishlist_rank() RETURNS TRIGGER AS $$ BEGIN SELECT COALESCE(COUNT(*), 0) + 1 FROM wishlist_item WHERE user_account_id = NEW.user_account_id INTO NEW.rank; RETURN NEW; END; $$ LANGUAGE plpgsql;")
+  curr.execute("CREATE OR REPLACE FUNCTION set_new_wishlist_rank() RETURNS TRIGGER AS $$ BEGIN SELECT COALESCE(COUNT(*), 0) + 1 FROM wishlist_item WHERE user_uuid = NEW.user_uuid INTO NEW.rank; RETURN NEW; END; $$ LANGUAGE plpgsql;")
   curr.execute("DROP TRIGGER IF EXISTS wishlist_rank_trigger ON wishlist_item;")
   curr.execute("CREATE TRIGGER wishlist_rank_trigger BEFORE INSERT ON wishlist_item FOR EACH ROW EXECUTE FUNCTION set_new_wishlist_rank();")
 
