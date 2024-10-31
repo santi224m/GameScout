@@ -70,7 +70,7 @@ function calculateEntropy() {
 }
 
 function validForm() {
-  if ($('input[name="email"]').val().match(emailRegex) && $('input[name="username"]').val().length != 0 && $('input[name="password"]').val().length != 0 && $('input[name="tos"]').is(":checked")) return true;
+  if ($('input[name="email"]').val().match(emailRegex) && $('input[name="username"]').val().length != 0 && $('input[name="password"]').val().length >= 8 && $('input[name="tos"]').is(":checked")) return true;
   else return false;
 }
 

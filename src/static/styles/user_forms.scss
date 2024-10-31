@@ -312,7 +312,11 @@ section.user {
               }
       
               &.valid {
-                color: col(accent-green);
+                color: col(accent-green) !important;
+              }
+
+              &.required {
+                color: col(accent-red);
               }
       
               i, svg {
