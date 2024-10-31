@@ -37,7 +37,11 @@
         <a href="/wishlist/">Wishlist</a>
         {% if session['user'] %}
         <a class="account" href="/user">
-          <img src="{{ url_for('static', filename='img/pfp_placeholder.png') }}" alt="Profile Picture" />
+          {% if session.user.profile_pic %}
+          <img src="{{ url_for('static', filename='profile_pics/' + session.user.profile_pic) }}" alt="Profile Picture" />
+          {% else %}
+          <img src="{{ url_for('static', filename='profile_pics/default_user.svg') }}" alt="Profile Picture" />
+          {% endif %}
           <span>{{ session.user.username }}</span>
         </a>
         {% else %}

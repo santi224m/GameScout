@@ -1,4 +1,6 @@
-from flask import render_template, request, session, redirect, url_for
+from pathlib import Path
+
+from flask import render_template, request, session, redirect, url_for, current_app
 from src.user import user_bp, signup_bp, signin_bp, support_bp
 from src.utils.db_user import db_user
 
@@ -68,6 +70,8 @@ def signin():
     else:
       user = db_user.get_user_full(email)
       session['user'] = user
+      profile_pic = find_profile_pic(user['username'])
+      session['user']['profile_pic'] = profile_pic
       return redirect(url_for('main.index'))
   else: return render_template('user/sign_in.html')
 
@@ -80,3 +84,17 @@ def signout():
 @support_bp.route('/', methods=('GET', 'POST'))
 def support():
   return render_template('user/support.html')
+
+def find_profile_pic(username):
+  """
+  Return the profile pic path for the user.
+  Filename should be the username
+  and stored in /static/profile_pics/
+  """
+  image_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg']
+  base_path = Path(current_app.config['BASE_DIR'] + "/src/static/profile_pics/")
+  for ext in image_extensions:
+    fname = base_path / f"{username}{ext}"
+    if fname.exists():
+      return f"{username}{ext}"
+  return None
