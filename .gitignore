@@ -4,3 +4,5 @@ __pycache__/
 .DS_Store
 .env
 .sass-cache
+src/static/profile_pics/*
+!src/static/profile_pics/default_user.*
