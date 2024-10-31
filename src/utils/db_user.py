@@ -40,21 +40,31 @@ class db_user:
     """Update a user in the database"""
     raise NotImplementedError
 
+  def verify_user(id):
+    with db_conn() as curr:
+      curr.execute("SELECT verified FROM user_account WHERE uuid = %s;", (id,))
+      res = curr.fetchall()
+      if res[0][0]: return {"already-verified": True}
+      else: 
+        curr.execute("UPDATE user_account SET verified = true WHERE uuid = %s", (id,))
+        return {"verified": True}
+
   def get_user_full(email):
     """
     Return all user details from the database.
     username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications
     """
     with db_conn() as curr:
-      curr.execute("SELECT username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications FROM user_account WHERE email = %s;", (email,))
+      curr.execute("SELECT uuid, username, dob, currency, profile_pic_path, email, verified, allow_alerts, allow_notifications FROM user_account WHERE email = %s;", (email,))
       res = curr.fetchone()
       user = {
-        'username': res[0],
-        'dob': res[1],
-        'currency': res[2],
-        'profile_pic_path': res[3],
-        'email': res[4],
-        'allow_alerts': res[5],
-        'allow_notifications': res[6]
+        'uuid': res[0],
+        'username': res[1],
+        'dob': res[2],
+        'currency': res[3],
+        'profile_pic_path': res[4],
+        'email': res[5],
+        'allow_alerts': res[6],
+        'allow_notifications': res[7]
       }
       return user
