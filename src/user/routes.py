@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 from flask import render_template, request, session, redirect, url_for, current_app
 from src.user import user_bp, signup_bp, signin_bp, support_bp
@@ -30,13 +31,13 @@ def signup():
     user = request.form['username']
     email = request.form["email"]
     password = request.form["password"]
-    if user == "": 
+    if user == "" or len(user) > 20: 
       response['username']['invalid'] = True
       response['status'] = 400
-    if email == "": 
+    if email == "" or not re.search(".+[@].+(?<![.])$", email): 
       response['email']['invalid'] = True
       response['status'] = 400
-    if password == "":
+    if len(password) < 8:
       response['password']['invalid'] = True
       response['status'] = 400
     
