@@ -50,6 +50,11 @@
       </div>
     </nav>
     {% endblock %}
+    {% block toast %}
+    <div class="toast">
+      <span><i class="fa-solid fa-xmark"></i>You must be logged in to do that!</span>
+    </div>
+    {% endblock %}
     {% block content %}
     {% endblock %}
     {% block footer %}

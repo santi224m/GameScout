@@ -323,6 +323,27 @@ nav {
   }
 }
 
+div.toast {
+  position: absolute;
+  right: 20px;
+  top: 70px;
+  padding: 10px;
+  background-color: col(bg-main-50);
+  border-radius: 5px;
+  border: 2px solid col(accent-red);
+  display: none;
+  z-index: 10;
+
+  span {
+    color: col(text-main);
+    @include bodyMedium();
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+}
+
 section.footer {
   display: flex;
   padding: 10px;

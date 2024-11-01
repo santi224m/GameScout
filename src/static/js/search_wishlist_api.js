@@ -2,9 +2,17 @@
 Add the current game to the user's wishlist
 */
 
+let wishlist_status;
+
 $('.wishlist').on("click", async function() {
   // Wishlist if not wishlisted, remove from wishlist otherwise
   let id = $(this).attr("data-steamid")
+
+  if (wishlist_status[id]["error"] == 500) {
+    $("div.toast").fadeIn(500)
+    setTimeout(function() {$("div.toast").fadeOut(500)}, 2000)
+    return
+  }
 
   if (wishlist_status[id]) {
     wishlist_status[id] = false;
@@ -30,7 +38,7 @@ $(document).ready(async function() {
   wishlist_status = await are_games_wishlisted(steamids);
 
   for(id in wishlist_status) {
-    if (!wishlist_status[id]) continue
+    if (!wishlist_status[id] || wishlist_status[id]["error"] == 500) continue
     $(`*[data-steamid="${id}"]`).addClass("active")
   }
 });

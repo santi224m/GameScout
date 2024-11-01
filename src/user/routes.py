@@ -73,7 +73,11 @@ def signin():
       session['user'] = user
       profile_pic = find_profile_pic(user['username'])
       session['user']['profile_pic'] = profile_pic
-      return redirect(url_for('main.index'))
+      if "redirect" in session: 
+        url = session["redirect"]
+        del session["redirect"]
+        return redirect(url_for(url))
+      else: return redirect(url_for('main.index'))
   else: return render_template('user/sign_in.html')
 
 @user_bp.route('/signout', methods=('GET', 'POST'))

@@ -6,6 +6,7 @@ from src.utils.WishlistDetails import WishlistDetails
 @bp.route('/')
 def wishlist():
     if 'user' not in session:
+        session["redirect"] = "wishlist.wishlist"
         return redirect(url_for('signin.signin'))
     username = session['user']['username']
     wishlist = WishlistDetails(username)

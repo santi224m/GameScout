@@ -24,6 +24,7 @@ def get_wishlist_items():
 
 @bp.route('/is_game_wishlisted', methods=('GET', 'POST'))
 def is_game_wishlisted():
+  if "user" not in session: return {"error": 500}
   username = session['user']['username']
   steamapp_id = request.json['steamapp_id']
   res = db_utils.is_game_wishlisted(username, steamapp_id)

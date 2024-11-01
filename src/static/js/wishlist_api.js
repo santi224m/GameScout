@@ -5,6 +5,13 @@ Add the current game to the user's wishlist
 $('.wishlist').on("click", async function() {
   // Wishlist if not wishlisted, remove from wishlist otherwise
   is_wishlisted = await is_game_wishlisted();
+
+  if (is_wishlisted["error"] == 500) {
+    $("div.toast").fadeIn(500)
+    setTimeout(function() {$("div.toast").fadeOut(500)}, 2000)
+    return
+  }
+
   if (!is_wishlisted) {
     $(this).addClass("active");
     add_to_wishlist();
@@ -17,7 +24,7 @@ $('.wishlist').on("click", async function() {
 $(document).ready(async function() {
   is_wishlisted = await is_game_wishlisted();
 
-  if (is_wishlisted) $('.wishlist').addClass("active");
+  if (is_wishlisted && !is_wishlisted["error"] == 500) $('.wishlist').addClass("active");
 });
 
 /*
