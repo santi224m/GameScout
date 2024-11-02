@@ -57,10 +57,6 @@ def signup():
     
     dob = request.form.get('dob', None)
     currency = request.form.get('currency', 'USD')
-    profile_pic_path = request.form.get('profile_pic_path', None)
-
-    allow_alerts = 'allow_alerts' in request.form
-    allow_notifications = 'allow_notifications' in request.form
 
     if db_user.exists_email(email):
       response['email']['taken'] = True
@@ -70,7 +66,7 @@ def signup():
       response['status'] = 400
     
     if response['status'] == 200:
-      db_user.insert_user(user, password, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications)
+      db_user.insert_user(user, password, dob, currency, email)
       uuid = db_user.get_uuid_by_email(email)
       thread_img = threading.Thread(target=ImageHandler.create_blank_pfp(uuid))
       thread_img.start()

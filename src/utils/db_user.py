@@ -29,12 +29,12 @@ class db_user:
       if not check_password_hash(res[0][0], password): return False
       else: return True
 
-  def insert_user(username, password, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
+  def insert_user(username, password, dob, currency, email):
     """Insert a new user to the database"""
     with db_conn() as curr:
       password_hash = generate_password_hash(password)
-      curr.execute("INSERT INTO user_account (username, password_hash, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications) VALUES (%s, %s, %s, %s, %s, %s, %s, %s);",
-                   (username, password_hash, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications))
+      curr.execute("INSERT INTO user_account (username, password_hash, dob, currency, email) VALUES (%s, %s, %s, %s, %s);",
+                   (username, password_hash, dob, currency, email,))
 
   def update_user(original_username, new_username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
     """Update a user in the database"""
