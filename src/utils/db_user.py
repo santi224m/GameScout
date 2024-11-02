@@ -61,7 +61,7 @@ class db_user:
     username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications
     """
     with db_conn() as curr:
-      curr.execute("SELECT uuid, username, dob, currency, profile_pic_path, email, verified, allow_alerts, allow_notifications FROM user_account WHERE email = %s;", (email,))
+      curr.execute("SELECT uuid, username, dob, currency, email, verified FROM user_account WHERE email = %s;", (email,))
       res = curr.fetchone()
       user = {
         'uuid': res[0],
