@@ -68,9 +68,6 @@ class db_user:
         'username': res[1],
         'dob': res[2],
         'currency': res[3],
-        'profile_pic_path': res[4],
-        'email': res[5],
-        'allow_alerts': res[6],
-        'allow_notifications': res[7]
+        'email': res[4]
       }
       return user
