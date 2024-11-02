@@ -58,7 +58,7 @@ class db_user:
   def get_user_full(email):
     """
     Return all user details from the database.
-    username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications
+    uuid, username, dob, currency, email, verified
     """
     with db_conn() as curr:
       curr.execute("SELECT uuid, username, dob, currency, email, verified FROM user_account WHERE email = %s;", (email,))
