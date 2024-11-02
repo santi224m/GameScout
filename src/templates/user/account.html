@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up{% endblock %}
+{% block style %}
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/account.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="account"> 
+  <div class="content">
+    <form method="POST" enctype="multipart/form-data">
+      <input name="pfp" type="file" accept=".png, .jpg, .jpeg, .webp">
+      <input type="submit" value="Update Pfp">
+    </form>
+  </div>
+</section>
+{% endblock %}

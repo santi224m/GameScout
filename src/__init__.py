@@ -44,14 +44,14 @@ def create_app(config_class=Config):
     app.register_blueprint(verify_bp, url_prefix='/verify')
 
     # User blueprint
-    from src.user import user_bp as user_bp
+    from src.user import account_bp as account_bp
     from src.user import signup_bp as signup_bp
     from src.user import signin_bp as signin_bp
     from src.user import support_bp as support_bp
 
-    app.register_blueprint(signup_bp, url_prefix='/signup/')
-    app.register_blueprint(signin_bp, url_prefix='/signin/')
-    app.register_blueprint(user_bp, url_prefix='/user/')
-    app.register_blueprint(support_bp, url_prefix='/support/')
+    app.register_blueprint(signup_bp, url_prefix='/signup')
+    app.register_blueprint(signin_bp, url_prefix='/signin')
+    app.register_blueprint(account_bp, url_prefix='/account')
+    app.register_blueprint(support_bp, url_prefix='/support')
 
     return app

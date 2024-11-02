@@ -49,6 +49,12 @@ class db_user:
         curr.execute("UPDATE user_account SET verified = true WHERE uuid = %s", (id,))
         return {"verified": True}
 
+  def get_uuid_by_email(email):
+    with db_conn() as curr:
+      curr.execute("SELECT uuid FROM user_account WHERE email = %s;", (email,))
+      res = curr.fetchall()
+      return res[0][0]
+
   def get_user_full(email):
     """
     Return all user details from the database.

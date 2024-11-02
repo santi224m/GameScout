@@ -231,7 +231,7 @@ nav {
       @include bodyMedium();
       border-radius: br();
       border: 1px solid transparent;
-      transition: 0.25s ease all;
+      transition: 0.25s ease border;
 
       &::placeholder {
         color: col(secondary);
@@ -293,7 +293,7 @@ nav {
       text-decoration: none;
       border-radius: 3px;
       background-color: col(bg-main-20);
-      transition: 0.25s ease all;
+      transition: 0.25s ease background-color;
       @include bodyLarge();
       color: col(text-main);
 
