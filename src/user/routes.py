@@ -24,56 +24,59 @@ def user():
     return redirect(url_for("signin.signin"))
 
 @signup_bp.route('/', methods=('GET', 'POST'))
-def signup():
-  response = {
-    "status": 200,
-    "username": {
-      "taken": False,
-      "invalid": False
-    },
-    "password": {
-      "invalid": False
-    },
-    "email": {
-      "taken": False,
-      "invalid": False
-    },
-  }
-  
+def signup():  
+  if "signin" in session:
+    del session['signin']
+    return redirect(url_for("signin.signin"))
   if request.method == 'POST':
-    print(request.form)
+    response = {
+      "username": {
+        "taken": False,
+        "invalid": False
+      },
+      "password": {
+        "invalid": False
+      },
+      "email": {
+        "taken": False,
+        "invalid": False
+      },
+    }
+
     username = request.form['username']
     email = request.form["email"]
     password = request.form["password"]
     if username == "" or len(username) > 20: 
       response['username']['invalid'] = True
-      response['status'] = 400
     if email == "" or not re.search(".+[@].+(?<![.])$", email): 
       response['email']['invalid'] = True
-      response['status'] = 400
     if len(password) < 8:
       response['password']['invalid'] = True
-      response['status'] = 400
     
     dob = request.form.get('dob', None)
     currency = request.form.get('currency', 'USD')
 
-    if db_user.exists_email(email):
-      response['email']['taken'] = True
-      response['status'] = 400
-    if db_user.exists_user(username):
-      response['username']['taken'] = True
-      response['status'] = 400
-    
-    if response['status'] == 200:
-      db_user.insert_user(username, password, dob, currency, email)
+    exists = db_user.exists_user_email(username, email)
+    if exists['username']: response['username']['taken'] = True
+    if exists['email']: response['email']['taken'] = True
+
+    if True not in response['username'].values() and True not in response['email'].values() and True not in response['password'].values():
+      session['signin'] = True
+
+      thread_db = threading.Thread(db_user.insert_user(username, password, dob, currency, email))
+      thread_db.start()
+      thread_db.join()
+
       uuid = db_user.get_uuid_by_email(email)
 
-      # MailSender().send_verification_email(uuid, email, username)
+      # thread_mail = threading.Thread(MailSender().send_verification_email(uuid, email, username))
+      # thread_mail.start()
+      # thread_mail.join()
       
       thread_img = threading.Thread(target=ImageHandler.create_blank_pfp(uuid))
       thread_img.start()
       thread_img.join()
+
       return response, 200
     else: return response, 400
   else: return render_template('user/sign_up.html')

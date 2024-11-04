@@ -71,3 +71,17 @@ class db_user:
         'email': res[4]
       }
       return user
+    
+  def exists_user_email(username, email):
+    with db_conn() as curr:
+      curr.execute("(SELECT 1 FROM user_account WHERE username = %s) UNION (SELECT 2 FROM user_account WHERE email = %s);", (username, email,))
+      res = curr.fetchall()
+
+      data = {
+        "username": False,
+        "email": False
+      }
+      if not res: return data
+      if 1 in res[0]: data['username'] = True
+      if 2 in res[1]: data['email'] = True
+      return data

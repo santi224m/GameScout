@@ -154,8 +154,7 @@ $('input[type=submit]').on("click", function(e) {
 
   $.ajax(settings)
   .done(function (res) {
-    console.log(res.status);
-    window.location.replace("/signin")
+    window.location.reload()
   })
   .fail(function (res) {
     console.log(res.status);
