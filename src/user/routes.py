@@ -1,4 +1,3 @@
-from pathlib import Path
 import re
 import threading
 
@@ -6,6 +5,7 @@ from flask import render_template, request, session, redirect, url_for, current_
 from src.user import account_bp, signup_bp, signin_bp, support_bp
 from src.utils.db_user import db_user
 from src.utils.ImageHandler import ImageHandler
+from src.utils.MailSender import MailSender
 
 tasks = set()
 
@@ -42,10 +42,10 @@ def signup():
   
   if request.method == 'POST':
     print(request.form)
-    user = request.form['username']
+    username = request.form['username']
     email = request.form["email"]
     password = request.form["password"]
-    if user == "" or len(user) > 20: 
+    if username == "" or len(username) > 20: 
       response['username']['invalid'] = True
       response['status'] = 400
     if email == "" or not re.search(".+[@].+(?<![.])$", email): 
@@ -61,13 +61,16 @@ def signup():
     if db_user.exists_email(email):
       response['email']['taken'] = True
       response['status'] = 400
-    if db_user.exists_user(user):
+    if db_user.exists_user(username):
       response['username']['taken'] = True
       response['status'] = 400
     
     if response['status'] == 200:
-      db_user.insert_user(user, password, dob, currency, email)
+      db_user.insert_user(username, password, dob, currency, email)
       uuid = db_user.get_uuid_by_email(email)
+
+      # MailSender().send_verification_email(uuid, email, username)
+      
       thread_img = threading.Thread(target=ImageHandler.create_blank_pfp(uuid))
       thread_img.start()
       thread_img.join()
@@ -86,7 +89,13 @@ def signin():
       user = db_user.get_user_full(email)
       session['user'] = user
       session['user']['pfp'] = ImageHandler.get_image_url(user['uuid'])
-      if "redirect" in session: 
+      if "redirect" in session and "verify" in session['redirect'] and "jwt" in session:
+        url = session["redirect"]
+        jwt = session["jwt"]
+        del session["redirect"]
+        del session["jwt"]
+        return redirect(f"http://127.0.0.1:5000/verify/{jwt}")
+      elif "redirect" in session: 
         url = session["redirect"]
         del session["redirect"]
         if ("http://localhost:5000" in url or "http://127.0.0.1:5000" in url) and "signup" not in url: return redirect(url)
@@ -94,7 +103,7 @@ def signin():
       else: return redirect(url_for('main.index'))
   else: 
     referrer = None
-    if "http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer: referrer = request.referrer
+    if request.referrer and ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer): referrer = request.referrer
     if referrer: session['redirect'] = referrer
     return render_template('user/sign_in.html')
 

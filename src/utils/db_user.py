@@ -44,10 +44,10 @@ class db_user:
     with db_conn() as curr:
       curr.execute("SELECT verified FROM user_account WHERE uuid = %s;", (id,))
       res = curr.fetchall()
-      if res[0][0]: return {"already-verified": True}
+      if res[0][0]: return False
       else: 
         curr.execute("UPDATE user_account SET verified = true WHERE uuid = %s", (id,))
-        return {"verified": True}
+        return True
 
   def get_uuid_by_email(email):
     with db_conn() as curr:

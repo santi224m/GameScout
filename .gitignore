@@ -6,3 +6,4 @@ __pycache__/
 .sass-cache
 src/static/profile_pics/*
 !src/static/profile_pics/default_user.*
+oct-256.json
