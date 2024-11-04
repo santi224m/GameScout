@@ -32,3 +32,4 @@ wrapt==1.16.0
 yarl==1.13.1
 cloudinary==1.41.0 
 joserfc==1.0.0 
+mailersend==0.5.8
