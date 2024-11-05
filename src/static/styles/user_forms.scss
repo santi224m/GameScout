@@ -220,7 +220,11 @@ section.user {
             &.active {
               display: flex;
             }
+            &:hover {
+              cursor:pointer;
+            }
           }
+         
 
           img {
             filter: invert(1);
@@ -229,6 +233,9 @@ section.user {
 
             &.active {
               display: flex;
+            }
+            &:hover{
+              cursor:pointer;
             }
           }
         }
@@ -356,6 +363,17 @@ section.user {
           align-items: center;
           gap: 10px;
           @include bodyMedium();
+          
+          a {
+            text-decoration: none;
+            color: col(primary);
+            transition: 0.25s ease all;
+
+            &:hover {
+              color: col(secondary);
+              cursor: pointer;
+            }
+          }
         }
 
         input[type="submit"] {
@@ -395,6 +413,7 @@ section.user {
         color: col(secondary);
       }
     }
+    
 
     span.redirect {
       @include bodyMedium();
