@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 import time
-import re
+from multiprocessing import Process
 
 from src.utils.GameDetails import GameDetails
 
@@ -30,6 +30,16 @@ class SearchDetails:
     soup = BeautifulSoup(data['results_html'], features="html.parser")
     print(f"Search Finished in: {time.perf_counter() - start:0.4f} seconds")
 
+    # Cache all games
+    p_list = []
+    for game in soup.find_all("a"):
+      p = Process(target=self.load_game, args=(game['data-ds-appid'],))
+      p_list.append(p)
+      p.start()
+
+    for p in p_list:
+      p.join()
+
     for game in soup.find_all("a"):
       loop_start = time.perf_counter()
       try:
@@ -40,3 +50,9 @@ class SearchDetails:
       print(f"Game Finished in: {time.perf_counter() - loop_start:0.4f} seconds")
 
     print(f"Total Time: {time.perf_counter() - start:0.4f} seconds")
+
+  def load_game(self, steamappid):
+    try:
+      GameDetails(steamappid)
+    except:
+      return
