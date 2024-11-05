@@ -101,7 +101,7 @@ def signin():
       elif "redirect" in session: 
         url = session["redirect"]
         del session["redirect"]
-        if ("http://localhost:5000" in url or "http://127.0.0.1:5000" in url) and "signup" in url:  redirect(url_for('main.index'))
+        if ("http://localhost:5000" in url or "http://127.0.0.1:5000" in url) and "signup" in url: return redirect(url_for('main.index'))
         elif "http://localhost:5000" in url or "http://127.0.0.1:5000" in url and "signup" not in url: return redirect(url)
         else: return redirect(url_for(url))
       else: return redirect(url_for('main.index'))
