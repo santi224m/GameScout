@@ -36,9 +36,29 @@ class db_user:
       curr.execute("INSERT INTO user_account (username, password_hash, dob, currency, email) VALUES (%s, %s, %s, %s, %s);",
                    (username, password_hash, dob, currency, email,))
 
-  def update_user(original_username, new_username, dob, currency, profile_pic_path, email, allow_alerts, allow_notifications):
-    """Update a user in the database"""
-    raise NotImplementedError
+
+  def update_user_email(uuid, new_email):
+    """Update user email to the database"""
+    with db_conn() as curr:
+      #check if new email is not in the database
+      if not exists_email(new_email):
+        curr.execute("UPDATE user_account SET email = %s WHERE uuid = %s; ",(new_email, uuid))
+        return True
+      else:
+        return False
+
+  def update_user_currency(uuid, new_currency):
+    """Update user currency to the data base """
+    with db_connn() as curr:
+      curr.execute("UPDATE user_account SET currency = %s WHERE uuid = %s; ",(new_currency, uuid))
+      return True
+  
+  def get_email_by_uuid(uuid):
+    """Get email using uuid"""
+    with db_conn() as curr:
+      curr.execute("SELECT email FROM user_account WHERE uuid = %s; ", (uuid,))
+      res = curr.fetchone()
+      return res[0]
 
   def verify_user(id):
     with db_conn() as curr:
