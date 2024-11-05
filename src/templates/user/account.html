@@ -1,16 +1,67 @@
 {% extends 'base.html' %}
 {% block title %}Sign Up{% endblock %}
 {% block style %}
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/countrySelect.css') }}">
 <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/account.css') }}">
 {% endblock %}
 
 {% block content %}
 <section class="account"> 
   <div class="content">
-    <form method="POST" enctype="multipart/form-data">
-      <input name="pfp" type="file" accept=".png, .jpg, .jpeg, .webp">
-      <input type="submit" value="Update Pfp">
+    <div class="header">
+      <span>Account Settings</span>
+      <button><i class="fa-solid fa-right-from-bracket"></i>Sign Out</button>
+    </div>
+    <form class="body" method="POST" enctype="multipart/form-data">
+      <div class="info">
+        <div class="main">
+          <img src="{{ session.user.pfp.100 }}" alt="Profile Picture">
+          <div class="text">
+            <div>
+              <span class="username">{{ session.user.username }}</span>
+              <span class="email">{{ session.user.email }}</span>
+            </div>
+            {% if session.user.verified %}
+            <span class="status verified"><i class="fa-solid fa-check"></i>Verified</span>
+            {% endif %}
+            {% if not session.user.verified %}
+            <span class="status unverified"><i class="fa-solid fa-xmark"></i>Not Verified</span>
+            {% endif %}
+          </div>
+        </div>
+        <div class="links">
+          <a href="#">Resend Verification Email</a>
+          <a href="#">Change Email Address</a>
+        </div>
+      </div>
+      <div class="container password">
+        <div>
+          <span class="title">Password:</span>
+          <span class="password"><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i></span>
+          <span class="subtitle">Last Modified 10/01/2024</span>
+        </div>
+        <a href="#">Change Password</a>
+      </div>
+      <div class="container pfp">
+        <span class="title">Profile Picture:</span>
+        <label for="pfp">Choose File</label>
+        <span class="file">No file selected</span>
+        <input id="pfp" type="file" accept=".png, .jpg, .jpeg, .webp" value="Choose File">
+      </div>
+      <div class="container country">
+        <span class="title">Country:</span>
+        <input name="country" id="country">
+        <input type="hidden" id="country_code">
+      </div>
+      <div class="container">
+        <input type="submit" value="Update Account Information">
+      </div>
     </form>
   </div>
 </section>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src=" {{ url_for('static', filename='js/countrySelect.js') }}"></script>
+<script src=" {{ url_for('static', filename='js/account.js') }}"></script>
 {% endblock %}

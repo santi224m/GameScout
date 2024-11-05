@@ -19,7 +19,7 @@ class ImageHandler:
     data = ImageHandler.get_image_info(name)
     return {
       30: "https://res.cloudinary.com/gamescout/image/upload/c_fill,f_auto,g_center,h_30,w_30/v" + str(data['version']) + "/" + data['public_id'],
-      200: "https://res.cloudinary.com/gamescout/image/upload/c_fill,f_auto,g_center,h_200,w_20/v" + str(data['version']) + "/" + data['public_id'],
+      100: "https://res.cloudinary.com/gamescout/image/upload/c_fill,f_auto,g_center,h_100,w_100/v" + str(data['version']) + "/" + data['public_id'],
       500: "https://res.cloudinary.com/gamescout/image/upload/c_fill,f_auto,g_center,h_500,w_500/v" + str(data['version']) + "/" + data['public_id'],
       1000: "https://res.cloudinary.com/gamescout/image/upload/c_fill,f_auto,g_center,h_1000,w_1000/v" + str(data['version']) + "/" + data['public_id'],
       "source": "https://res.cloudinary.com/gamescout/image/upload/f_auto/v" + str(data['version']) + "/" + data['public_id']
