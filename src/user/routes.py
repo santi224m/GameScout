@@ -14,11 +14,16 @@ def user():
   if 'user' in session:
     if request.method == 'GET': return render_template('user/account.html')
     elif request.method == 'POST':
+      print(request.form)
       print(request.files)
       uuid = session['user']['uuid']
-      ImageHandler.upload_image(uuid, request.files['pfp'])
-      session['user']['pfp'] = ImageHandler.get_image_url(uuid)
-      return redirect(url_for('account.user')) 
+      if "pfp" in request.files and request.files['pfp'].filename != "":
+        ImageHandler.upload_image(uuid, request.files['pfp'])
+        session['user']['pfp'] = ImageHandler.get_image_url(uuid)
+      if "country_code" in request.form: 
+        session['user']['country'] = request.form['country_code']
+        db_user.update_country(session['user']['uuid'], request.form['country_code'])
+      return redirect(url_for('account.user'))
   else: 
     session["redirect"] = "account.user"
     return redirect(url_for("signin.signin"))
@@ -54,7 +59,7 @@ def signup():
       response['password']['invalid'] = True
     
     dob = request.form.get('dob', None)
-    currency = request.form.get('currency', 'USD')
+    country = request.form.get('country', 'us')
 
     exists = db_user.exists_user_email(username, email)
     if exists['username']: response['username']['taken'] = True
@@ -63,7 +68,7 @@ def signup():
     if True not in response['username'].values() and True not in response['email'].values() and True not in response['password'].values():
       session['signin'] = True
 
-      thread_db = threading.Thread(db_user.insert_user(username, password, dob, currency, email))
+      thread_db = threading.Thread(db_user.insert_user(username, password, dob, country, email))
       thread_db.start()
       thread_db.join()
 
@@ -101,7 +106,7 @@ def signin():
       elif "redirect" in session: 
         url = session["redirect"]
         del session["redirect"]
-        if ("http://localhost:5000" in url or "http://127.0.0.1:5000" in url) and "signup" in url: return redirect(url_for('main.index'))
+        if ("http://localhost:5000" in url or "http://127.0.0.1:5000" in url) and ("signup" in url or "signin" in url): return redirect(url_for('main.index'))
         elif "http://localhost:5000" in url or "http://127.0.0.1:5000" in url and "signup" not in url: return redirect(url)
         else: return redirect(url_for(url))
       else: return redirect(url_for('main.index'))

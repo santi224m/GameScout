@@ -3,7 +3,7 @@ $("#pfp").on("change", function(e) {
 })
 
 $("#country").countrySelect({
-  defaultCountry: "us",
+  defaultCountry: $("#country_code").attr("data-country"),
   preferredCountries: ['ca', 'gb', 'us'],
   responsiveDropdown: true
 });

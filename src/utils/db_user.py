@@ -29,28 +29,27 @@ class db_user:
       if not check_password_hash(res[0][0], password): return False
       else: return True
 
-  def insert_user(username, password, dob, currency, email):
+  def insert_user(username, password, dob, country, email):
     """Insert a new user to the database"""
     with db_conn() as curr:
       password_hash = generate_password_hash(password)
-      curr.execute("INSERT INTO user_account (username, password_hash, dob, currency, email) VALUES (%s, %s, %s, %s, %s);",
-                   (username, password_hash, dob, currency, email,))
-
-
-  def update_user_email(uuid, new_email):
+      curr.execute("INSERT INTO user_account (username, password_hash, dob, country, email) VALUES (%s, %s, %s, %s, %s);",
+                   (username, password_hash, dob, country, email,))
+  
+  def update_user_email(uuid, email):
     """Update user email to the database"""
     with db_conn() as curr:
       #check if new email is not in the database
-      if not exists_email(new_email):
-        curr.execute("UPDATE user_account SET email = %s WHERE uuid = %s; ",(new_email, uuid))
+      if not db_conn.exists_email(email):
+        curr.execute("UPDATE user_account SET email = %s WHERE uuid = %s; ",(email, uuid))
         return True
       else:
         return False
 
-  def update_user_currency(uuid, new_currency):
-    """Update user currency to the data base """
-    with db_connn() as curr:
-      curr.execute("UPDATE user_account SET currency = %s WHERE uuid = %s; ",(new_currency, uuid))
+  def update_country(uuid, country):
+    """Update user country to the data base """
+    with db_conn() as curr:
+      curr.execute("UPDATE user_account SET country = %s WHERE uuid = %s; ",(country, uuid))
       return True
   
   def get_email_by_uuid(uuid):
@@ -81,14 +80,15 @@ class db_user:
     uuid, username, dob, currency, email, verified
     """
     with db_conn() as curr:
-      curr.execute("SELECT uuid, username, dob, currency, email, verified FROM user_account WHERE email = %s;", (email,))
+      curr.execute("SELECT uuid, username, dob, country, email, verified FROM user_account WHERE email = %s;", (email,))
       res = curr.fetchone()
       user = {
         'uuid': res[0],
         'username': res[1],
         'dob': res[2],
-        'currency': res[3],
-        'email': res[4]
+        'country': res[3],
+        'email': res[4],
+        'verified': res[5]
       }
       return user
     

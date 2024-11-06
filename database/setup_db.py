@@ -26,7 +26,7 @@ def create_tables(db_name):
   curr = conn.cursor()
 
   # User Account
-  curr.execute("CREATE TABLE IF NOT EXISTS user_account (uuid uuid DEFAULT gen_random_uuid() PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL, password_hash TEXT NOT NULL, dob DATE, currency VARCHAR(3) DEFAULT 'usd', email TEXT, verified BOOLEAN DEFAULT FALSE);")
+  curr.execute("CREATE TABLE IF NOT EXISTS user_account (uuid uuid DEFAULT gen_random_uuid() PRIMARY KEY, username VARCHAR(20) UNIQUE NOT NULL, password_hash TEXT NOT NULL, dob DATE, country VARCHAR(2) DEFAULT 'us', email TEXT, verified BOOLEAN DEFAULT FALSE);")
 
   # Game
   curr.execute("CREATE TABLE IF NOT EXISTS game (steam_app_id INT PRIMARY KEY, title TEXT NOT NULL);")

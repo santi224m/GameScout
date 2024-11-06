@@ -34,7 +34,7 @@ section.account {
       color: col(text-main);
     }
 
-    button {
+    a {
       display: flex;
       padding: 17px 20px;
       align-items: center;
@@ -46,6 +46,7 @@ section.account {
       color: col(text-main);
       border: none;
       @include bodyLarge();
+      text-decoration: none;
 
       &:hover {
         background-color: col(bg-hover);

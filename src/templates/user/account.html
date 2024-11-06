@@ -10,7 +10,7 @@
   <div class="content">
     <div class="header">
       <span>Account Settings</span>
-      <button><i class="fa-solid fa-right-from-bracket"></i>Sign Out</button>
+      <a href="{{ url_for('account.signout') }}"><i class="fa-solid fa-right-from-bracket"></i>Sign Out</a>
     </div>
     <form class="body" method="POST" enctype="multipart/form-data">
       <div class="info">
@@ -46,12 +46,12 @@
         <span class="title">Profile Picture:</span>
         <label for="pfp">Choose File</label>
         <span class="file">No file selected</span>
-        <input id="pfp" type="file" accept=".png, .jpg, .jpeg, .webp" value="Choose File">
+        <input id="pfp" name="pfp" type="file" accept=".png, .jpg, .jpeg, .webp" value="Choose File">
       </div>
       <div class="container country">
         <span class="title">Country:</span>
         <input name="country" id="country">
-        <input type="hidden" id="country_code">
+        <input type="hidden" id="country_code" name="country_code" data-country="{{ session.user.country }}">
       </div>
       <div class="container">
         <input type="submit" value="Update Account Information">
