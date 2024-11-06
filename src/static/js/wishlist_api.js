@@ -24,7 +24,7 @@ $('.wishlist').on("click", async function() {
 $(document).ready(async function() {
   is_wishlisted = await is_game_wishlisted();
 
-  if (is_wishlisted && !is_wishlisted["error"] == 500) $('.wishlist').addClass("active");
+  if (is_wishlisted && !is_wishlisted["error"]) $('.wishlist').addClass("active");
 });
 
 /*
