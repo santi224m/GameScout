@@ -10,5 +10,4 @@ def game(steam_app_id):
     if not steam_app_id.isdigit():
         return redirect(url_for('main.index'))
     game_details = GameDetails(steam_app_id)
-    db_utils.insert_game(steam_app_id, game_details.title)
     return render_template('game/game_page.html', game=game_details)

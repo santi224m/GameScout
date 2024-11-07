@@ -18,11 +18,6 @@ class db_utils:
       res = curr.fetchall()
       return res
 
-  def insert_game(steam_app_id, title):
-    """Insert a game into the game table"""
-    with db_conn() as curr:
-      curr.execute("INSERT INTO game (steam_app_id, title) VALUES (%s, %s) ON CONFLICT (steam_app_id) DO UPDATE SET title = %s;", (steam_app_id, title, title))
-
   def is_game_wishlisted(username, steamapp_id):
     """Returns True if a user wishlisted the game with steamapp id, False otherwise"""
     with db_conn() as curr:
