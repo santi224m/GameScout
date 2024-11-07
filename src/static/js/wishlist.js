@@ -1,3 +1,6 @@
+/*
+JQuery functions
+*/
 $(document).ready(function() {
   renumber()
   $(".games").sortable({
@@ -18,6 +21,9 @@ $(".position").on('blur', function(e) {
   changePos(e);
 })
 
+/*
+Change game position on text input
+*/
 function changePos(e) {
   val = parseInt(e.target.value)
   parent = $(e.currentTarget.parentElement.parentElement.parentElement)
@@ -35,6 +41,9 @@ function changePos(e) {
   update_db()
 }
 
+/*
+Renumber items
+*/
 async function renumber() {
   let inputs = $(".position")
   $.each(inputs, function(i) {
@@ -44,6 +53,9 @@ async function renumber() {
   })
 }
 
+/*
+Update positions in the db
+*/
 async function update_db() {
   let inputs = $(".position")
   // Update game ranks in database
@@ -61,7 +73,7 @@ async function update_db() {
 }
 
 /*
-Add the current game to the user's wishlist
+Removes the game from the wishlist if double confirmed
 */
 let wishlist_halfconfirm = {}
 

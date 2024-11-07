@@ -23,14 +23,6 @@ $('.wishlist').on("click", async function() {
     $(this).addClass("active");
     add_to_wishlist(id);
   }
-  // is_wishlisted = await is_game_wishlisted();
-  // if (!is_wishlisted) {
-  //   $(this).addClass("active");
-  //   add_to_wishlist();
-  // } else {
-  //   $(this).removeClass("active");
-  //   delete_from_wishlist();
-  // }
 })
 
 $(document).ready(async function() {

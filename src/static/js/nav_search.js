@@ -32,5 +32,5 @@ $(".nav-account").on("click", function() {
 
 
 $(".nav-account").on("blur", function(e) {
-  if (active && e.relatedTarget.tagName != "A") toggleDropdown()
+  if (active && (e.relatedTarget == null || e.relatedTarget.tagName != "A")) toggleDropdown()
 });
