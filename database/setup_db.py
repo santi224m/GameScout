@@ -32,7 +32,7 @@ def create_tables(db_name):
   curr.execute("CREATE TABLE IF NOT EXISTS game (steam_app_id INT PRIMARY KEY, title TEXT NOT NULL);")
 
   # Wishlist Item
-  curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_uuid uuid NOT NULL REFERENCES user_account(uuid), steam_app_id INT NOT NULL REFERENCES game(steam_app_id), added_date DATE DEFAULT now(), rank INT, PRIMARY KEY (user_uuid, steam_app_id));")
+  curr.execute("CREATE TABLE IF NOT EXISTS wishlist_item (user_uuid uuid NOT NULL REFERENCES user_account(uuid), steam_app_id INT NOT NULL, added_date DATE DEFAULT now(), rank INT, PRIMARY KEY (user_uuid, steam_app_id));")
 
   # Trigger function to update rank
   curr.execute("CREATE OR REPLACE FUNCTION set_new_wishlist_rank() RETURNS TRIGGER AS $$ BEGIN SELECT COALESCE(COUNT(*), 0) + 1 FROM wishlist_item WHERE user_uuid = NEW.user_uuid INTO NEW.rank; RETURN NEW; END; $$ LANGUAGE plpgsql;")
