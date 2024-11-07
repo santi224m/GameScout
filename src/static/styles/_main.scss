@@ -338,6 +338,7 @@ nav {
         gap: 10px;
         grid-template-columns: 30px 1fr;
         grid-template-rows: auto;
+        border-radius: 0px;
 
         &:hover {
           background-color: col(bg-main);
