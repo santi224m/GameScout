@@ -294,6 +294,8 @@ nav {
     .nav-wishlist {
       grid-area: wishlist;
       align-self: flex-start;
+      padding: 13px 7px;
+      width: 120px;
     }
 
     .dropdown {
@@ -400,10 +402,6 @@ nav {
           display: none;
         }
       }
-    }
-
-    a {
-      width: 100px;
     }
   }
 }
