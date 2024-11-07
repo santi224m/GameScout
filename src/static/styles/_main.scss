@@ -298,6 +298,13 @@ nav {
       width: 120px;
     }
 
+    .sign_in {
+      grid-area: button;
+      align-self: flex-start;
+      padding: 13px 7px;
+      width: 120px;
+    }
+
     .dropdown {
       display: flex;
       flex-direction: column;
