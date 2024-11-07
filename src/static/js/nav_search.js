@@ -10,3 +10,27 @@ function redirect_to_search_page(e, button) {
     else window.location = '/search?e=s&t=' + search_term;
   }
 }
+
+let active = false;
+
+function toggleDropdown() {
+  if (active) {
+    active = false;
+    $(".nav-account").removeClass("active");
+    $(".dropdown").removeClass("active");
+  } else {
+    active = true;
+    $(".nav-account").addClass("active");
+    $(".dropdown").addClass("active");
+  }
+};
+
+
+$(".nav-account").on("click", function() {
+  toggleDropdown()
+});
+
+
+$(".nav-account").on("blur", function(e) {
+  if (active && e.relatedTarget.tagName != "A") toggleDropdown()
+});

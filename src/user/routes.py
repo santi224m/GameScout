@@ -120,7 +120,7 @@ def signin():
 def signout():
   if 'user' in session:
     del session['user']
-    if ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer) and not ("wishlist" in request.referrer or "account" in request.referrer): return redirect(request.referrer)
+    if request.referrer and ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer) and not ("wishlist" in request.referrer or "account" in request.referrer): return redirect(request.referrer)
   return redirect(url_for('main.index'))
 
 @support_bp.route('/', methods=('GET', 'POST'))
