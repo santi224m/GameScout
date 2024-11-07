@@ -34,6 +34,7 @@
         <a onclick="redirect_to_search_page(event, true)"><i class="fa-solid fa-magnifying-glass"></i></a>
       </div>
       <div class="right">
+        <a href="/wishlist" class="wishlist">Wishlist</a>
         {% if session['user'] %}
         <button class="nav-account">
           <img src="{{ session.user.pfp.30 }}" alt="Profile Picture"/>
@@ -44,7 +45,7 @@
         <div class="dropdown">
           <a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a>
           <a href="/account"><i class="fa-solid fa-gear"></i> Settings</a>
-          <a href="/signout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+          <a href="/account/signout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
         </div>
         {% else %}
         <a href="/signin/">Sign In</a>

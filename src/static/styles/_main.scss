@@ -285,29 +285,16 @@ nav {
     justify-content: center;
     grid-template-columns: auto;
     grid-template-rows: auto;
-    grid-template-areas: "button"
-                         "dropdown";
+    grid-template-areas: "wishlist button"
+                         "wishlist dropdown";
     align-self: flex-start;
     margin-top: 8px;
+    column-gap: 10px;
 
-    // a {
-    //   display: flex;
-    //   padding: 13px 29px;
-    //   justify-content: center;
-    //   align-items: center;
-    //   gap: 10px;
-    //   text-decoration: none;
-    //   border-radius: 3px;
-    //   background-color: col(bg-main-20);
-    //   transition: 0.25s ease background-color;
-    //   @include bodyLarge();
-    //   color: col(text-main);
-    //   grid-area: button;
-
-    //   &:hover {
-    //     background-color: col(bg-main-50);
-    //   }
-    // }
+    .wishlist {
+      grid-area: wishlist;
+      align-self: flex-start;
+    }
 
     .dropdown {
       display: flex;
