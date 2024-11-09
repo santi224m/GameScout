@@ -80,7 +80,7 @@ class db_user:
     uuid, username, dob, currency, email, verified
     """
     with db_conn() as curr:
-      curr.execute("SELECT uuid, username, dob, country, email, verified FROM user_account WHERE email = %s;", (email,))
+      curr.execute("SELECT uuid, username, dob, country, email, verified, TO_CHAR(password_last_modified, 'MM/DD/YYYY') FROM user_account WHERE email = %s;", (email,))
       res = curr.fetchone()
       user = {
         'uuid': res[0],
@@ -88,7 +88,8 @@ class db_user:
         'dob': res[2],
         'country': res[3],
         'email': res[4],
-        'verified': res[5]
+        'verified': res[5],
+        'password_last_modified': res[6]
       }
       return user
     

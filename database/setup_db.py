@@ -36,6 +36,7 @@ def create_schema(db_name):
       uuid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
       username VARCHAR(20) UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
+      password_last_modified DATE DEFAULT now(),
       dob DATE,
       country VARCHAR(2) DEFAULT 'us',
       email TEXT,
@@ -61,16 +62,16 @@ def create_schema(db_name):
   # --------------------------- Update Wishlist Rank --------------------------- #
   curr.execute(
     """
-    CREATE OR REPLACE FUNCTION set_new_wishlist_rank() RETURNS TRIGGER 
-      AS $$ 
-      BEGIN 
-        SELECT COALESCE(COUNT(*), 0) + 1 
-        FROM wishlist_item 
-        WHERE user_uuid = NEW.user_uuid 
-        INTO NEW.rank; 
-        RETURN NEW; 
-      END; 
-      $$ LANGUAGE plpgsql;
+    CREATE OR REPLACE FUNCTION set_new_wishlist_rank()
+    RETURNS TRIGGER AS $$
+    BEGIN
+      SELECT COALESCE(COUNT(*), 0) + 1
+      FROM wishlist_item
+      WHERE user_uuid = NEW.user_uuid
+      INTO NEW.rank;
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
     """)
 
   curr.execute(
@@ -86,6 +87,38 @@ def create_schema(db_name):
       FOR EACH ROW 
       EXECUTE FUNCTION set_new_wishlist_rank();
     """)
+
+  # ------------ Update password_last_modified on password_hash update ----------- #
+
+  curr.execute(
+    """
+    CREATE OR REPLACE FUNCTION update_password_last_modified()
+    RETURNS TRIGGER AS $$
+    BEGIN
+      IF NEW.password_hash != OLD.password_hash THEN
+        NEW.password_last_modified = CURRENT_DATE;
+      END IF;
+      RETURN NEW;
+    END;
+    $$ LANGUAGE plpgsql;
+    """
+  )
+
+  curr.execute(
+    """
+    DROP TRIGGER IF EXISTS update_password_last_modified_trigger
+      ON user_account;
+    """
+  )
+
+  curr.execute(
+    """
+    CREATE TRIGGER update_password_last_modified_trigger
+      BEFORE UPDATE ON user_account
+      FOR EACH ROW
+      EXECUTE FUNCTION update_password_last_modified();
+    """
+  )
 
   # Commit and close connection
   conn.commit()
