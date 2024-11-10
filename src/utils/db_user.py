@@ -120,15 +120,21 @@ class db_user:
       return user
 
   def exists_user_email(username, email):
+    """
+    Check if username and email exist in database.
+    Return dictionary: {"username": bool, "email": bool}
+    """
     with db_conn() as curr:
-      curr.execute("(SELECT 1 FROM user_account WHERE username = %s) UNION (SELECT 2 FROM user_account WHERE email = %s);", (username, email,))
-      res = curr.fetchall()
+      curr.execute("SELECT 1 FROM user_account WHERE username = %s;",
+                   (username,))
+      exists_username = True if curr.fetchone() else False
+
+      curr.execute("SELECT 1 FROM user_account WHERE email = %s;",
+                   (email,))
+      exists_email = True if curr.fetchone() else False
 
       data = {
-        "username": False,
-        "email": False
+        "username": exists_username,
+        "email": exists_email
       }
-      if not res: return data
-      if 1 in res[0]: data['username'] = True
-      if 2 in res[1]: data['email'] = True
       return data
