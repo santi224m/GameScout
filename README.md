@@ -174,7 +174,6 @@ flask run
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Miro Flowchart Site Diagram
 - [ ] Figma UI design
 - [x] Setup Flask environment
 - [x] Document API calls
@@ -189,16 +188,16 @@ flask run
     * This page displays information about a particular game that the user has clicked on
   - [x] Search results page
     * This page displays games that match the user's search term
-  - [ ] Sign up page
-  - [ ] Login page
-  - [ ] Edit user profile page
+  - [x] Sign up page
+  - [x] Login page
+  - [x] Edit user profile page
     * This page allows users to update their profile information
   - [x] Wishlist page
     * This page allows users to view and update their game wishlist
 - [ ] Database
-  - [ ] Database Conceptual Design
-  - [ ] Database Schema
-  - [ ] Setup PostgreSQL server
+  - [x] Database Conceptual Design
+  - [x] Database Schema
+  - [x] Setup PostgreSQL server
 - [ ] Develop price alert system
 
 See the [open issues](https://github.com/santi224m/GameScout/issues) for a full list of proposed features (and known issues).
