@@ -6,7 +6,8 @@ class db_user:
   def exists_user(username):
     """Returns True if username exists in the database, False otherwise"""
     with db_conn() as curr:
-      curr.execute("SELECT 1 FROM user_account WHERE username = %s;", (username,))
+      curr.execute("SELECT 1 FROM user_account WHERE username = %s;",
+                   (username,))
       res = curr.fetchall()
       if res:
         return True
@@ -22,6 +23,7 @@ class db_user:
       return False
     
   def correct_login(email, password):
+    """Return True if the password matches the email, False otherwise"""
     with db_conn() as curr:
       curr.execute("SELECT password_hash FROM user_account WHERE email = %s", (email,))
       res = curr.fetchall()
@@ -33,23 +35,33 @@ class db_user:
     """Insert a new user to the database"""
     with db_conn() as curr:
       password_hash = generate_password_hash(password)
-      curr.execute("INSERT INTO user_account (username, password_hash, dob, country, email) VALUES (%s, %s, %s, %s, %s);",
-                   (username, password_hash, dob, country, email,))
-  
+      curr.execute(
+        """
+        INSERT INTO user_account (
+          username,
+          password_hash,
+          dob,
+          country,
+          email)
+        VALUES (%s, %s, %s, %s, %s);
+        """,
+        (username, password_hash, dob, country, email,))
+
   def update_user_email(uuid, email):
-    """Update user email to the database"""
+    """Update a user's email"""
     with db_conn() as curr:
       #check if new email is not in the database
       if not db_conn.exists_email(email):
-        curr.execute("UPDATE user_account SET email = %s WHERE uuid = %s; ",(email, uuid))
+        curr.execute("UPDATE user_account SET email = %s WHERE uuid = %s;",
+                     (email, uuid))
         return True
-      else:
-        return False
+      return False
 
   def update_country(uuid, country):
-    """Update user country to the data base """
+    """Update a user's country"""
     with db_conn() as curr:
-      curr.execute("UPDATE user_account SET country = %s WHERE uuid = %s; ",(country, uuid))
+      curr.execute("UPDATE user_account SET country = %s WHERE uuid = %s; ",
+                   (country, uuid))
       return True
   
   def get_email_by_uuid(uuid):
@@ -59,14 +71,17 @@ class db_user:
       res = curr.fetchone()
       return res[0]
 
-  def verify_user(id):
+  def verify_user(uuid):
+    """Verify a user's account"""
     with db_conn() as curr:
-      curr.execute("SELECT verified FROM user_account WHERE uuid = %s;", (id,))
-      res = curr.fetchall()
-      if res[0][0]: return False
-      else: 
-        curr.execute("UPDATE user_account SET verified = true WHERE uuid = %s", (id,))
-        return True
+      curr.execute("SELECT verified FROM user_account WHERE uuid = %s;",
+                   (uuid,))
+      res = curr.fetchone()
+      if res[0] is True: return False
+
+      curr.execute("UPDATE user_account SET verified = true WHERE uuid = %s;",
+                   (uuid,))
+      return True
 
   def get_uuid_by_email(email):
     with db_conn() as curr:
@@ -76,11 +91,22 @@ class db_user:
 
   def get_user_full(email):
     """
-    Return all user details from the database.
-    uuid, username, dob, currency, email, verified
+    Return user info for session
     """
     with db_conn() as curr:
-      curr.execute("SELECT uuid, username, dob, country, email, verified, TO_CHAR(password_last_modified, 'MM/DD/YYYY') FROM user_account WHERE email = %s;", (email,))
+      curr.execute(
+        """
+        SELECT  uuid,
+                username,
+                dob,
+                country,
+                email,
+                verified,
+                TO_CHAR(password_last_modified, 'MM/DD/YYYY')
+        FROM user_account
+        WHERE email = %s;
+        """, (email,))
+
       res = curr.fetchone()
       user = {
         'uuid': res[0],
@@ -92,7 +118,7 @@ class db_user:
         'password_last_modified': res[6]
       }
       return user
-    
+
   def exists_user_email(username, email):
     with db_conn() as curr:
       curr.execute("(SELECT 1 FROM user_account WHERE username = %s) UNION (SELECT 2 FROM user_account WHERE email = %s);", (username, email,))
