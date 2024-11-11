@@ -1,10 +1,10 @@
 import time
-from multiprocessing import Process
 
 import requests
 from bs4 import BeautifulSoup
 
 from src.utils.GameDetails import GameDetails
+from src.utils.GameCacher import GameCacher
 
 class SearchDetails:
   def __init__(self, search_string):
@@ -30,24 +30,14 @@ class SearchDetails:
 
     # Store steam app id's in a list
     games = [game['data-ds-appid'] for game in soup.find_all("a")]
-
-    # Cache all games
-    p_list = []
-    for game_id in games:
-      p = Process(target=self.load_game, args=(game_id,))
-      p_list.append(p)
-      p.start()
-
-    for p in p_list:
-      p.join()
+    GameCacher(games)
 
     for game_id in games:
       try:
         details = GameDetails(game_id)
+        self.results.append(details)
       except:
         print("Error trying to load steam app id: ", game_id)
-      self.results.append(details)
-
     print(f"Total Time: {time.perf_counter() - start:0.4f} seconds")
 
   def load_game(self, steamappid):
