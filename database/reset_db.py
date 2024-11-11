@@ -1,4 +1,5 @@
 import csv
+import os
 
 import psycopg2
 
@@ -38,6 +39,7 @@ def load_itad_ids():
         ON CONFLICT (steam_app_id) DO UPDATE
           SET itad_id = %s;
         """, (steamappid, itad_id, itad_id))
+  os.remove(ITAD_IDS_CSV_FNAME)
 
 if __name__ == "__main__":
   DB_NAME = "gamescout"
