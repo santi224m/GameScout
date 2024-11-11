@@ -52,7 +52,6 @@ class HLTB:
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     # See if the HLTB key is already in Redis
     if (key_cache := redis_conn.get("hltb_key")) is not None:
-      print("Using key cache...")
       return pickle.loads(key_cache)
     else:
       headers = self.get_headers()

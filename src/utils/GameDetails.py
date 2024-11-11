@@ -18,8 +18,7 @@ from src.utils.HLTBHelper import HLTB
 from src.utils.db_utils import db_utils
 
 format = "%(asctime)s: %(message)s"
-logging.basicConfig(format=format, level=logging.INFO,
-                    datefmt="%H:%M:%S")
+logging.basicConfig(format=format, level=logging.INFO)
 
 class GameDetails :
   def __init__(self, steam_app_id):
@@ -90,7 +89,7 @@ class GameDetails :
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     # See if the Steam ID is already in Redis
     if (game_cache := redis_conn.get(steam_app_id)) is not None:
-      print("Using game cache...")
+      logging.info(f"{str(steam_app_id):<9} - - Using game cache...")
       game = pickle.loads(game_cache)
       self.__dict__ = game.__dict__.copy()  # Set self to game cache
     else:
@@ -104,29 +103,18 @@ class GameDetails :
 
       self.call_apis_w_threads()
 
-      steam_start = time.perf_counter()
       steam_data = query_steam_api(self.steam_app_id, self.steam_api_res)
-      steam_end = time.perf_counter()
-      print(f"Gathered Steam Data in {steam_end - steam_start:0.4f} seconds")
 
       reviews_data = query_steam_reviews_api(self.steam_reviews_api_res)
-      reviews_end = time.perf_counter()
-      print(f"Gathered Reviews Data in {reviews_end - steam_end:0.4f} seconds")
 
       reviews_data = parse_steam_ids(reviews_data, self.steamplayers_api_res)
-      parse_reviews_end = time.perf_counter()
-      print(f"Updated Reviews Data in {parse_reviews_end - reviews_end:0.4f} seconds")
 
       itad_data = query_itad_api(self.steam_app_id, steam_data['release_date']['coming_soon'], self.ITAD_api_2_res, self.ITAD_api_3_res)
-      itad_end = time.perf_counter()
-      print(f"Gathered ITAD Data in {itad_end - parse_reviews_end:0.4f} seconds")
 
-      update_start = time.perf_counter()
       self.update(steam_data, reviews_data, itad_data, self.hltb_data)
       update_end = time.perf_counter()
-      print(f"Update variables in {update_end - update_start:0.4f} seconds")
 
-      print(f"Total Time: {update_end - start:0.4f} seconds")
+      logging.info(f"{str(steam_app_id):<9} - - Total Time: {update_end - start:0.4f} seconds")
 
       # Store game_details in Redis cache
       game_cache = pickle.dumps(self)
@@ -167,19 +155,16 @@ class GameDetails :
     self.cv_steam_reviews = None
     self.cv_steam_api = None
     end = time.perf_counter()
-    logging.info(f"call_apis_w_threads: Total time {end - start:0.4f} seconds")
+    logging.info(f"{str(self.steam_app_id):<9} - - call_apis_w_threads: Total time {end - start:0.4f} seconds")
 
   def get_htlb_data(self, q):
-    logging.info("HLTB: Calling Helper")
     start = time.perf_counter()
     hltb_data = HLTB(self.steam_api_res.json()[self.steam_app_id]['data']['name'])
     q.put(hltb_data)
     end = time.perf_counter()
-    logging.info("HLTB: Helper returned")
-    logging.info(f"HLTB Helper: Total time {end - start:0.4f} seconds")
+    logging.info(f"{str(self.steam_app_id):<9} - - HLTB Helper: Total time {end - start:0.4f} seconds")
 
   def get_steamapi(self):
-    logging.info("SteamAPI: Starting request")
     start = time.perf_counter()
     usd = 1
     url_params = {'appids': self.steam_app_id, 'currency': usd}
@@ -187,11 +172,9 @@ class GameDetails :
     with self.cv_steam_api:
       self.cv_steam_api.notify_all()
     end = time.perf_counter()
-    logging.info("SteamAPI: Received response")
-    logging.info(f"SteamAPI: Total time {end - start:0.4f} seconds")
+    logging.info(f"{str(self.steam_app_id):<9} - - SteamAPI: Total time {end - start:0.4f} seconds")
 
   def get_steam_reviews_api(self):
-    logging.info("SteamReviewsAPI: Starting request")
     start = time.perf_counter()
     url_params = {
       'appids': self.steam_app_id,
@@ -206,11 +189,9 @@ class GameDetails :
     with self.cv_steam_reviews:
       self.cv_steam_reviews.notify_all()
     end = time.perf_counter()
-    logging.info("SteamReviewsAPI: Received Response")
-    logging.info(f"SteamReviewAPI: Total time {end - start:0.4f} seconds")
+    logging.info(f"{str(self.steam_app_id):<9} - - SteamReviewAPI: Total time {end - start:0.4f} seconds")
 
   def get_ITAD_ID(self):
-    logging.info("ITADapi1: Starting request")
     start = time.perf_counter()
     if (itad_app_id := db_utils.get_itad_game_id(self.steam_app_id)):
       self.itad_app_id = itad_app_id
@@ -223,11 +204,9 @@ class GameDetails :
     with self.cv_itad_id:
       self.cv_itad_id.notify_all()
     end = time.perf_counter()
-    logging.info("ITADapi1: Received Response")
-    logging.info(f"ITADapi1: Total time {end - start:0.4f} seconds")
+    logging.info(f"{str(self.steam_app_id):<9} - - ITADapi1: Total time {end - start:0.4f} seconds")
 
   def get_ITAD_api_2(self):
-    logging.info("ITADapi2: Starting request")
     start = time.perf_counter()
 
     with self.cv_itad_id:
@@ -251,11 +230,9 @@ class GameDetails :
       }
       self.ITAD_api_2_res = requests.post('https://api.isthereanydeal.com/games/prices/v2', data=json.dumps(payload), params=url_params)
     end = time.perf_counter()
-    logging.info("ITADapi2: Received Response")
-    logging.info(f"ITADapi2: Total time {end - start:0.4f} seconds")
+    logging.info(f"{str(self.steam_app_id):<9} - - ITADapi2: Total time {end - start:0.4f} seconds")
 
   def get_ITAD_api_3(self):
-    logging.info("ITADapi3: Starting request")
     start = time.perf_counter()
 
     with self.cv_itad_id:
@@ -268,11 +245,9 @@ class GameDetails :
     }
     self.ITAD_api_3_res = requests.get('https://api.isthereanydeal.com/games/info/v2', params=url_params)
     end = time.perf_counter()
-    logging.info("ITADapi3: Received Response")
-    logging.info(f"ITADapi3: Total time {end - start:0.4f} seconds")
+    logging.info(f"{str(self.steam_app_id):<9} - - ITADapi3: Total time {end - start:0.4f} seconds")
 
   def get_steamplayers_api(self):
-    logging.info("SteamPlayersAPI: Starting request")
     start = time.perf_counter()
 
     with self.cv_steam_reviews:
@@ -286,8 +261,7 @@ class GameDetails :
     self.steamplayers_api_res = requests.get('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v2/', params=url_params)
 
     end = time.perf_counter()
-    logging.info("SteamPlayersAPI: Received Response")
-    logging.info(f"SteamPlayersAPI: Total time {end - start:0.4f} seconds")
+    logging.info(f"{str(self.steam_app_id):<9} - - SteamPlayersAPI: Total time {end - start:0.4f} seconds")
 
   def update(self, steam_data, reviews_data, itad_data, hltb_data):
     """Update GameDetails with data from our various API's"""
