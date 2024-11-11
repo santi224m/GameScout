@@ -1,17 +1,15 @@
-import requests
-from bs4 import BeautifulSoup
-from dotenv import load_dotenv
 import time
 from multiprocessing import Process
 
-from src.utils.GameDetails import GameDetails
+import requests
+from bs4 import BeautifulSoup
 
-load_dotenv()
+from src.utils.GameDetails import GameDetails
 
 class SearchDetails:
   def __init__(self, search_string):
     self.results = []
-    self.num_items = 0;
+    self.num_items = 0
 
     self.query_game_details(search_string)
 
@@ -30,22 +28,24 @@ class SearchDetails:
     soup = BeautifulSoup(data['results_html'], features="html.parser")
     print(f"Search Finished in: {time.perf_counter() - start:0.4f} seconds")
 
+    # Store steam app id's in a list
+    games = [game['data-ds-appid'] for game in soup.find_all("a")]
+
     # Cache all games
     p_list = []
-    for game in soup.find_all("a"):
-      p = Process(target=self.load_game, args=(game['data-ds-appid'],))
+    for game_id in games:
+      p = Process(target=self.load_game, args=(game_id,))
       p_list.append(p)
       p.start()
 
     for p in p_list:
       p.join()
 
-    for game in soup.find_all("a"):
-      loop_start = time.perf_counter()
+    for game_id in games:
       try:
-        details = GameDetails(game['data-ds-appid'])
+        details = GameDetails(game_id)
       except:
-        print("Error trying to load steam app id: ", game['data-ds-appid'])
+        print("Error trying to load steam app id: ", game_id)
       self.results.append(details)
 
     print(f"Total Time: {time.perf_counter() - start:0.4f} seconds")
