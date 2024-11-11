@@ -15,6 +15,7 @@ from bs4 import BeautifulSoup
 from flask import abort
 
 from src.utils.HLTBHelper import HLTB
+from src.utils.db_utils import db_utils
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO,
@@ -211,10 +212,14 @@ class GameDetails :
   def get_ITAD_ID(self):
     logging.info("ITADapi1: Starting request")
     start = time.perf_counter()
-    key =  'app/' + str(self.steam_app_id)
-    payload = [key]
-    res = requests.post('https://api.isthereanydeal.com/lookup/id/shop/61/v1', data=json.dumps(payload))
-    self.itad_app_id = res.json()[key]
+    if (itad_app_id := db_utils.get_itad_game_id(self.steam_app_id)):
+      self.itad_app_id = itad_app_id
+    else:
+      key =  'app/' + str(self.steam_app_id)
+      payload = [key]
+      res = requests.post('https://api.isthereanydeal.com/lookup/id/shop/61/v1', data=json.dumps(payload))
+      self.itad_app_id = res.json()[key]
+      db_utils.insert_itad_game_id(self.steam_app_id, self.itad_app_id)
     with self.cv_itad_id:
       self.cv_itad_id.notify_all()
     end = time.perf_counter()

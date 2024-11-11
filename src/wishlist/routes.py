@@ -2,6 +2,7 @@ from flask import render_template, redirect, url_for, session
 from src.wishlist import bp
 
 from src.utils.WishlistDetails import WishlistDetails
+from src.utils.db_utils import db_utils
 
 @bp.route('/')
 def wishlist():

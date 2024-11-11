@@ -55,6 +55,15 @@ def create_schema(db_name):
     );
     """)
 
+  curr.execute(
+    """
+    CREATE TABLE IF NOT EXISTS itad_game_id (
+      steam_app_id INT PRIMARY KEY,
+      itad_id TEXT NOT NULL
+    );
+    """
+  )
+
   # ---------------------------------------------------------------------------- #
   #                                   TRIGGERS                                   #
   # ---------------------------------------------------------------------------- #

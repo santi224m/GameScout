@@ -31,3 +31,22 @@ class db_utils:
     """Update the rank for a game in the wishlist"""
     with db_conn() as curr:
       curr.execute("UPDATE wishlist_item SET rank = %s WHERE user_uuid = (SELECT uuid FROM user_account WHERE username = %s) AND steam_app_id = %s;", (rank, username, steamappid))
+
+  def insert_itad_game_id(steam_app_id, itad_id):
+    """Insert a (steam app id, itad id) pair into the database"""
+    with db_conn() as curr:
+      curr.execute(
+        """
+        INSERT INTO itad_game_id (steam_app_id, itad_id)
+          VALUES (%s, %s);
+        """, (steam_app_id, itad_id))
+
+  def get_itad_game_id(steam_app_id):
+    """Return the matching ITAD game id for a steam app id"""
+    with db_conn() as curr:
+      curr.execute("SELECT itad_id FROM itad_game_id WHERE steam_app_id = %s;",
+                   (steam_app_id,))
+      res = curr.fetchone()
+      if res:
+        return res[0]
+      return None
