@@ -38,8 +38,10 @@ class db_utils:
       curr.execute(
         """
         INSERT INTO itad_game_id (steam_app_id, itad_id)
-          VALUES (%s, %s);
-        """, (steam_app_id, itad_id))
+        VALUES (%s, %s)
+        ON CONFLICT (steam_app_id) DO UPDATE
+          SET itad_id = %s;
+        """, (steam_app_id, itad_id, itad_id))
 
   def get_itad_game_id(steam_app_id):
     """Return the matching ITAD game id for a steam app id"""
