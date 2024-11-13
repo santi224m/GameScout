@@ -21,7 +21,7 @@ class HLTB:
       self.all = hltb_format(self.data['comp_all'])
       self.completionist = hltb_format(self.data['comp_100'])
 
-  def get_payload(self, title):
+  def get_payload(self, title, id):
     payload = {
       "searchType": "games",
       "searchTerms": title.split(" "),
@@ -38,7 +38,10 @@ class HLTB:
           "rangeYear": {"min": "", "max": ""},
           "modifier": ""
         },
-        "users": {"sortCategory": "postcount"},
+        "users": {
+          "id": id,
+          "sortCategory": "postcount"
+          },
         "lists": {"sortCategory": "follows"},
         "filter": "",
         "sort": 0,
@@ -47,11 +50,11 @@ class HLTB:
     }
     return json.dumps(payload)
 
-  def get_key(self):
+  def get_id(self):
     # Connect to Redis
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     # See if the HLTB key is already in Redis
-    if (key_cache := redis_conn.get("hltb_key")) is not None:
+    if (key_cache := redis_conn.get("hltb_id")) is not None:
       return pickle.loads(key_cache)
     else:
       headers = self.get_headers()
@@ -64,15 +67,15 @@ class HLTB:
             script_url = base_url + script_url
             script_resp = requests.get(script_url, headers=headers)
             if script_resp.status_code == 200 and script_resp.text is not None:
-                pattern = r'"/api/search/".concat\("([a-zA-Z0-9]+)"\)'
-                matches = re.findall(pattern, script_resp.text)
-                for match in matches:
-                  # Store game_details in Redis cache
-                  key_cache = pickle.dumps(match)
-                  redis_conn.set("hltb_key", key_cache)
-                  HOUR_SECONDS = 86400
-                  redis_conn.expire("hltb_key", HOUR_SECONDS)
-                  return match
+                pattern = r'users:\{id:"([^"]+)"'
+                match = re.search(pattern, script_resp.text)
+                if match:
+                    user_id = match.group(1)
+                    id_cache = pickle.dumps(user_id)
+                    redis_conn.set("hltb_id", id_cache)
+                    HOUR_SECONDS = 86400
+                    redis_conn.expire("hltb_id", HOUR_SECONDS)
+                    return user_id
       return None
 
   def get_headers(self):
@@ -87,10 +90,10 @@ class HLTB:
 
   def get_game_data(self, title):
     headers = self.get_headers()
-    payload = self.get_payload(title)
-    url = search_url + self.get_key()
+    user_id = self.get_id()
+    payload = self.get_payload(title, user_id)
 
-    res = requests.post(url, headers=headers, data=payload)
+    res = requests.post(search_url, headers=headers, data=payload)
     try:
       return res.json()['data'][0]
     except IndexError:
