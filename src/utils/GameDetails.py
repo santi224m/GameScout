@@ -139,7 +139,7 @@ class GameDetails :
     thread_steamplayers_api.start()
     q = multiprocessing.Queue()
     thread_steamapi.join()
-    hltb_proc = multiprocessing.Process(target=self.get_htlb_data, args=(q,))
+    hltb_proc = multiprocessing.Process(target=get_htlb_data, args=(q, self.steam_api_res.json()[self.steam_app_id]['data']['name'], self.steam_app_id))
     hltb_proc.start()
 
     # Wait for all threads
@@ -156,13 +156,6 @@ class GameDetails :
     self.cv_steam_api = None
     end = time.perf_counter()
     logging.info(f"{str(self.steam_app_id):<9} - - call_apis_w_threads: Total time {end - start:0.4f} seconds")
-
-  def get_htlb_data(self, q):
-    start = time.perf_counter()
-    hltb_data = HLTB(self.steam_api_res.json()[self.steam_app_id]['data']['name'])
-    q.put(hltb_data)
-    end = time.perf_counter()
-    logging.info(f"{str(self.steam_app_id):<9} - - HLTB Helper: Total time {end - start:0.4f} seconds")
 
   def get_steamapi(self):
     start = time.perf_counter()
@@ -321,6 +314,13 @@ class GameDetails :
 
     # HLTB Data
     self.hltb = hltb_data.package()
+
+def get_htlb_data(q, name, id):
+  start = time.perf_counter()
+  hltb_data = HLTB(name)
+  q.put(hltb_data)
+  end = time.perf_counter()
+  logging.info(f"{str(id):<9} - - HLTB Helper: Total time {end - start:0.4f} seconds")
 
 def query_itad_api(steam_id, coming_soon, ITAD_api_2_res, ITAD_api_3_res):
   """Get prices, tags, and reviews from the ITAD API"""
