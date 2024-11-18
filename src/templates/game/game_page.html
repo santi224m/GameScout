@@ -300,11 +300,11 @@
               <img src="{{ url_for('static', filename=esrb_path) }}" alt="ESRB {{ game.esrb_rating.rating }} Rating" loading="lazy">
               <div class="desc">
                 {% if game.esrb_rating.descriptors %}
-                <span>{{ game.esrb_rating.descriptors }}</span>
+                <span>{{ game.esrb_rating.descriptors|safe }}</span>
                 {% endif %}
                 {% if game.esrb_rating.interactive_elements %}
                 <span class="heading">Interactive Elements</span>
-                <span>{{ game.esrb_rating.interactive_elements }}</span>
+                <span>{{ game.esrb_rating.interactive_elements|safe }}</span>
                 {% endif %}
               </div>
             </div>

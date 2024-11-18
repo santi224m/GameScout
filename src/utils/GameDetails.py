@@ -297,8 +297,10 @@ class GameDetails :
       self.esrb_rating = steam_data['ratings']['esrb']
       if 'interactive_elements' not in self.esrb_rating:
         self.esrb_rating['interactive_elements'] = None
+      else: self.esrb_rating['interactive_elements'] = self.esrb_rating['interactive_elements'].replace("\n", "<br>")
       if 'descriptors' not in self.esrb_rating:
-         self.esrb_rating['descriptors'] = None
+        self.esrb_rating['descriptors'] = None
+      else: self.esrb_rating['descriptors'] = self.esrb_rating['descriptors'].replace("\n", "<br>")
 
     # Steam Reviews Data
     self.reviews = reviews_data
