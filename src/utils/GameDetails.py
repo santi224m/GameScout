@@ -444,10 +444,55 @@ def query_steam_api(steam_id, steam_api_res):
 
 def query_steam_reviews_api(steam_reviews_api_res):
   """Get Steam Reviews using Steam Reviews API"""
-
+  bbcode_test = """
+  [h1] Heading 1 [/h1]
+  [h2] Heading 2 [/h2]
+  [h3] Heading 3 [/h3]
+  [b] Bold text [/b]
+  [u] Underlined text [/u]
+  [i] Italic text [/i]
+  [strike] Strikethrough text [/strike]
+  [spoiler] Spoiler text [/spoiler]
+  hr below this
+  [hr][/hr]
+  hr above this
+  [url=store.steampowered.com] Website link [/url]
+  [list]
+  [*] Bulleted list
+  [*] Bulleted list
+  [*] Bulleted list
+  [/list]
+  [olist]
+  [*] Ordered list
+  [*] Ordered list
+  [*] Ordered list
+  [/olist]
+  [quote=author;3155312274947358220] Quoted text [/quote]
+  [code] Fixed-width font, preserves spaces [/code]
+  [table]
+    [tr]
+      [th] Name [/th]
+      [th] Age [/th]
+    [/tr]
+    [tr]
+      [td] John [/td]
+      [td] 65 [/td]
+    [/tr]
+    [tr]
+      [td] Gitte [/td]
+      [td] 40 [/td]
+    [/tr]
+    [tr]
+      [td] Sussie [/td]
+      [td] 19 [/td]
+    [/tr]
+  [/table]
+  """
   # Get english reviews for display
   res = steam_reviews_api_res
   app_reviews = res.json()['reviews']
+  # Uncomment to use test review
+  # app_reviews[0]['review'] = bbcode_test
 
   parser = bbcode.Parser()
   parser.add_simple_formatter('h1', '<h1>%(value)s</h1>')
