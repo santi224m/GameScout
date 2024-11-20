@@ -33,3 +33,4 @@ yarl==1.13.1
 cloudinary==1.41.0 
 joserfc==1.0.0 
 mailersend==0.5.8
+bbcode==1.1.0

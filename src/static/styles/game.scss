@@ -1302,6 +1302,23 @@ section.main {
               @include bodyLarge();
               color: col(text-main);
               white-space: pre-line;
+
+              h1 {
+                color: col(primary);
+                margin: 0px;
+                font-weight: normal;
+              }
+
+              .spoiler {
+                background-color: col(bg-main);
+                color: col(bg-main);
+                cursor: pointer;
+                transition: 0.25s ease color;
+
+                &:hover {
+                  color: col(text-main);
+                }
+              }
             }
           }
         }

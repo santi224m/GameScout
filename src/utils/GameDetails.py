@@ -8,6 +8,7 @@ import re
 import requests
 import threading
 import time
+import bbcode
 from datetime import datetime
 
 import redis
@@ -446,8 +447,16 @@ def query_steam_reviews_api(steam_reviews_api_res):
 
   # Get english reviews for display
   res = steam_reviews_api_res
-  app_reviews = res.json()
-  return app_reviews['reviews']
+  app_reviews = res.json()['reviews']
+
+  parser = bbcode.Parser()
+  parser.add_simple_formatter('h1', '<h1>%(value)s</h1>')
+  parser.add_simple_formatter('spoiler', '<span class="spoiler">%(value)s</span>')
+
+  for review in app_reviews:
+    review['review'] = parser.format(review['review'])
+
+  return app_reviews
 
 def parse_steam_ids(data, steamplayers_api_res):
   """Get the display name and profile pictures for the steam ids in reviews"""
