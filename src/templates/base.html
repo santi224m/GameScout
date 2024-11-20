@@ -34,7 +34,7 @@
         <a onclick="redirect_to_search_page(event, true)"><i class="fa-solid fa-magnifying-glass"></i></a>
       </div>
       <div class="right">
-        <a href="/wishlist" class="nav-wishlist"><i class="fa-solid fa-heart"></i>Wishlist</a>
+        <a href="/wishlist" class="nav-wishlist">Wishlist</a>
         {% if session['user'] %}
         <button class="nav-account">
           <img src="{{ session.user.pfp.30 }}" alt="Profile Picture"/>
