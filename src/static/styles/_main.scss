@@ -10,6 +10,10 @@
   src: url("../fonts/MotivaSansBold.ttf") format("truetype");
   font-weight: 700;
 }
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono.ttf") format("truetype")
+}
 
 // SCSS Variables
 $bg-main: rgb(14, 20, 27);

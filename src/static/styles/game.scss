@@ -1301,9 +1301,30 @@ section.main {
               white-space: pre-line;
 
               h1 {
+                font-size: 26px;
+                line-height: 29px;
                 color: col(primary);
-                margin: 0px;
                 font-weight: normal;
+                margin-bottom: 10px;
+                clear: both;
+              }
+
+              h2 {
+                font-size: 22px;
+                line-height: 25px;
+                color: col(primary);
+                font-weight: normal;
+                margin-bottom: 10px;
+                clear: both;
+              }
+
+              h3 {
+                font-size: 18px;
+                line-height: 21px;
+                color: col(primary);
+                font-weight: normal;
+                margin-bottom: 10px;
+                clear: both;
               }
 
               .spoiler {
@@ -1315,6 +1336,10 @@ section.main {
                 &:hover {
                   color: col(text-main);
                 }
+              }
+
+              code {
+                font-family: 'JetBrains Mono', Arial, Helvetica, sans-serif;
               }
             }
           }

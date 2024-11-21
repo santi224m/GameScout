@@ -17,6 +17,7 @@ from flask import abort
 
 from src.utils.HLTBHelper import HLTB
 from src.utils.db_utils import db_utils
+from src.utils.BBParser import BBParser
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO)
@@ -468,7 +469,8 @@ def query_steam_reviews_api(steam_reviews_api_res):
   [*] Ordered list
   [/olist]
   [quote=author;3155312274947358220] Quoted text [/quote]
-  [code] Fixed-width font, preserves spaces [/code]
+  [code] Fixed-width font,              preserves spaces [/code]
+  [noparse][b]Hello![/b][/noparse]
   [table]
     [tr]
       [th] Name [/th]
@@ -494,12 +496,8 @@ def query_steam_reviews_api(steam_reviews_api_res):
   # Uncomment to use test review
   # app_reviews[0]['review'] = bbcode_test
 
-  parser = bbcode.Parser()
-  parser.add_simple_formatter('h1', '<h1>%(value)s</h1>')
-  parser.add_simple_formatter('spoiler', '<span class="spoiler">%(value)s</span>')
-
   for review in app_reviews:
-    review['review'] = parser.format(review['review'])
+    review['review'] = BBParser().format_text(review['review'])
 
   return app_reviews
 
