@@ -316,11 +316,11 @@ class GameDetails :
       self.negative_reviews = itad_data['total_negative']    
 
     # HLTB Data
-    self.hltb = hltb_data.package()
+    self.hltb = hltb_data
 
 def get_htlb_data(q, name, id):
   start = time.perf_counter()
-  hltb_data = HLTB(name)
+  hltb_data = HLTB.search(name)
   q.put(hltb_data)
   end = time.perf_counter()
   logging.info(f"{str(id):<9} - - HLTB Helper: Total time {end - start:0.4f} seconds")

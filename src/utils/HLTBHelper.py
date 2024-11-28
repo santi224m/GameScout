@@ -13,14 +13,14 @@ class HLTB:
   SEARCH_URL = BASE_URL + "api/search/"
   GAME_URL = BASE_URL + "game/"
 
-  def search(self, title: str) -> dict:
+  def search(title: str) -> dict:
     if title is None or len(title) == 0: return None
 
-    res = self.search_game(title)
+    res = HLTB.search_game(title)
 
-    if res is not None: return self.package(res)
+    if res is not None: return HLTB.package(res)
 
-  def get_payload(self, title: str, api_key: str=None) -> str:
+  def get_payload(title: str, api_key: str=None) -> str:
     payload = {
       "searchType": "games",
       "searchTerms": title.split(" "),
@@ -32,13 +32,28 @@ class HLTB:
           "platform": "",
           "sortCategory": "popular",
           "rangeCategory": "main",
-          "rangeTime": {"min": 0, "max": 0},
-          "gameplay": {"perspective": "", "flow": "", "genre": ""},
-          "rangeYear": {"min": "", "max": ""},
+          "rangeTime": {
+            "min": 0,
+            "max": 0
+          },
+          "gameplay": {
+            "perspective": "",
+            "flow": "",
+            "genre": "",
+            "subGenre": " "
+          },
+          "rangeYear": {
+            "min": "",
+            "max": ""
+          },
           "modifier": ""
         },
-        "users": {"sortCategory": "postcount"},
-        "lists": {"sortCategory": "follows"},
+        "users": {
+          "sortCategory": "postcount"
+        },
+        "lists": {
+          "sortCategory": "follows"
+        },
         "filter": "",
         "sort": 0,
         "randomizer": 0
@@ -49,7 +64,7 @@ class HLTB:
   
     return json.dumps(payload)
 
-  def get_key(self):
+  def get_key() -> str:
     # Connect to Redis
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     # See if the HLTB key is already in Redis
@@ -79,21 +94,21 @@ class HLTB:
                   return key
       return None
 
-  def get_id(self):
+  def get_id() -> str:
     # Connect to Redis
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     # See if the HLTB key is already in Redis
     if (key_cache := redis_conn.get("hltb_id")) is not None:
       return pickle.loads(key_cache)
     else:
-      headers = self.get_headers()
-      resp = requests.get(self.BASE_URL, headers=headers)
+      headers = HLTB.get_headers()
+      resp = requests.get(HLTB.BASE_URL, headers=headers)
       if resp.status_code == 200 and resp.text is not None:
         soup = BeautifulSoup(resp.text, 'html.parser')
         scripts = soup.find_all('script', src=True)
         matching_scripts = [script['src'] for script in scripts if '_app-' in script['src']]
         for script_url in matching_scripts:
-            script_url = self.BASE_URL + script_url
+            script_url = HLTB.BASE_URL + script_url
             script_resp = requests.get(script_url, headers=headers)
             if script_resp.status_code == 200 and script_resp.text is not None:
                 pattern = r'users:\{id:"([^"]+)"'
@@ -107,30 +122,30 @@ class HLTB:
                     return user_id
       return None
   
-  def get_headers(self):
+  def get_headers() -> dict:
     ua = UserAgent()
     headers = {
         "user-agent": ua.random.strip(),
-        "referer": self.BASE_URL,
+        "referer": HLTB.BASE_URL,
         "accept": "*/*",
         "content-type": "application/json"
     }
     return headers
 
-  def search_game(self, title: str):
-    headers = self.get_headers()
+  def search_game(title: str) -> dict:
+    headers = HLTB.get_headers()
 
-    key = self.get_key()
-    payload = self.get_payload(title)
-    url = self.SEARCH_URL + key
+    key = HLTB.get_key()
+    payload = HLTB.get_payload(title)
+    url = HLTB.SEARCH_URL + key
     res = requests.post(url, headers=headers, data=payload)
-    if res.status_code == 200:
+    if res.status_code == 200 and len(res.json()['data']) != 0:
       return res.json()['data'][0]
 
-    user_id = self.get_id()
-    payload = self.get_payload(title, user_id)
-    res = requests.post(self.SEARCH_URL, headers=headers, data=payload)
-    if res.status_code == 200:
+    user_id = HLTB.get_id()
+    payload = HLTB.get_payload(title, user_id)
+    res = requests.post(HLTB.SEARCH_URL, headers=headers, data=payload)
+    if res.status_code == 200 and len(res.json()['data']) != 0:
       return res.json()['data'][0]
 
     return None
@@ -140,19 +155,20 @@ class HLTB:
     except IndexError:
       return None
   
-  def package(self, data):
+  def package(data: dict) -> dict:
+    """Returns a formated dictionary of HLTB Values"""
     return {
       'id': data['game_id'],
-      'main': data['main'],
-      'main_extra': data['main_extra'],
-      'completionist': data['all'],
-      'all_styles': data['completionist']
+      'main': HLTB.format(data['comp_main']),
+      'main_extra': HLTB.format(data['comp_plus']),
+      'completionist': HLTB.format(data['comp_100']),
+      'all_styles': HLTB.format(data['comp_all'])
     }
 
-def hltb_format(num):
-  """Format HowLongToBeat hours by round to the nearest half hour and adding the 1/2 symbol"""
-  num_hours = num / 3600
-  norm_num = round(num_hours * 2) / 2
+  def format(num: int) -> str:
+    """Format HowLongToBeat hours by round to the nearest half hour and adding the 1/2 symbol"""
+    num_hours = num / 3600
+    norm_num = round(num_hours * 2) / 2
 
-  if norm_num%1==0: return str(int(norm_num))
-  else: return str(math.floor(norm_num)) + "½"
+    if norm_num%1==0: return str(int(norm_num))
+    else: return str(math.floor(norm_num)) + "½"
