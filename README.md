@@ -38,13 +38,18 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#windows">Windows</a></li>
+        <li><a href="#linux">Linux</a></li>
+        <li><a href="#macos">MacOS</a></li>
         <li><a href="#setting-up-steamwebapi">Setting up SteamWebAPI</a></li>
+        <li><a href="#setting-up-mailersend">Setting up Mailersend</a></li>
+        <li><a href="#setting-up-itad">Setting up ITAD</a></li>
         <li><a href="#setting-up-postgresql">Setting up PostgreSQL</a></li>
         <li><a href="#run-flask-app">Run Flask App</a></li>
       </ul>
     </li>
     <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#top-contributors">Top Contributors</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
@@ -55,7 +60,7 @@
 <!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
 
 PC game shopping should be an easy experience. In reality, PC gamers must visit many sites to find the best games and deals. This causes shoppers to pay more than necessary or purchase games that they regret buying.
-GameScout will solve this buy aggregating data from all the websites gamers must visit into a single site, making the shopping experience more pleasant.
+GameScout will solve this by aggregating data from all the websites gamers must visit into a single site, making the shopping experience more pleasant.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -73,8 +78,6 @@ GameScout will solve this buy aggregating data from all the websites gamers must
 <!-- GETTING STARTED -->
 ## Getting Started
 
-### Prerequisites
-
 Clone the repository
 
 ```bash
@@ -82,83 +85,99 @@ git clone git@github.com:santi224m/GameScout.git
 cd GameScout
 ```
 
-Setup a virtual environment (macOS, Linux)
+### Windows
+
+Redis is not offically supported on Windows so you will need to set up an Ubuntu version of WSL2, instructions [here](https://learn.microsoft.com/en-us/windows/wsl/install). After successfulyl installing WSL, follow the [Linux](#linux) instructions.
+
+### Linux
+
+Setup a virtual environment
 
 ```bash
 python -m venv venv
 source venv/bin/activate
 ```
 
-Setup a virtual environment (Windows)
-
-```bash
-python -m venv venv
-.\venv\Scripts\activate
-```
-
-Install requirements
+#### Install requirements
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Install Redis (Linux)
+#### Install Redis
 
 ```bash
 sudo apt install redis-server
 sudo nano /etc/redis/redis.conf
 ```
-
-Install Redis (macOS)
-
-```bash
-brew install redis
-sudo nano /etc/redis/redis.conf
-```
-
-Install Redis (Windows)
-
-*Redis is not offically supported on Windows but you can install it using WSL2, instructions [here](https://redis.io/docs/latest/operate/oss_and_stack/install/install-redis/install-redis-on-windows/).*
-
-Configure Redis
+#### Configure Redis
 
 * In the ```redis.conf``` file, change the line ```supervised no``` to ```supervised systemd```.
 
+### MacOS
+
+#### Setup a virtual environment
+
+```bash
+python -m venv venv
+source venv/bin/activate
+```
+
+#### Install requirements
+
+```bash
+pip install -r requirements.txt
+```
+
+#### Install Redis
+Installing Redis on macOS requires Homebrew which you can install [here](https://brew.sh/)
+
+```bash
+brew install redis
+```
+
 ### Setting up SteamWebAPI
+*The SteamWebAPI is used to get information about users for review data*
 
-To start you need a SteamWebAPI key, which you can get [here](https://steamcommunity.com/dev/apikey).
-
-Once you have your SteamWebAPI key, create a new file in the root GameScout folder called `.env`.
-
-Inside your newly created `.env` file, add the following:
+To start you need a SteamWebAPI key, which you can get [here](https://steamcommunity.com/dev/apikey). Once you have your key, create a new file in the root GameScout folder called `.env`. Inside your newly created `.env` file, add the following:
 
 ```yaml
 STEAM_API_KEY = "{{YOUR STEAM API KEY HERE}}"
 ```
 
-You should now be able to use the SteamWebAPI
+### Setting up Mailersend
+*Mailersend is used to send out our Email Verification and Password Reset emails*
+
+Create a [mailersend account](https://www.mailersend.com/) and generate an API Token.
+Once you have your token open your `.env` file and add the following:
+
+```yaml
+MAILERSEND_API_KEY = "{{YOUR MAILERSEND API KEY HERE}}"
+```
+
+### Setting up ITAD
+*The ITAD API is used to get price information for the various games*
+
+Create an [IsThereAnyDeal account](https://isthereanydeal.com/) and create a new app [here](https://isthereanydeal.com/apps/my/). Once you have your token, open your  `.env` file and add the following:
+
+```yaml
+ITAD_API_KEY = "{{YOUR ITAD API KEY HERE}}"
+```
 
 ### Setting up PostgreSQL
 
-1. Install [PostgreSQL](https://www.postgresql.org/download/) for your operating system.
+1. Install [PostgreSQL](https://www.postgresql.org/download/) for your operating system. \
+For MacOS you could also use something like [Postgres.app](https://postgresapp.com/)
 
 1. Run the ```setup_db.py``` script located in ```database/``` to create the database and tables in the database.
 
 ### Run Flask app
 
-1. Export environment variables (macOS, Linux)
-  * You can also add these variables to your ```.env``` file so that you don't have to manually export them each time
+1. Add values to your `.env` file
 
-```bash
-export FLASK_APP=src
-export FLASK_ENV=development
-```
-
-1. Export environment variables (Windows)
-
-```bash
-set FLASK_APP=src
-set FLASK_ENV=development
+```yaml
+FLASK_APP=src
+FLASK_ENV=development
 ```
 
 2. Run app
@@ -174,7 +193,7 @@ flask run
 <!-- ROADMAP -->
 ## Roadmap
 
-- [ ] Figma UI design
+- [x] Figma UI design
 - [x] Setup Flask environment
 - [x] Document API calls
   - [x] Steam Web API
@@ -204,7 +223,7 @@ See the [open issues](https://github.com/santi224m/GameScout/issues) for a full 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Top contributors:
+## Top Contributors
 
 <a href="https://github.com/santi224m/GameScout/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=santi224m/GameScout" alt="contrib.rocks image" />
