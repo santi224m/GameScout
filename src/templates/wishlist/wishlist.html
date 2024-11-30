@@ -84,10 +84,10 @@
               {% endif %}
               <div class="prices">
                 {% if deal.cut|float|round|int != 0 %}
-                <span class="retail-price">${{ deal.regular.amount }}</span>
+                <span class="retail-price">${{ "{:.2f}".format(deal.regular.amount) }}</span>
                 {% endif %}
                 {% if deal.price.amount != 0 %}
-                <span class="price">${{ deal.price.amount }}</span>
+                <span class="price">${{ "{:.2f}".format(deal.price.amount) }}</span>
                 {% else %}
                 <span class="price">Free</span>
                 {% endif %}

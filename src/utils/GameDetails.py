@@ -40,6 +40,7 @@ class GameDetails :
     self.short_description = None
     self.detailed_description = None
     self.header_img = None
+    self.library_img = None
     self.developers = None
     self.publishers = None
     self.platforms = {
@@ -265,6 +266,7 @@ class GameDetails :
     self.short_description = steam_data['short_description']
     self.detailed_description = soupificate(steam_data['detailed_description'])
     self.header_img = steam_data['header_image']
+    self.library_img = f"https://steamcdn-a.akamaihd.net/steam/apps/{self.steam_app_id}/library_600x900_2x.jpg"
     if 'developers' in steam_data and len(steam_data['developers']) > 0:
       self.developers = ', '.join(steam_data['developers'])
     if 'developers' in steam_data and len(steam_data['publishers']) > 0:
