@@ -100,7 +100,7 @@
             {% if game.deals %}
             {% for deal in game.deals|groupby("price.amount")|first|last %}
             {% if loop.index == 1 %}
-            <div class="price_display">
+            <a class="price_display" target="_blank" href="{{ deal.url }}">
               {% if deal.cut|float|round|int != 0 %}
               <span class="percent">-{{ deal.cut|float|round|int }}%</span>
               {% endif %}
@@ -114,7 +114,7 @@
                 <span class="price">Free</span>
                 {% endif %}
               </div>
-            </div>
+            </a>
             {% endif %}
             {% endfor %}
             {% endif %}
@@ -144,7 +144,7 @@
             {% if game.deals %}
             {% for deal in game.deals|groupby("price.amount")|first|last %}
             {% if loop.index == 1 %}
-            <div class="price_display">
+            <a class="price_display" target="_blank" href="{{ deal.url }}">
               {% if deal.cut|float|round|int != 0 %}
               <span class="percent">-{{ deal.cut|float|round|int }}%</span>
               {% endif %}
@@ -158,7 +158,7 @@
                 <span class="price">Free</span>
                 {% endif %}
               </div>
-            </div>
+            </a>
             {% endif %}
             {% endfor %}
             {% endif %}
