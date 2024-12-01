@@ -39,23 +39,24 @@ class HomeDetails:
 
     temp = []
     for id in featured_ids:
-      temp.append(next((s for s in id_data[id] if 'app' in s), None))
-      featured_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
+      if id_data[id] is not None: temp.append(next((s for s in id_data[id] if 'app' in s), None))
+    featured_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
     
     temp = []
     for id in trending_ids:
-      temp.append(next((s for s in id_data[id] if 'app' in s), None))
-      trending_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
+      if id_data[id] is not None: temp.append(next((s for s in id_data[id] if 'app' in s), None))
+    trending_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
     
     temp = []
+    print(under5_ids)
     for id in under5_ids:
-      temp.append(next((s for s in id_data[id] if 'app' in s), None))
-      under5_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
+      if id_data[id] is not None: temp.append(next((s for s in id_data[id] if 'app' in s), None))
+    under5_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
     
     temp = []
     for id in cut50_ids:
-      temp.append(next((s for s in id_data[id] if 'app' in s), None))
-      cut50_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
+      if id_data[id] is not None: temp.append(next((s for s in id_data[id] if 'app' in s), None))
+    cut50_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
 
     print(f"ID Parsing Finished in: {time.perf_counter() - start:0.4f} seconds")
 
