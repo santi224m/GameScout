@@ -200,8 +200,8 @@ flask run
     - [x] App Details API
     - [x] Steam Reviews API
   - [x] CheapShark API
-- [ ] Implement pages
-  - [ ] Home page
+- [x] Implement pages
+  - [x] Home page
     * This page should display game deals
   - [x] Game page
     * This page displays information about a particular game that the user has clicked on
@@ -213,7 +213,7 @@ flask run
     * This page allows users to update their profile information
   - [x] Wishlist page
     * This page allows users to view and update their game wishlist
-- [ ] Database
+- [x] Database
   - [x] Database Conceptual Design
   - [x] Database Schema
   - [x] Setup PostgreSQL server
