@@ -59,13 +59,13 @@ class BBParser:
       return '<blockquote>%s<p>%s</p></blockquote>' % (extra, value)
 
   def _render_table_header(self, name, value, options, parent, context):
-     if not parent or parent.tag_name != "table": return value
+     if not parent or (parent.tag_name != "tr" and parent.tag_name != "table"): return value
      return "<th>%s</th>" % value
   
   def _render_table_row(self, name, value, options, parent, context):
      if not parent or parent.tag_name != "table": return value
-     return "<th>%s</th>" % value
+     return "<tr>%s</tr>" % value
   
   def _render_table_data(self, name, value, options, parent, context):
-     if not parent or parent.tag_name != "table": return value
+     if not parent or (parent.tag_name != "tr" and parent.tag_name != "table"): return value
      return "<td>%s</td>" % value

@@ -1305,7 +1305,7 @@ section.main {
                 line-height: 29px;
                 color: col(primary);
                 font-weight: normal;
-                margin-bottom: 10px;
+                margin: 0px;
                 clear: both;
               }
 
@@ -1314,7 +1314,7 @@ section.main {
                 line-height: 25px;
                 color: col(primary);
                 font-weight: normal;
-                margin-bottom: 10px;
+                margin: 0px;
                 clear: both;
               }
 
@@ -1323,7 +1323,7 @@ section.main {
                 line-height: 21px;
                 color: col(primary);
                 font-weight: normal;
-                margin-bottom: 10px;
+                margin: 0px;
                 clear: both;
               }
 
@@ -1340,6 +1340,46 @@ section.main {
 
               code {
                 font-family: 'JetBrains Mono', Arial, Helvetica, sans-serif;
+              }
+
+              a {
+                color: col(text-dim);
+                text-decoration: none;
+                transition: 0.25s ease all;
+
+                &:hover {
+                  color: col(secondary);
+                }
+              }
+
+              hr {
+                border-color: col(text-dim);
+              }
+
+              blockquote {
+                border: 2px solid col(text-dim);
+                padding: 10px;
+                margin: 10px;
+                width: fit-content;
+                border-radius: br();
+
+                p {
+                  margin: 10px 0 5px;
+                }
+              }
+
+              table, th, td {
+                border: 1px solid col(text-dim);
+                border-collapse: collapse;
+              }
+
+              table {
+                border-width: 2px;
+                margin: 10px;
+              }
+
+              th, td {
+                padding: 3px;
               }
             }
           }
