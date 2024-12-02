@@ -30,8 +30,10 @@
           </div>
         </div>
         <div class="links">
-          <a href="#">Resend Verification Email</a>
-          <a href="#">Change Email Address</a>
+          {% if not session.user.verified %}
+          <a href="/account/resend_email">Resend Verification Email</a>
+          {% endif %}
+          <!-- <a href="#">Change Email Address</a> -->
         </div>
       </div>
       <div class="container password">

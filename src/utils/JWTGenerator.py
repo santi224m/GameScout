@@ -6,12 +6,13 @@ import json
 import datetime
 
 class JWTGen:
-  def encode_jwt(email, uuid):
+  def encode_jwt(email, uuid, request = 'email'):
     with open('oct-256.json', 'r') as f:
       data = json.load(f)
       key_set = KeySet.import_key_set(data)
     header = {'alg': "HS256"}
-    payload = {"email": email, "uuid": uuid, "exp": int(datetime.datetime.now().timestamp() + 86400)}
+    payload = {"email": email, "uuid": uuid, "exp": int(datetime.datetime.now().timestamp() + 86400), "req": request, "iss": "gamescout"}
+    if request is 'password': payload['exp'] = int(datetime.datetime.now().timestamp() + 1800)
     return jwt.encode(header, payload, key_set)
   def decode_jwt(token, e):
     with open('oct-256.json', 'r') as f:
@@ -21,7 +22,8 @@ class JWTGen:
     s = jwt.decode(token, key_set) 
     claims_request = JWTClaimsRegistry(
       email={"essential": True, 'value': e, 'allow_blank': False},
-      uuid={"essential": True, 'allow_blank': False}
+      uuid={"essential": True, 'allow_blank': False},
+      iss={"essential": True, 'allow_blank': False, 'value': "gamescout"}
     )
     try:
       claims_request.validate(s.claims)

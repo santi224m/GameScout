@@ -123,6 +123,9 @@ def signout():
     if request.referrer and ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer) and not ("wishlist" in request.referrer or "account" in request.referrer): return redirect(request.referrer)
   return redirect(url_for('main.index'))
 
-@support_bp.route('/', methods=('GET', 'POST'))
-def support():
-  return render_template('user/support.html')
+@account_bp.route('/resend_email', methods=('GET', 'POST'))
+def resend_email():
+  if 'user' in session: 
+    MailSender().send_verification_email(session['user']['uuid'], session['user']['email'], session['user']['username'])
+    return redirect(url_for('account.user'))
+  else: return redirect(url_for('main.index'))
