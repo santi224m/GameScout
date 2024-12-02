@@ -8,22 +8,19 @@ import math
 import redis
 import pickle
 
-base_url = "https://howlongtobeat.com/"
-search_url = base_url + "api/search/"
-
 class HLTB:
-  def __init__(self, title, use_id=False): 
-    self.use_id = use_id
-    self.data = self.get_game_data(title)
+  BASE_URL = "https://howlongtobeat.com/"
+  SEARCH_URL = BASE_URL + "api/search/"
+  GAME_URL = BASE_URL + "game/"
 
-    if self.data:
-      self.game_id = self.data['game_id']
-      self.main = hltb_format(self.data['comp_main'])
-      self.main_extra = hltb_format(self.data['comp_plus'])
-      self.all = hltb_format(self.data['comp_all'])
-      self.completionist = hltb_format(self.data['comp_100'])
+  def search(title: str) -> dict:
+    if title is None or len(title) == 0: return None
 
-  def get_payload_id(self, title, id):
+    res = HLTB.search_game(title)
+
+    if res is not None: return HLTB.package(res)
+
+  def get_payload(title: str, api_key: str=None) -> str:
     payload = {
       "searchType": "games",
       "searchTerms": title.split(" "),
@@ -35,64 +32,53 @@ class HLTB:
           "platform": "",
           "sortCategory": "popular",
           "rangeCategory": "main",
-          "rangeTime": {"min": 0, "max": 0},
-          "gameplay": {"perspective": "", "flow": "", "genre": ""},
-          "rangeYear": {"min": "", "max": ""},
+          "rangeTime": {
+            "min": 0,
+            "max": 0
+          },
+          "gameplay": {
+            "perspective": "",
+            "flow": "",
+            "genre": "",
+            "subGenre": " "
+          },
+          "rangeYear": {
+            "min": "",
+            "max": ""
+          },
           "modifier": ""
         },
         "users": {
-          "id": id,
           "sortCategory": "postcount"
-          },
-        "lists": {"sortCategory": "follows"},
-        "filter": "",
-        "sort": 0,
-        "randomizer": 0
-      }
-    }
-    return json.dumps(payload)
-  
-  def get_payload_key(self, title):
-    payload = {
-      "searchType": "games",
-      "searchTerms": title.split(" "),
-      "searchPage": 1,
-      "size": 1,
-      "searchOptions": {
-        "games": {
-          "userId": 0,
-          "platform": "",
-          "sortCategory": "popular",
-          "rangeCategory": "main",
-          "rangeTime": {"min": 0, "max": 0},
-          "gameplay": {"perspective": "", "flow": "", "genre": ""},
-          "rangeYear": {"min": "", "max": ""},
-          "modifier": ""
         },
-        "users": {"sortCategory": "postcount"},
-        "lists": {"sortCategory": "follows"},
+        "lists": {
+          "sortCategory": "follows"
+        },
         "filter": "",
         "sort": 0,
         "randomizer": 0
       }
     }
+
+    if api_key is not None: payload['searchOptions']['users']['id'] = api_key
+  
     return json.dumps(payload)
 
-  def get_key(self):
+  def get_key() -> str:
     # Connect to Redis
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     # See if the HLTB key is already in Redis
     if (key_cache := redis_conn.get("hltb_key")) is not None:
       return pickle.loads(key_cache)
     else:
-      headers = self.get_headers()
-      resp = requests.get(base_url, headers=headers)
+      headers = HLTB.get_headers()
+      resp = requests.get(HLTB.BASE_URL, headers=headers)
       if resp.status_code == 200 and resp.text is not None:
         soup = BeautifulSoup(resp.text, 'html.parser')
         scripts = soup.find_all('script', src=True)
         matching_scripts = [script['src'] for script in scripts if '_app-' in script['src']]
         for script_url in matching_scripts:
-            script_url = base_url + script_url
+            script_url = HLTB.BASE_URL + script_url
             script_resp = requests.get(script_url, headers=headers)
             if script_resp.status_code == 200 and script_resp.text is not None:
                 pattern = r'\/api\/search\/"(?:\.concat\("[^"]*"\))*'
@@ -108,21 +94,21 @@ class HLTB:
                   return key
       return None
 
-  def get_id(self):
+  def get_id() -> str:
     # Connect to Redis
     redis_conn = redis.Redis(host='localhost', port=6379, db=0)
     # See if the HLTB key is already in Redis
     if (key_cache := redis_conn.get("hltb_id")) is not None:
       return pickle.loads(key_cache)
     else:
-      headers = self.get_headers()
-      resp = requests.get(base_url, headers=headers)
+      headers = HLTB.get_headers()
+      resp = requests.get(HLTB.BASE_URL, headers=headers)
       if resp.status_code == 200 and resp.text is not None:
         soup = BeautifulSoup(resp.text, 'html.parser')
         scripts = soup.find_all('script', src=True)
         matching_scripts = [script['src'] for script in scripts if '_app-' in script['src']]
         for script_url in matching_scripts:
-            script_url = base_url + script_url
+            script_url = HLTB.BASE_URL + script_url
             script_resp = requests.get(script_url, headers=headers)
             if script_resp.status_code == 200 and script_resp.text is not None:
                 pattern = r'users:\{id:"([^"]+)"'
@@ -135,48 +121,54 @@ class HLTB:
                     redis_conn.expire("hltb_id", HOUR_SECONDS)
                     return user_id
       return None
-
-  def get_headers(self):
+  
+  def get_headers() -> dict:
     ua = UserAgent()
     headers = {
         "user-agent": ua.random.strip(),
-        "referer": base_url,
+        "referer": HLTB.BASE_URL,
         "accept": "*/*",
         "content-type": "application/json"
     }
     return headers
 
-  def get_game_data(self, title):
-    headers = self.get_headers()
-    if self.use_id: 
-      user_id = self.get_id()
-      payload = self.get_payload_id(title, user_id)
-      res = requests.post(search_url, headers=headers, data=payload)
-    else: 
-      key = self.get_key()
-      payload = self.get_payload_key(title)
-      url = search_url + key
-      res = requests.post(url, headers=headers, data=payload)
+  def search_game(title: str) -> dict:
+    headers = HLTB.get_headers()
+
+    key = HLTB.get_key()
+    payload = HLTB.get_payload(title)
+    url = HLTB.SEARCH_URL + key
+    res = requests.post(url, headers=headers, data=payload)
+    if res.status_code == 200 and len(res.json()['data']) != 0:
+      return res.json()['data'][0]
+
+    user_id = HLTB.get_id()
+    payload = HLTB.get_payload(title, user_id)
+    res = requests.post(HLTB.SEARCH_URL, headers=headers, data=payload)
+    if res.status_code == 200 and len(res.json()['data']) != 0:
+      return res.json()['data'][0]
+
+    return None
 
     try:
       return res.json()['data'][0]
     except IndexError:
       return None
   
-  def package(self):
-    if self.data: return {
-      'id': self.game_id,
-      'main': self.main,
-      'main_extra': self.main_extra,
-      'completionist': self.all,
-      'all_styles': self.completionist
+  def package(data: dict) -> dict:
+    """Returns a formated dictionary of HLTB Values"""
+    return {
+      'id': data['game_id'],
+      'main': HLTB.format(data['comp_main']),
+      'main_extra': HLTB.format(data['comp_plus']),
+      'completionist': HLTB.format(data['comp_100']),
+      'all_styles': HLTB.format(data['comp_all'])
     }
-    else: return None
 
-def hltb_format(num):
-  """Format HowLongToBeat hours by round to the nearest half hour and adding the 1/2 symbol"""
-  num_hours = num / 3600
-  norm_num = round(num_hours * 2) / 2
+  def format(num: int) -> str:
+    """Format HowLongToBeat hours by round to the nearest half hour and adding the 1/2 symbol"""
+    num_hours = num / 3600
+    norm_num = round(num_hours * 2) / 2
 
-  if norm_num%1==0: return str(int(norm_num))
-  else: return str(math.floor(norm_num)) + "½"
+    if norm_num%1==0: return str(int(norm_num))
+    else: return str(math.floor(norm_num)) + "½"

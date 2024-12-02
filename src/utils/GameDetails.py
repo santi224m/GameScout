@@ -41,6 +41,7 @@ class GameDetails :
     self.short_description = None
     self.detailed_description = None
     self.header_img = None
+    self.library_img = None
     self.developers = None
     self.publishers = None
     self.platforms = {
@@ -266,6 +267,7 @@ class GameDetails :
     self.short_description = steam_data['short_description']
     self.detailed_description = soupificate(steam_data['detailed_description'])
     self.header_img = steam_data['header_image']
+    self.library_img = f"https://steamcdn-a.akamaihd.net/steam/apps/{self.steam_app_id}/library_600x900_2x.jpg"
     if 'developers' in steam_data and len(steam_data['developers']) > 0:
       self.developers = ', '.join(steam_data['developers'])
     if 'developers' in steam_data and len(steam_data['publishers']) > 0:
@@ -317,11 +319,11 @@ class GameDetails :
       self.negative_reviews = itad_data['total_negative']    
 
     # HLTB Data
-    self.hltb = hltb_data.package()
+    self.hltb = hltb_data
 
 def get_htlb_data(q, name, id):
   start = time.perf_counter()
-  hltb_data = HLTB(name)
+  hltb_data = HLTB.search(name)
   q.put(hltb_data)
   end = time.perf_counter()
   logging.info(f"{str(id):<9} - - HLTB Helper: Total time {end - start:0.4f} seconds")
