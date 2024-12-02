@@ -89,6 +89,12 @@ class db_user:
       res = curr.fetchall()
       return res[0][0]
 
+  def get_password_modified(email):
+    with db_conn() as curr:
+      curr.execute("SELECT TO_CHAR(password_last_modified, 'MM/DD/YYYY') FROM user_account WHERE email = %s;", (email,))
+      res = curr.fetchone()
+      return res[0]
+
   def get_user_full(email):
     """
     Return user info for session

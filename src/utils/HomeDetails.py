@@ -48,7 +48,6 @@ class HomeDetails:
     trending_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]
     
     temp = []
-    print(under5_ids)
     for id in under5_ids:
       if id_data[id] is not None: temp.append(next((s for s in id_data[id] if 'app' in s), None))
     under5_steam_ids = [int(x.split('/')[1]) for x in temp if x is not None]

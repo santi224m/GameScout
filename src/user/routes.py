@@ -7,6 +7,8 @@ from src.utils.db_user import db_user
 from src.utils.ImageHandler import ImageHandler
 from src.utils.MailSender import MailSender
 
+from src.utils.JWTGenerator import JWTGen
+
 tasks = set()
 
 @account_bp.route('/', methods=('GET', 'POST'))
@@ -129,3 +131,18 @@ def resend_email():
     MailSender().send_verification_email(session['user']['uuid'], session['user']['email'], session['user']['username'])
     return redirect(url_for('account.user'))
   else: return redirect(url_for('main.index'))
+
+@account_bp.route('/password', methods=('GET', 'POST'))
+def reset_password():
+  if request.method == "GET":
+    if 'user' in session:
+      print(JWTGen.encode_jwt(session['user']['email'], session['user']['uuid'], 'password'))
+    return redirect(url_for('account.user'))
+  if request.method == "POST":
+    email = request.form["email"]
+    if email == "" or not re.search(".+[@].+(?<![.])$", email) or not db_user.exists_email(email): 
+      return "invallid email"
+    uuid = db_user.get_uuid_by_email(email)
+    print(JWTGen.encode_jwt(email, uuid, 'password'))
+
+    return redirect(url_for('account.user'))
