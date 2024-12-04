@@ -177,6 +177,10 @@ section.account {
         color: col(text-dim);
       }
 
+      span.success {
+        color: col(accent-green);
+      }
+
       &.password {
         gap: auto;
         justify-content: space-between;

@@ -1,5 +1,6 @@
 import re
 import threading
+import base64
 
 from flask import render_template, request, session, redirect, url_for, current_app
 from src.user import account_bp, signup_bp, signin_bp, support_bp
@@ -14,7 +15,11 @@ tasks = set()
 @account_bp.route('/', methods=('GET', 'POST'))
 def user():
   if 'user' in session:
-    if request.method == 'GET': return render_template('user/account.html')
+    if request.method == 'GET': 
+      if 'v' in session:
+        del session['v']
+        return render_template('user/account.html', v=True)
+      return render_template('user/account.html')
     elif request.method == 'POST':
       print(request.form)
       print(request.files)
@@ -132,17 +137,40 @@ def resend_email():
     return redirect(url_for('account.user'))
   else: return redirect(url_for('main.index'))
 
+@account_bp.route('/recovery/<jwt>', methods=('GET', 'POST'))
+def recover_account(jwt):
+  if not jwt: return redirect(url_for('main.index')) 
+  claims = JWTGen.decode_jwt(jwt)
+  if claims is False: return redirect(url_for('main.index')) 
+  modify_date = db_user.get_password_modified(claims['email'])
+  claims_date = base64.b64decode(claims['nonce'].encode("ascii")).decode("ascii")
+  if modify_date != claims_date: return redirect(url_for('main.index'))
+
+  if request.method == "GET":
+    return render_template('user/passwords.html')
+  if request.method == "POST":
+    password = request.form["password"]
+    if len(password) < 8:
+      return render_template('user/passwords.html')
+    
+    db_user.update_user_password(claims['uuid'], password)
+
+    return redirect(url_for("signin.signin"))
+
+
 @account_bp.route('/password', methods=('GET', 'POST'))
 def reset_password():
   if request.method == "GET":
     if 'user' in session:
       print(JWTGen.encode_jwt(session['user']['email'], session['user']['uuid'], 'password'))
-    return redirect(url_for('account.user'))
+      session['v'] = True
+      return redirect(url_for('account.user'))
+    else: return render_template('user/recovery.html')
   if request.method == "POST":
     email = request.form["email"]
     if email == "" or not re.search(".+[@].+(?<![.])$", email) or not db_user.exists_email(email): 
-      return "invallid email"
+      return render_template('user/recovery.html', email=False)
     uuid = db_user.get_uuid_by_email(email)
     print(JWTGen.encode_jwt(email, uuid, 'password'))
 
-    return redirect(url_for('account.user'))
+    return render_template('user/recovery.html', email=True)

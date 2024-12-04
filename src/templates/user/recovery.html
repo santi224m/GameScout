@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Sign In{% endblock %}
+{% block style %}
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/user_forms.css') }}">
+{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+<section class="user">
+  <a class="logo" href="/">
+    <img src="{{ url_for('static', filename='img/controller.svg') }}" alt="Controller Icon" />
+    GameScout
+  </a>
+  <div class="form">
+    <div class="header">
+      <span>Reset Password</span>
+    </div>
+    <form method="POST">
+      <div class="field">
+        <label for="email">Email Address</label>
+        <label class="input-field">
+          <input type="email" name="email" placeholder="example@gmail.com" required>
+          <i class="fa-regular fa-envelope"></i>
+        </label>
+        {% if email %}
+          <span class="success">Recovery Email Sent</span>
+        {% elif email == False %}
+          <span class="fail">Invalid Email!</span>
+        {% endif %}
+      </div>
+      <div class="tos-submit">
+        <input type="submit" value="Send Password Reset Email">
+      </div>
+    </form>
+    <span class="redirect">Know your password? <a href="/signin">Sign in</a></span>
+  </div>
+</section>
+{% endblock %}
+{% block footer %}{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='js/sign_in.js') }}"></script>
+{% endblock %}

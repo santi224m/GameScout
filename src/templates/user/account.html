@@ -41,8 +41,11 @@
           <span class="title">Password:</span>
           <span class="password"><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i><i class="fa-solid fa-circle"></i></span>
           <span class="subtitle">Last Modified {{ session.user.password_last_modified }}</span>
+          {% if v %}
+          <span class="subtitle success">Password Reset email sent!</span>
+          {% endif %}
         </div>
-        <a href="#">Change Password</a>
+        <a href="/account/password">Change Password</a>
       </div>
       <div class="container pfp">
         <span class="title">Profile Picture:</span>

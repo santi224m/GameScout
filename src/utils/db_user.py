@@ -56,6 +56,15 @@ class db_user:
                      (email, uuid))
         return True
       return False
+  
+  def update_user_password(uuid, password):
+    """Updates a users password"""
+    password_hash = generate_password_hash(password)
+    with db_conn() as curr:
+      #check if new email is not in the database
+      curr.execute("UPDATE user_account SET password_hash = %s WHERE uuid = %s;",
+                   (password_hash, uuid))
+      return True
 
   def update_country(uuid, country):
     """Update a user's country"""

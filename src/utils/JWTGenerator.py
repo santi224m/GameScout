@@ -20,12 +20,15 @@ class JWTGen:
       modify_date = db_user.get_password_modified(email)
       payload['nonce'] = base64.b64encode(modify_date.encode("ascii")).decode("ascii")
     return jwt.encode(header, payload, key_set)
-  def decode_jwt(token, e):
+  def decode_jwt(token, e=None):
     with open('oct-256.json', 'r') as f:
       data = json.load(f)
       key_set = KeySet.import_key_set(data)
 
-    s = jwt.decode(token, key_set) 
+    try:
+      s = jwt.decode(token, key_set)
+    except ValueError: return False
+    e = s.claims['email']
     claims_request = JWTClaimsRegistry(
       email={"essential": True, 'value': e, 'allow_blank': False},
       uuid={"essential": True, 'allow_blank': False},

@@ -132,6 +132,18 @@ section.user {
           transition: 0.5s ease all;
         }
 
+        span.success {
+          @include bodySmall();
+          color: col(accent-green);
+          margin-top: 10px;
+        }
+
+        span.fail {
+          @include bodySmall();
+          color: col(accent-red);
+          margin-top: 10px;
+        }
+
         input {
           display: flex;
           width: 400px;
