@@ -293,7 +293,8 @@ class GameDetails :
       elif int(self.metacritic['score']) >= 50: self.metacritic['color'] = "yellow"
       else: self.metacritic['color'] = "red"
     self.categories = steam_data['categories']
-    self.screenshots = steam_data['screenshots']
+    if 'screenshots' in steam_data:
+      self.screenshots = steam_data['screenshots']
     if 'achievements' in steam_data:
       self.achievements = steam_data['achievements']
     self.release_date = steam_data['release_date']
@@ -409,7 +410,8 @@ def query_steam_api(steam_id, steam_api_res):
     "e": '<i class="fa-solid fa-xmark"></i>'
   }
 
-  categories = app_details['categories']
+  if 'categories' in app_details:
+    categories = app_details['categories']
 
   # If CPM del M
   if find(categories, 1) is not None and find(categories, 27):
@@ -556,7 +558,7 @@ def soupify(requirement):
 def soupificate(desc):
   """Addes header to game descriptions without a header"""
   soup = BeautifulSoup(desc, features="html.parser")
-  if soup.contents[0].name != "h1":
+  if len(soup.contents) > 0 and soup.contents[0].name != "h1":
     new_tag = soup.new_tag("h1")
     new_tag.string = "About this Game"
     soup.insert(0, new_tag)
