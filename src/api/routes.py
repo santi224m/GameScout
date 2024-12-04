@@ -1,6 +1,7 @@
 from flask import request, jsonify, session
 from src.api import bp
 from src.utils.db_utils import db_utils
+from src.utils.ITADHelper import ITADHelper
 
 @bp.route('/add_wishlist_item', methods=('GET', 'POST'))
 def add_wishlist_item():
@@ -36,3 +37,14 @@ def update_wishlist_rank():
   for steamappid, rank in request.json.items():
     db_utils.update_wishlist_rank(username, steamappid, rank)
   return jsonify({'status': 'success'})
+
+@bp.route('/get_prices', methods=('GET', 'POST'))
+def get_prices():
+  """Return prices for game"""
+  try:
+    steamappid = request.json["steam_app_id"]
+    res = ITADHelper(steamappid)
+  except Exception as e:
+    return jsonify({"success": False, "error": e})
+
+  return jsonify({"success": True, "deals": res.deals})
