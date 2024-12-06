@@ -1,6 +1,11 @@
 // Include Main
 @use "main" as *;
 
+span.error {
+  color: col(accent-red);
+  @include bodyMedium();
+}
+
 // Styles
 section.user {
   background: linear-gradient(223deg, #0E141B -9.34%, #14344B 79.71%);
@@ -39,36 +44,36 @@ section.user {
       align-items: center;
       gap: 18px;
 
-      span {
+      span.header {
         @include headingMedium();
         color: col(text-main);
       }
 
-      button {
-        display: flex;
-        width: 400px;
-        height: 40px;
-        padding: 10px;
-        justify-content: space-between;
-        align-items: center;
-        border-radius: br();
-        background-color: col(secondary);
-        @include bodyMedium();
-        border: none;
-        color: col(text-main);
-        cursor: pointer;
-        transition: 0.25s ease all;
+      // button {
+      //   display: flex;
+      //   width: 400px;
+      //   height: 40px;
+      //   padding: 10px;
+      //   justify-content: space-between;
+      //   align-items: center;
+      //   border-radius: br();
+      //   background-color: col(secondary);
+      //   @include bodyMedium();
+      //   border: none;
+      //   color: col(text-main);
+      //   cursor: pointer;
+      //   transition: 0.25s ease all;
 
-        &:hover {
-          background-color: hsl(224, 35%, 30%);
-        }
+      //   &:hover {
+      //     background-color: hsl(224, 35%, 30%);
+      //   }
 
-        span {
-          @include bodyMedium();
-          width: 100%;
-          text-align: center;
-        }
-      }
+      //   span {
+      //     @include bodyMedium();
+      //     width: 100%;
+      //     text-align: center;
+      //   }
+      // }
     }
 
     div.hr {

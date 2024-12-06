@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Sign In{% endblock %}
 {% block style %}
+<script src="https://accounts.google.com/gsi/client" async></script>
 <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/user_forms.css') }}">
 {% endblock %}
 {% block nav %}{% endblock %}
@@ -12,8 +13,25 @@
   </a>
   <div class="form">
     <div class="header">
-      <span>Sign in</span>
-      <button><i class="fa-brands fa-google"></i><span>Sign In With Google</span></button>
+      <span class="header">Sign in</span>
+      <!-- <button><i class="fa-brands fa-google"></i><span>Sign In With Google</span></button> -->
+      <div id="g_id_onload"
+        data-client_id="136372732967-sfn01tfvep2hauimktcs0stbda3qc0ma.apps.googleusercontent.com"
+        data-context="signin"
+        data-ux_mode="popup"
+        data-login_uri="http://localhost:5000/signup"
+        data-auto_prompt="false">
+      </div>
+
+      <div class="g_id_signin"
+        data-type="standard"
+        data-shape="rectangular"
+        data-theme="filled_blue"
+        data-text="signin_with"
+        data-size="large"
+        data-logo_alignment="left"
+        data-width="380px">
+      </div>
     </div>
     <div class="hr">
       <svg xmlns="http://www.w3.org/2000/svg" width="135" height="2" viewBox="0 0 135 2" fill="none">
@@ -24,6 +42,11 @@
         <path d="M0.5 1H135" stroke="#76808C"/>
       </svg>
     </div>
+    {% if google == False %}
+    <span class="error">Unable to sign in with Google, please sign in via email</span>
+    {% elif google == True %}
+    <span class="error">Unable to sign in with email, please sign in with Google</span>
+    {% endif %}
     <form method="POST">
       <div class="field">
         <label for="email">Email Address</label>

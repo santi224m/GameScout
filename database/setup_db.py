@@ -35,7 +35,7 @@ def create_schema(db_name):
     CREATE TABLE IF NOT EXISTS user_account (
       uuid UUID DEFAULT gen_random_uuid() PRIMARY KEY,
       username VARCHAR(20) UNIQUE NOT NULL,
-      password_hash TEXT NOT NULL,
+      password_hash TEXT,
       password_last_modified DATE DEFAULT now(),
       country VARCHAR(2) DEFAULT 'us',
       email TEXT,

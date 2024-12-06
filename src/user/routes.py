@@ -63,17 +63,25 @@ def signup():
         userid = idinfo['sub']
         email = idinfo['email']
         name = idinfo['name']
+        print(name)
+        print(email)
         
         if db_user.exists_email(email) and db_user.google_login(email):
           user = db_user.get_user_full(email)
           session['user'] = user
           session['user']['pfp'] = ImageHandler.get_image_url(user['uuid'])
           return redirect(url_for("main.index"))
-        elif db_user.exists_email(email) and not db_user.google_login(email): return redirect(url_for("signin.signin"))
-        elif not db_user.exists_email(email):
+        elif db_user.exists_email(email) and db_user.google_login(email) is False: 
+          session['g'] = False
+          return redirect(url_for("signin.signin"))
+        elif db_user.exists_email(email) is False:
           db_user.insert_user(name, None, "us", email, True)
           uuid = db_user.get_uuid_by_email(email)
+          db_user.verify_user(uuid)
           ImageHandler.create_blank_pfp(uuid)
+          user = db_user.get_user_full(email)
+          session['user'] = user
+          session['user']['pfp'] = ImageHandler.get_image_url(user['uuid'])
           return redirect(url_for("main.index"))
         else: return redirect(url_for("signup.signup")) # Ignore and redirect back to signup
       except ValueError:
@@ -133,6 +141,8 @@ def signup():
 def signin():
   if request.method == 'POST':
     email = request.form["email"].lower()
+    if db_user.google_login(email):
+      return render_template('user/sign_in.html', google=True)
     password = request.form["password"]
     if password == "" or email == "": return render_template('user/sign_in.html', error=True)
     if not db_user.correct_login(email, password): return render_template('user/sign_in.html', error=True)
@@ -157,6 +167,10 @@ def signin():
     referrer = None
     if request.referrer and ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer): referrer = request.referrer
     if referrer: session['redirect'] = referrer
+    if 'g' in session: 
+      temp = session['g']
+      del session['g']
+      return render_template('user/sign_in.html', google=temp)
     return render_template('user/sign_in.html')
 
 @account_bp.route('/signout', methods=('GET', 'POST'))

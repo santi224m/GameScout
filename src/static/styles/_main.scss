@@ -299,14 +299,14 @@ nav {
       grid-area: wishlist;
       align-self: flex-start;
       padding: 13px 7px;
-      width: 120px;
+      width: 100px;
     }
 
     .sign_in {
       grid-area: button;
       align-self: flex-start;
       padding: 13px 7px;
-      width: 120px;
+      width: 100px;
     }
 
     .dropdown {
@@ -315,7 +315,7 @@ nav {
       background-color: col(bg-tertiary);
       grid-area: dropdown;
       align-items: flex-start;
-      width: 150px;
+      width: 100%;
       display: none;
       border-radius: 0px 0px 3px 3px;
 
@@ -365,7 +365,7 @@ nav {
       grid-area: button;
       cursor: pointer;
       border: none;
-      width: 150px;
+      min-width: 100px;
       height: 44px;
 
       &:hover {

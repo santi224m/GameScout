@@ -2,6 +2,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from src.utils.db_conn import db_conn
 
+import random
+
 class db_user:
   def exists_user(username):
     """Returns True if username exists in the database, False otherwise"""
@@ -16,7 +18,7 @@ class db_user:
   def exists_email(email):
     """Returns True if email exists in the database, False otherwise"""
     with db_conn() as curr:
-      curr.execute("SELECT 1 FROM user_account WHERE email = %s;", (email,))
+      curr.execute("SELECT 1 FROM user_account WHERE email = %s;", (email.lower(),))
       res = curr.fetchall()
       if res:
         return True
@@ -34,8 +36,10 @@ class db_user:
   def insert_user(username, password, country, email, google=False):
     """Insert a new user to the database"""
     with db_conn() as curr:
-      password_hash = generate_password_hash(password)
-      if google: password_hash = None
+      if google: 
+        password_hash = None
+        if db_user.exists_user(username): username += str(random.randrange(0, 9999))
+      else: password_hash = generate_password_hash(password)
       curr.execute(
         """
         INSERT INTO user_account (
@@ -44,9 +48,9 @@ class db_user:
           country,
           email,
           google)
-        VALUES (%s, %s, %s, %s, %s, %s);
+        VALUES (%s, %s, %s, %s, %s);
         """,
-        (username, password_hash, country, email, google))
+        (username, password_hash, country, email.lower(), google))
 
   def update_user_email(uuid, email):
     """Update a user's email"""
@@ -95,7 +99,7 @@ class db_user:
 
   def get_uuid_by_email(email):
     with db_conn() as curr:
-      curr.execute("SELECT uuid FROM user_account WHERE email = %s;", (email,))
+      curr.execute("SELECT uuid FROM user_account WHERE email = %s;", (email.lower(),))
       res = curr.fetchall()
       return res[0][0]
 
@@ -107,7 +111,7 @@ class db_user:
 
   def google_login(email):
     with db_conn() as curr:
-      curr.execute("SELECT google FROM user_account WHERE email = %s;", (email,))
+      curr.execute("SELECT google FROM user_account WHERE email = %s;", (email.lower(),))
       res = curr.fetchone()
       return res[0]
 
@@ -127,7 +131,7 @@ class db_user:
                 google
         FROM user_account
         WHERE email = %s;
-        """, (email,))
+        """, (email.lower(),))
 
       res = curr.fetchone()
       user = {
@@ -152,7 +156,7 @@ class db_user:
       exists_username = True if curr.fetchone() else False
 
       curr.execute("SELECT 1 FROM user_account WHERE email = %s;",
-                   (email,))
+                   (email.lower(),))
       exists_email = True if curr.fetchone() else False
 
       data = {

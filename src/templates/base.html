@@ -36,16 +36,18 @@
       <div class="right">
         <a href="/wishlist" class="nav-wishlist">Wishlist</a>
         {% if session['user'] %}
-        <button class="nav-account">
-          <img src="{{ session.user.pfp.30 }}" alt="Profile Picture"/>
-          <span>{{ session.user.username }}</span>
-          <i class="fa-solid fa-angle-down"></i>
-          <i class="fa-solid fa-angle-up"></i>
-        </button>
-        <div class="dropdown">
-          <a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a>
-          <a href="/account"><i class="fa-solid fa-gear"></i> Settings</a>
-          <a href="/account/signout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+        <div class="account">
+          <button class="nav-account">
+            <img src="{{ session.user.pfp.30 }}" alt="Profile Picture"/>
+            <span>{{ session.user.username }}</span>
+            <i class="fa-solid fa-angle-down"></i>
+            <i class="fa-solid fa-angle-up"></i>
+          </button>
+          <div class="dropdown">
+            <a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a>
+            <a href="/account"><i class="fa-solid fa-gear"></i> Settings</a>
+            <a href="/account/signout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+          </div>
         </div>
         {% else %}
         <a href="/signin/" class="sign_in">Sign In</a>
