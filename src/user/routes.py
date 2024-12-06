@@ -1,6 +1,10 @@
 import re
 import threading
 import base64
+import os
+
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 from flask import render_template, request, session, redirect, url_for, current_app
 from src.user import account_bp, signup_bp, signin_bp, support_bp
@@ -41,6 +45,39 @@ def signup():
     del session['signin']
     return redirect(url_for("signin.signin"))
   if request.method == 'POST':
+    if 'credential' in request.form:
+      try:
+        # Specify the CLIENT_ID of the app that accesses the backend:
+        idinfo = id_token.verify_oauth2_token(request.form['credential'], requests.Request(), os.getenv("GOOGLE_OAUTH_KEY"))
+
+        # Or, if multiple clients access the backend server:
+        # idinfo = id_token.verify_oauth2_token(token, requests.Request())
+        # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
+        #     raise ValueError('Could not verify audience.')
+
+        # If the request specified a Google Workspace domain
+        # if idinfo['hd'] != DOMAIN_NAME:
+        #     raise ValueError('Wrong domain name.')
+
+        # ID token is valid. Get the user's Google Account ID from the decoded token.
+        userid = idinfo['sub']
+        email = idinfo['email']
+        name = idinfo['name']
+        
+        if db_user.exists_email(email) and db_user.google_login(email):
+          user = db_user.get_user_full(email)
+          session['user'] = user
+          session['user']['pfp'] = ImageHandler.get_image_url(user['uuid'])
+          return redirect(url_for("main.index"))
+        elif db_user.exists_email(email) and not db_user.google_login(email): return redirect(url_for("signin.signin"))
+        elif not db_user.exists_email(email):
+          db_user.insert_user(name, None, "us", email, True)
+          uuid = db_user.get_uuid_by_email(email)
+          ImageHandler.create_blank_pfp(uuid)
+          return redirect(url_for("main.index"))
+        else: return redirect(url_for("signup.signup")) # Ignore and redirect back to signup
+      except ValueError:
+        return redirect(url_for("signup.signup"))
     response = {
       "username": {
         "taken": False,
@@ -65,7 +102,6 @@ def signup():
     if len(password) < 8:
       response['password']['invalid'] = True
     
-    dob = request.form.get('dob', None)
     country = request.form.get('country', 'us')
 
     exists = db_user.exists_user_email(username, email)
@@ -75,7 +111,7 @@ def signup():
     if True not in response['username'].values() and True not in response['email'].values() and True not in response['password'].values():
       session['signin'] = True
 
-      thread_db = threading.Thread(db_user.insert_user(username, password, dob, country, email))
+      thread_db = threading.Thread(db_user.insert_user(username, password, country, email))
       thread_db.start()
       thread_db.join()
 

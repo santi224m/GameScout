@@ -31,21 +31,22 @@ class db_user:
       if not check_password_hash(res[0][0], password): return False
       else: return True
 
-  def insert_user(username, password, dob, country, email):
+  def insert_user(username, password, country, email, google=False):
     """Insert a new user to the database"""
     with db_conn() as curr:
       password_hash = generate_password_hash(password)
+      if google: password_hash = None
       curr.execute(
         """
         INSERT INTO user_account (
           username,
           password_hash,
-          dob,
           country,
-          email)
-        VALUES (%s, %s, %s, %s, %s);
+          email,
+          google)
+        VALUES (%s, %s, %s, %s, %s, %s);
         """,
-        (username, password_hash, dob, country, email,))
+        (username, password_hash, country, email, google))
 
   def update_user_email(uuid, email):
     """Update a user's email"""
@@ -104,6 +105,12 @@ class db_user:
       res = curr.fetchone()
       return res[0]
 
+  def google_login(email):
+    with db_conn() as curr:
+      curr.execute("SELECT google FROM user_account WHERE email = %s;", (email,))
+      res = curr.fetchone()
+      return res[0]
+
   def get_user_full(email):
     """
     Return user info for session
@@ -113,11 +120,11 @@ class db_user:
         """
         SELECT  uuid,
                 username,
-                dob,
                 country,
                 email,
                 verified,
-                TO_CHAR(password_last_modified, 'MM/DD/YYYY')
+                TO_CHAR(password_last_modified, 'MM/DD/YYYY'),
+                google
         FROM user_account
         WHERE email = %s;
         """, (email,))
@@ -126,11 +133,11 @@ class db_user:
       user = {
         'uuid': res[0],
         'username': res[1],
-        'dob': res[2],
-        'country': res[3],
-        'email': res[4],
-        'verified': res[5],
-        'password_last_modified': res[6]
+        'country': res[2],
+        'email': res[3],
+        'verified': res[4],
+        'password_last_modified': res[5],
+        'google': res[6]
       }
       return user
 

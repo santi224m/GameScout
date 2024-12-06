@@ -37,10 +37,10 @@ def create_schema(db_name):
       username VARCHAR(20) UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
       password_last_modified DATE DEFAULT now(),
-      dob DATE,
       country VARCHAR(2) DEFAULT 'us',
       email TEXT,
-      verified BOOLEAN DEFAULT FALSE
+      verified BOOLEAN DEFAULT FALSE,
+      google BOOLEAN DEFAULT FALSE
     );
     """)
 
