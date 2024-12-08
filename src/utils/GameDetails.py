@@ -140,7 +140,8 @@ class GameDetails :
     with self.cv_steam_reviews:
       while self.steam_reviews_api_res is None:
         pass
-      if ('data' not in self.steam_api_res.json()[self.steam_app_id]): return False
+      if ('data' not in self.steam_api_res.json()[self.steam_app_id]): valid_id = False
+    if valid_id is False: return False
     thread_ITAD_api_2 = threading.Thread(target=self.get_ITAD_api_2)
     thread_ITAD_api_2.start()
     thread_ITAD_api_3 = threading.Thread(target=self.get_ITAD_api_3)
