@@ -218,7 +218,7 @@ flask run
   - [x] Database Schema
   - [x] Setup PostgreSQL server
 - [ ] Develop price alert system
-- [ ] Change/Reset Password
+- [x] Change/Reset Password
 - [ ] Working Currency (pull GameDetails from cache but then get current pricing)
 - [ ] TOS and Privacy Policy
 
