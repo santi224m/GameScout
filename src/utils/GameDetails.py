@@ -104,7 +104,9 @@ class GameDetails :
       self.steamplayers_api_res = None
       self.hltb_data = None
 
-      self.call_apis_w_threads()
+      exists = self.call_apis_w_threads()
+
+      if exists is False: return None
 
       steam_data = query_steam_api(self.steam_app_id, self.steam_api_res)
 
@@ -142,6 +144,7 @@ class GameDetails :
     thread_steamplayers_api.start()
     q = multiprocessing.Queue()
     thread_steamapi.join()
+    if ('data' not in self.steam_api_res.json()[self.steam_app_id]): return False
     hltb_proc = multiprocessing.Process(target=get_htlb_data, args=(q, self.steam_api_res.json()[self.steam_app_id]['data']['name'], self.steam_app_id))
     hltb_proc.start()
 

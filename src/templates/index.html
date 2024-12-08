@@ -11,6 +11,7 @@
       <span class="header">Featured</span>
       <div class="games">
         {% for game in home.featured %}
+        {% if game.title != None %}
           <div class="game">
             <a href="/game/{{ game.steam_app_id }}">
               <img src="{{ game.library_img }}" alt="{{ game.title }} Banner">
@@ -39,6 +40,7 @@
               {% endif %}
             </div>
           </div>
+        {% endif %}
         {% endfor %}
       </div>
     </div>
@@ -46,6 +48,7 @@
       <span class="header">Trending</span>
       <div class="games">
         {% for game in home.trending %}
+        {% if game.title != None %}
           <div class="game">
             <a href="/game/{{ game.steam_app_id }}">
               <img src="{{ game.header_img }}" alt="{{ game.title }} Banner">
@@ -74,6 +77,7 @@
               {% endif %}
             </div>
           </div>
+          {% endif %}
         {% endfor %}
       </div>
     </div>
@@ -82,6 +86,7 @@
         <span class="header">Games under $5</span>
         <div class="games">
           {% for game in home.under5 %}
+          {% if game.title != None %}
           <div class="game">
             <div class="left">
               <a class="banner" href="/game/{{ game.steam_app_id }}">
@@ -119,6 +124,7 @@
             {% endfor %}
             {% endif %}
           </div>
+          {% endif %}
           {% endfor %}
         </div>
       </div>
@@ -126,6 +132,7 @@
         <span class="header">At least 50% off</span>
         <div class="games">
           {% for game in home.cut50 %}
+          {% if game.title != None %}
           <div class="game">
             <div class="left">
               <a class="banner" href="/game/{{ game.steam_app_id }}">
@@ -163,6 +170,7 @@
             {% endfor %}
             {% endif %}
           </div>
+          {% endif %}
           {% endfor %}
         </div>
       </div>
