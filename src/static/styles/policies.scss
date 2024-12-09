@@ -43,6 +43,7 @@ section.policy {
       background-color: col(bg-main-50);
       padding: 15px;
       color: col(text-main);
+      width: 1300px;
 
       h1 {
         @include headingMedium();
