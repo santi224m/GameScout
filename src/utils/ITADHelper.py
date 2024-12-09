@@ -35,4 +35,5 @@ class ITADHelper:
       "vouchers": "true"
     }
     res = requests.post(api_url, data=json.dumps(payload), params=url_params)
-    return res.json()[0]['deals']
+    deals = {deal['shop']['name']: {'current_price': deal['price']['amount'], 'regular_price': deal['regular']['amount'], 'discount': deal['cut'], 'voucher': deal['voucher'], 'url': deal['url']} for deal in res.json()[0]['deals']}
+    return deals
