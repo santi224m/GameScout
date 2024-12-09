@@ -220,7 +220,7 @@ flask run
 - [ ] Develop price alert system
 - [x] Change/Reset Password
 - [ ] Working Currency (pull GameDetails from cache but then get current pricing)
-- [ ] TOS and Privacy Policy
+- [x] TOS and Privacy Policy
 
 See the [open issues](https://github.com/santi224m/GameScout/issues) for a full list of proposed features (and known issues).
 
