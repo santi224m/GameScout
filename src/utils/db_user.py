@@ -111,9 +111,11 @@ class db_user:
 
   def google_login(email):
     with db_conn() as curr:
-      curr.execute("SELECT google FROM user_account WHERE email = %s;", (email.lower(),))
-      res = curr.fetchone()
-      return res[0]
+      if db_user.exists_email(email):
+        curr.execute("SELECT google FROM user_account WHERE email = %s;", (email.lower(),))
+        res = curr.fetchone()
+        return res[0]
+      else: return False
 
   def get_user_full(email):
     """

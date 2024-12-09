@@ -35,6 +35,7 @@
       </div>
       <div class="right">
         <a href="/wishlist" class="nav-wishlist">Wishlist</a>
+        <a href="/watchlist" class="nav-watching">Watching</a>
         {% if session['user'] %}
         <div class="account">
           <button class="nav-account">
@@ -45,6 +46,7 @@
           </button>
           <div class="dropdown">
             <a href="/wishlist"><i class="fa-solid fa-heart"></i> Wishlist</a>
+            <a href="/watchlist"><i class="fa-solid fa-eye"></i> Watching</a>
             <a href="/account"><i class="fa-solid fa-gear"></i> Settings</a>
             <a href="/account/signout"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
           </div>
@@ -71,9 +73,15 @@
       <span class="copyright">
         &copy; 2024 GameScout. All Right Reserved. All trademarks are property of their respective owners in the US and other countries.
       </span>
-      <div class="buttons">
-        <a href="/">Home</a>
+      <div class="links">
         <a href="/wishlist">Wishlist</a>
+        |
+        <a href="/watchlist">Watching</a>
+        |
+        <a href="/terms">Terms</a>
+        |
+        <a href="/privacy">Privacy</a>
+        |
         <a href="#" class=".back-to-top">Back to Top</a>
       </div>
     </section>

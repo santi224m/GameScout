@@ -279,7 +279,7 @@ class GameDetails :
     self.library_img = f"https://steamcdn-a.akamaihd.net/steam/apps/{self.steam_app_id}/library_600x900_2x.jpg"
     if 'developers' in steam_data and len(steam_data['developers']) > 0:
       self.developers = ', '.join(steam_data['developers'])
-    if 'developers' in steam_data and len(steam_data['publishers']) > 0:
+    if 'publishers' in steam_data and len(steam_data['publishers']) > 0:
       self.publishers = ', '.join(steam_data['publishers'])
     self.platforms = steam_data['platforms']
     if self.platforms['windows']:

@@ -289,14 +289,21 @@ nav {
     justify-content: center;
     grid-template-columns: auto;
     grid-template-rows: auto;
-    grid-template-areas: "wishlist button"
-                         "wishlist dropdown";
+    grid-template-areas: "wishlist watching button"
+                         "wishlist watching dropdown";
     align-self: flex-start;
     margin-top: 8px;
     column-gap: 10px;
 
     .nav-wishlist {
       grid-area: wishlist;
+      align-self: flex-start;
+      padding: 13px 7px;
+      width: 100px;
+    }
+
+    .nav-watching {
+      grid-area: watching;
       align-self: flex-start;
       padding: 13px 7px;
       width: 100px;
@@ -470,26 +477,22 @@ section.footer {
     flex-shrink: 4;
   }
 
-  div.buttons {
+  div.links {
     display: flex;
     align-items: center;
     gap: 10px;
+    color: col(text-dim);
+    padding: 10px;
 
     a {
-      display: flex;
-      padding: 13px 30px;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      border-radius: br();
       @include bodyLarge();
       color: col(text-main);
       text-decoration: none;
-      transition: 0.25s ease background-color;
+      transition: 0.25s ease color;
       text-wrap: nowrap;
 
       &:hover {
-        background-color: col(bg-tertiary);
+        color: col(secondary);
       }
     }
   }
