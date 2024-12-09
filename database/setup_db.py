@@ -66,11 +66,11 @@ def create_schema(db_name):
 
   curr.execute(
     """
-    CREATE TABLE IF NOT EXISTS price_watch (
+    CREATE TABLE IF NOT EXISTS watchlist_item (
       user_uuid UUID NOT NULL REFERENCES user_account(uuid),
       steam_app_id INT NOT NULL,
-      desired_price BIGINT NOT NULL,
-      last_seen_price BIGINT
+      added_date DATE DEFAULT now(),
+      PRIMARY KEY (user_uuid, steam_app_id)
     );
     """
   )

@@ -17,6 +17,20 @@ def delete_wishlist_item():
   db_utils.delete_wishlist_item(username, steamapp_id)
   return jsonify({'status': 'success'})
 
+@bp.route('/add_watchlist_item', methods=('GET', 'POST'))
+def add_watchlist_item():
+  steamapp_id = request.json['steamapp_id']
+  username = session['user']['username']
+  db_utils.insert_watchlist_item(username, steamapp_id)
+  return jsonify({'status': 'success'})
+
+@bp.route('/delete_watchlist_item', methods=('GET', 'POST'))
+def delete_watchlist_item():
+  steamapp_id = request.json['steamapp_id']
+  username = session['user']['username']
+  db_utils.delete_watchlist_item(username, steamapp_id)
+  return jsonify({'status': 'success'})
+
 @bp.route('/get_wishlist_items', methods=('GET', 'POST'))
 def get_wishlist_items():
   username = session['user']['username']
@@ -29,6 +43,14 @@ def is_game_wishlisted():
   username = session['user']['username']
   steamapp_id = request.json['steamapp_id']
   res = db_utils.is_game_wishlisted(username, steamapp_id)
+  return jsonify(res)
+
+@bp.route('/is_game_watchlisted', methods=('GET', 'POST'))
+def is_game_watchlisted():
+  if "user" not in session: return {"error": 500}
+  username = session['user']['username']
+  steamapp_id = request.json['steamapp_id']
+  res = db_utils.is_game_watchlisted(username, steamapp_id)
   return jsonify(res)
 
 @bp.route('/update_wishlist_rank', methods=('GET', 'POST'))

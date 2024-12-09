@@ -30,7 +30,7 @@
           <span class="game-title" data-steamid="{{ game.steam_app_id }}">{{ game.title }}</span>
           <div class="buttons">
             <button class="wishlist"><i class="fa-solid fa-heart solid"></i><i class="fa-regular fa-heart outline"></i><span>Wishlist</span></button>
-            <button><i class="fa-regular fa-eye"></i><span>Watch</span></button>
+            <button class="watchlist"><i class="fa-solid fa-eye solid"></i><i class="fa-regular fa-eye outline"></i><span>Watch</span></button>
           </div>
         </div>
         <div class="quick-look">
@@ -389,4 +389,5 @@
 {{ super() }}
 <script src="{{ url_for('static', filename='js/game_page.js') }}"></script>
 <script src="{{ url_for('static', filename='js/wishlist_api.js') }}"></script>
+<script src="{{ url_for('static', filename='js/watchlist_api.js') }}"></script>
 {% endblock %}

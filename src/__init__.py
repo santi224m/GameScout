@@ -39,6 +39,10 @@ def create_app(config_class=Config):
     from src.wishlist import bp as wishlist_bp
     app.register_blueprint(wishlist_bp, url_prefix='/wishlist')
 
+    # Watchlist blueprint
+    from src.watchlist import bp as watchlist_bp
+    app.register_blueprint(watchlist_bp, url_prefix='/watchlist')
+
     # Verify blueprint
     from src.verify import bp as verify_bp
     app.register_blueprint(verify_bp, url_prefix='/verify')

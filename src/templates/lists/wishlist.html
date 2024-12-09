@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Wishlist{% endblock %}
 {% block style %}
-<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/wishlist.css') }}">
+<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='styles/lists.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -9,7 +9,7 @@
   <div class="content">
     <div class="header">
       <span class="title">{{ wishlist.username }}'s Wishlist</span>
-      <span class="num">{{ "{:,}".format(wishlist.num_items) }} item{% if wishlist.num_items > 1 %}s{% endif %}</span>
+      <span class="num">{{ "{:,}".format(wishlist.num_items) }} item{% if wishlist.num_items != 1 %}s{% endif %}</span>
     </div>
     <div class="games">
       {% for item in wishlist.items %}
@@ -67,8 +67,8 @@
         <div class="actions">
           <div class="buttons">
             <span class="confirm">Press again to confirm</span>
-            <button class="wishlist" data-steamid="{{ item.steam_app_id }}"><i class="fa-solid fa-heart solid"></i></button>
-            <button class="watch"><i class="fa-regular fa-eye"></i></button>
+            <button class="wishlist active" data-steamid="{{ item.steam_app_id }}"><i class="fa-solid fa-heart solid"></i><i class="fa-regular fa-heart outline"></i></button>
+            <button class="watchlist" data-steamid="{{ item.steam_app_id }}"><i class="fa-solid fa-eye solid"></i><i class="fa-regular fa-eye outline"></i></button>
           </div>
           <span class="add-date">Added on {{ wishlist.added_date_dict[item.steam_app_id|int] }}</span>
           <div class="price-container">

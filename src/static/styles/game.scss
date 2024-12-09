@@ -206,6 +206,24 @@ section.main {
                 }
               }
 
+              &.watchlist.active {
+                background-color: col(secondary);
+                gap: 0px;
+                max-width: 56px;
+
+                .solid {
+                  display: flex;
+                }
+
+                .outline {
+                  display: none;
+                }
+
+                span {
+                  opacity: 0;
+                }
+              }
+
               &:hover {
                 background-color: col(bg-hover);
               }

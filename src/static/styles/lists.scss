@@ -322,18 +322,6 @@ section.list {
               background-color: col(bg-hover);
             }
 
-            &.wishlist {
-              background-color: col(accent-red);
-
-              .solid {
-                display: flex;
-              }
-            }
-
-            &.watch.active {
-              background-color: col(bg-hover);
-            }
-
             i, svg {
               width: 24px;
               height: auto;
@@ -343,6 +331,28 @@ section.list {
               &.solid {
                 display: none;
               }
+            }
+
+            &.active {
+              i.solid, svg.solid {
+                display: inherit;
+              }
+
+              i.outline, svg.outline {
+                display: none;
+              }
+            }
+
+            &.wishlist.active {
+              background-color: col(accent-red);
+
+              .solid {
+                display: flex;
+              }
+            }
+
+            &.watchlist.active {
+              background-color: col(secondary);
             }
           }
         }

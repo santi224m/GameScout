@@ -298,6 +298,18 @@ section.search {
               }
             }
 
+            &.watchlist.active {
+              background-color: col(secondary);
+
+              .solid {
+                display: flex;
+              }
+
+              .outline {
+                display: none;
+              }
+            }
+
             &.watch.active {
               background-color: col(bg-hover);
             }

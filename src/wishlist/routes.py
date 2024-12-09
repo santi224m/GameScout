@@ -11,4 +11,4 @@ def wishlist():
         return redirect(url_for('signin.signin'))
     username = session['user']['username']
     wishlist = WishlistDetails(username)
-    return render_template('wishlist/wishlist.html', wishlist=wishlist)
+    return render_template('lists/wishlist.html', wishlist=wishlist)
