@@ -54,8 +54,10 @@
         {% else %}
         <div class="account">
           <button class="nav-account">
+            <a href="/signin">
             <img src="{{ url_for('static', filename='img/pfp_blank.webp') }}" alt="Profile Picture"/>
             <span>Sign In</span>
+            </a>
           </button>
         </div>
         {% endif %}
