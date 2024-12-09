@@ -1,0 +1,107 @@
+// Include Main
+@use "main" as *;
+
+// Styles
+section.policy {
+  background: linear-gradient(223deg, #0E141B -9.34%, #14344B 79.71%);
+  width: 100%;
+  min-height: calc(100vh - 60px - 66px);
+  display: flex;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 45px 0 200px;
+
+  div.content {
+    width: 1300px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+
+    div.header {
+      display: flex;
+      width: 100%;
+      padding: 25px 15px;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 5px;
+      background-color: col(bg-main);
+
+      span.title {
+        color: col(text-main);
+        @include headingLarge();
+      }
+
+      span.small {
+        color: col(text-dim);
+        @include bodyMedium();
+      }
+    }
+
+    div.policy{
+      border-radius: br();
+      background-color: col(bg-main-50);
+      padding: 15px;
+      color: col(text-main);
+
+      h1 {
+        @include headingMedium();
+        width: 100%;
+        border: 0;
+        border-bottom: 2px;
+        border-style: solid;
+        padding-bottom: 5px;
+        margin-bottom: 10px;
+        margin-top: 30px;
+        border-image: linear-gradient(90deg, col(text-dim) 0%, transparent 100%) 0 0 100%;
+      }
+
+      p {
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        span.dim {
+          color: col(text-dim);
+        }
+
+        strong {
+          color: col(text-main);
+        }
+      }
+
+      em {
+        color: col(text-dim);
+      }
+
+      a {
+        text-decoration: none;
+        transition: 0.25s ease color;
+        color: col(primary);
+
+        &:hover {
+          color: col(secondary);
+        }
+      }
+
+      table, th, td {
+        border: 1px solid col(text-dim);
+        border-collapse: collapse;
+      }
+
+      table {
+        border-width: 2px;
+        margin: 10px;
+      }
+
+      th, td {
+        padding: 5px 10px;
+      }
+
+      td:last-child {
+        text-align: center;
+      }
+    }
+  }
+}

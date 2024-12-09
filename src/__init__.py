@@ -54,4 +54,11 @@ def create_app(config_class=Config):
     app.register_blueprint(account_bp, url_prefix='/account')
     app.register_blueprint(support_bp, url_prefix='/support')
 
+    # Policy blueprint
+    from src.policies import terms_bp as terms_bp
+    from src.policies import privacy_bp as privacy_bp
+
+    app.register_blueprint(terms_bp, url_prefix='/terms')
+    app.register_blueprint(privacy_bp, url_prefix='/privacy')
+
     return app
