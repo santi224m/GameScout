@@ -8,7 +8,10 @@ from cloudinary import CloudinaryImage
 import cloudinary.uploader
 import cloudinary.api
 
-config = cloudinary.config(secure=True)
+config = cloudinary.config(
+  secure=True
+  cloud_name="gamescout"
+)
 
 class ImageHandler:
   def create_blank_pfp(name):
