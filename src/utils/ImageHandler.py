@@ -9,7 +9,7 @@ import cloudinary.uploader
 import cloudinary.api
 
 config = cloudinary.config(
-  secure=True
+  secure=True,
   cloud_name="gamescout"
 )
 
