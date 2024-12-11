@@ -10,7 +10,7 @@ import pickle
 
 class HLTB:
   BASE_URL = "https://howlongtobeat.com/"
-  SEARCH_URL = BASE_URL + "api/search/"
+  SEARCH_URL = BASE_URL + "api/find/"
   GAME_URL = BASE_URL + "game/"
 
   def search(title: str) -> dict:
@@ -40,7 +40,7 @@ class HLTB:
             "perspective": "",
             "flow": "",
             "genre": "",
-            "subGenre": " "
+            "difficulty": ""
           },
           "rangeYear": {
             "min": "",
@@ -81,7 +81,7 @@ class HLTB:
             script_url = HLTB.BASE_URL + script_url
             script_resp = requests.get(script_url, headers=headers)
             if script_resp.status_code == 200 and script_resp.text is not None:
-                pattern = r'\/api\/search\/"(?:\.concat\("[^"]*"\))*'
+                pattern = r'\/api\/find\/"(?:\.concat\("[^"]*"\))*'
                 matches = re.findall(pattern, script_resp.text)
                 if matches:
                   matches = str(matches).split('.concat')
