@@ -1,8 +1,0 @@
-{
-  "keys": [
-    { "k": "f_bCbnEErG2-FZi8SznpP6xW9NGAfvU23QjTJ-XTG2w", "kty": "oct", "kid": "cTh1ivQo1RRSBLwVITMDoQJDmIgEabspCikwxqmcXNQ" },
-    { "k": "UaZS4iifNLV9-Ydie8ZLRKZPkNxz0HLHCP9IZ7kdPnA", "kty": "oct", "kid": "2Z5EmrqoVddCingllxk-PwvcKs1QXiDnHO7SXlDDsV8" },
-    { "k": "QJs50iEbQkuhmyPKx9UNpwJ9tGHFCw2J4egaEm7axaM", "kty": "oct", "kid": "yzTz_c-T--z1h-gDVISNNnBR-r02Q3Fw-0S-ACB24po" },
-    { "k": "0OwDfo2YKp8BHnniOlro3gq-u2grH11mSAVDl4nXkzE", "kty": "oct", "kid": "Ussx9tDnq-R13QC8Tx-OZatvAURUNeH6JTQpKMlSm3g" }
-  ]
-}
