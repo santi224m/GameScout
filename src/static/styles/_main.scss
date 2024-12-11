@@ -371,7 +371,7 @@ nav {
       }
     }
 
-    button.nav-account, a {
+    .nav-account, a {
       display: flex;
       padding: 7px;
       align-items: center;
@@ -381,7 +381,8 @@ nav {
       text-decoration: none;
       border-radius: 3px;
       transition: 0.25s ease background-color;
-      @include bodyLarge();
+      @include bodyMedium();
+      font-size: 15px;
       color: col(text-main);
       grid-area: button;
       cursor: pointer;
@@ -422,6 +423,7 @@ nav {
 
       span {
         @include bodyMedium();
+        font-size: 15px;
         color: col(text-main);
       }
 
