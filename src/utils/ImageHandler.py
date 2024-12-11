@@ -1,5 +1,5 @@
 import cloudinary.exceptions
-from os import getenv
+import os
 
 import cloudinary
 from cloudinary import CloudinaryImage
@@ -9,8 +9,8 @@ import cloudinary.api
 config = cloudinary.config(
   secure=True,
   cloud_name="gamescout",
-  api_key=getenv("CLOUDINARY_API_KEY"),
-  api_secret=getenv("CLOUDINARY_API_SECRET")
+  api_key=os.environ.get("CLOUDINARY_API_KEY"),
+  api_secret=os.environ.get("CLOUDINARY_API_SECRET")
 )
 
 class ImageHandler:
