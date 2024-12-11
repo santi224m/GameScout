@@ -109,9 +109,7 @@ class GameDetails :
 
       exists = self.call_apis_w_threads()
 
-      if exists is False:
-        print("exiting")
-        return None
+      if exists is False: return None
 
       steam_data = query_steam_api(self.steam_app_id, self.steam_api_res)
 

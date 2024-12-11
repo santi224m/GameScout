@@ -2,6 +2,7 @@
 import json
 import os
 from dotenv import load_dotenv
+from flask import session
 
 import requests
 from src.utils.db_utils import db_utils
@@ -37,6 +38,7 @@ class ITADHelper:
       "nondeals": "true",
       "vouchers": "true"
     }
+    if 'user' in session: url_params['country'] = session['user']['country']
     res = requests.post(api_url, data=json.dumps(payload), params=url_params)
     deals = {deal['shop']['name']: {'current_price': deal['price']['amount'], 'regular_price': deal['regular']['amount'], 'discount': deal['cut'], 'voucher': deal['voucher'], 'url': deal['url']} for deal in res.json()[0]['deals']}
     return deals
