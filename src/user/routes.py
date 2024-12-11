@@ -162,13 +162,13 @@ def signin():
       elif "redirect" in session: 
         url = session["redirect"]
         del session["redirect"]
-        if ("http://localhost:5000" in url or "http://127.0.0.1:5000" in url) and ("signup" in url or "signin" in url or "signout" in url): return redirect(url_for('main.index'))
-        elif "http://localhost:5000" in url or "http://127.0.0.1:5000" in url and "signup" not in url: return redirect(url)
+        if ("http://localhost:5000" in url or "http://127.0.0.1:5000" in url or "https://gamescout.shop" in url) and ("signup" in url or "signin" in url or "signout" in url): return redirect(url_for('main.index'))
+        elif ("http://localhost:5000" in url or "http://127.0.0.1:5000" in url or "https://gamescout.shop" in url) and "signup" not in url: return redirect(url)
         else: return redirect(url_for(url))
       else: return redirect(url_for('main.index'))
   else: 
     referrer = None
-    if request.referrer and ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer): referrer = request.referrer
+    if request.referrer and ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer or "https://gamescout.shop" in request.referrer): referrer = request.referrer
     if referrer: session['redirect'] = referrer
     if 'g' in session: 
       temp = session['g']
@@ -180,7 +180,7 @@ def signin():
 def signout():
   if 'user' in session:
     del session['user']
-    if request.referrer and ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer) and not ("wishlist" in request.referrer or "account" in request.referrer): return redirect(request.referrer)
+    if request.referrer and ("http://localhost:5000" in request.referrer or "http://127.0.0.1:5000" in request.referrer or "https://gamescout.shop" in request.referrer) and not ("wishlist" in request.referrer or "account" in request.referrer): return redirect(request.referrer)
   return redirect(url_for('main.index'))
 
 @account_bp.route('/resend_email', methods=('GET', 'POST'))
