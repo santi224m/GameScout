@@ -1,9 +1,12 @@
 """Is There Any Deal API Helper"""
 import json
 import os
+from dotenv import load_dotenv
 
 import requests
 from src.utils.db_utils import db_utils
+
+load_dotenv()
 
 class ITADHelper:
   def __init__(self, steamappid):

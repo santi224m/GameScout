@@ -1,6 +1,9 @@
 from mailersend import emails
 import os
 from src.utils.JWTGenerator import JWTGen
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class MailSender:
   def __init__(self):

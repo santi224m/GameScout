@@ -2,6 +2,7 @@ import re
 import threading
 import base64
 import os
+from dotenv import load_dotenv
 
 from google.oauth2 import id_token
 from google.auth.transport import requests
@@ -15,6 +16,8 @@ from src.utils.MailSender import MailSender
 from src.utils.JWTGenerator import JWTGen
 
 tasks = set()
+
+load_dotenv()
 
 @account_bp.route('/', methods=('GET', 'POST'))
 def user():

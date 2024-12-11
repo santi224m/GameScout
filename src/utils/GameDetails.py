@@ -10,6 +10,7 @@ import threading
 import time
 import bbcode
 from datetime import datetime
+from dotenv import load_dotenv
 
 import redis
 from bs4 import BeautifulSoup
@@ -21,6 +22,8 @@ from src.utils.BBParser import BBParser
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO)
+
+load_dotenv()
 
 class GameDetails :
   def __init__(self, steam_app_id):
