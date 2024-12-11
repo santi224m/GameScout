@@ -32,7 +32,7 @@ class MailSender:
     template = "3zxk54vww2xljy6v"
 
     jwt = JWTGen.encode_jwt(email, uuid)
-    link = "http://localhost:5000/verify/" + jwt
+    link = "https://gamescout.shop/verify/" + jwt
 
     self.send_mail(email, template, link, f"Hi {username}, please verify your GameScout account")
 
@@ -40,6 +40,6 @@ class MailSender:
     template = "jy7zpl9qpq545vx6"
 
     jwt = JWTGen.encode_jwt(email, uuid, 'password')
-    link = "http://localhost:5000/account/recovery/" + jwt
+    link = "https://gamescout.shop/account/recovery/" + jwt
 
     self.send_mail(email, template, link, f"Password Reset Requested")
