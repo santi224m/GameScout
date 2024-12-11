@@ -34,8 +34,8 @@
         <a onclick="redirect_to_search_page(event, true)"><i class="fa-solid fa-magnifying-glass"></i></a>
       </div>
       <div class="right">
-        <a href="/wishlist" class="nav-wishlist">Wishlist</a>
-        <a href="/watchlist" class="nav-watching">Watchlist</a>
+        <a href="/wishlist" class="nav-wishlist"><i class="fa-solid fa-heart"></i>Wishlist</a>
+        <a href="/watchlist" class="nav-watching"><i class="fa-solid fa-eye"></i>Watchlist</a>
         {% if session['user'] %}
         <div class="account">
           <button class="nav-account">
@@ -52,7 +52,14 @@
           </div>
         </div>
         {% else %}
-        <a href="/signin/" class="sign_in">Sign In</a>
+        <div class="account">
+          <button class="nav-account">
+            <a href="/signin">
+            <img src="{{ url_for('static', filename='img/pfp_blank.webp') }}" alt="Profile Picture"/>
+            <span>Sign In</span>
+            </a>
+          </button>
+        </div>
         {% endif %}
       </div>
     </nav>

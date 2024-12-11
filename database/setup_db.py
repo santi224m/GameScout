@@ -75,6 +75,17 @@ def create_schema(db_name):
     """
   )
 
+  curr.execute(
+    """
+    CREATE TABLE IF NOT EXISTS price_watch (
+      user_uuid UUID NOT NULL REFERENCES user_account(uuid),
+      steam_app_id INT NOT NULL,
+      desired_price BIGINT NOT NULL,
+      last_seen_price BIGINT
+    );
+    """
+  )
+
   # ---------------------------------------------------------------------------- #
   #                                   TRIGGERS                                   #
   # ---------------------------------------------------------------------------- #

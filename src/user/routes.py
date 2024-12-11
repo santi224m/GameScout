@@ -212,7 +212,7 @@ def recover_account(jwt):
 def reset_password():
   if request.method == "GET":
     if 'user' in session:
-      print(JWTGen.encode_jwt(session['user']['email'], session['user']['uuid'], 'password'))
+      MailSender().send_reset_email(session['user']['uuid'], session['user']['email'])
       session['v'] = True
       return redirect(url_for('account.user'))
     else: return render_template('user/recovery.html')
@@ -221,6 +221,6 @@ def reset_password():
     if email == "" or not re.search(".+[@].+(?<![.])$", email) or not db_user.exists_email(email): 
       return render_template('user/recovery.html', email=False)
     uuid = db_user.get_uuid_by_email(email)
-    print(JWTGen.encode_jwt(email, uuid, 'password'))
+    MailSender().send_reset_email(uuid, email)
 
     return render_template('user/recovery.html', email=True)

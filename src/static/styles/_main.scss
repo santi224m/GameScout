@@ -152,37 +152,41 @@ body {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+  overflow-y: auto;
+  scrollbar-color: col(text-dim);
+  scrollbar-width: thin;
 
-  &::-webkit-scrollbar {
-    width: 10px;
-    border-radius: br();
-    margin-top: 5px;
-  }
+  // &::-webkit-scrollbar {
+  //   width: 10px;
+  //   border-radius: br();
+  //   margin-top: 5px;
+  // }
 
-  /* Track */
-  &::-webkit-scrollbar-track {
-    background: col(bg-main-20);
-    border-radius: br();
-  }
+  // /* Track */
+  // &::-webkit-scrollbar-track {
+  //   background: col(bg-main-20);
+  //   border-radius: br();
+  // }
   
-  /* Handle */
-  &::-webkit-scrollbar-thumb {
-    background-color: col(bg-tertiary);
-    border-radius: br();
-    cursor: pointer;
-    transition: 0.25s ease;
-  }
+  // /* Handle */
+  // &::-webkit-scrollbar-thumb {
+  //   background-color: col(bg-tertiary);
+  //   border-radius: br();
+  //   cursor: pointer;
+  //   transition: 0.25s ease;
+  // }
 
-  /* Handle on hover */
-  &::-webkit-scrollbar-thumb:hover {
-    background: col(secondary); 
-    border-radius: br();
-  }
+  // /* Handle on hover */
+  // &::-webkit-scrollbar-thumb:hover {
+  //   background: col(secondary); 
+  //   border-radius: br();
+  // }
 }
 
 body {
   background-color: col(bg-main);
   height: fit-content;
+  max-height: fit-content;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -196,7 +200,7 @@ nav {
   display: flex;
   width: 100%;
   height: 60px;
-  padding: 0px 10px;
+  padding: 0px 20px 0px 10px;
   box-sizing: border-box;
   justify-content: space-between;
   align-items: center;
@@ -299,14 +303,24 @@ nav {
       grid-area: wishlist;
       align-self: flex-start;
       padding: 13px 7px;
-      width: 100px;
+      width: 120px;
+      color: col(text-main);
+
+      i, svg {
+        color: col(text-main);
+      }
     }
 
     .nav-watching {
       grid-area: watching;
       align-self: flex-start;
       padding: 13px 7px;
-      width: 100px;
+      width: 120px;
+      color: col(text-main);
+
+      i, svg {
+        color: col(text-main);
+      }
     }
 
     .sign_in {
@@ -472,7 +486,7 @@ section.footer {
   }
 
   span {
-    @include bodyLarge();
+    @include bodyMedium();
     color: col(text-dim);
     flex-shrink: 4;
   }
@@ -485,7 +499,7 @@ section.footer {
     padding: 10px;
 
     a {
-      @include bodyLarge();
+      @include bodyMedium();
       color: col(text-main);
       text-decoration: none;
       transition: 0.25s ease color;
