@@ -1,6 +1,6 @@
 # Game Caching
 
-We want to cache game data in our PostgreSQL database so that we don't' have to use multiple API calls for recenlty displayed games. This should speed up page loads for frequently viewed games.
+We want to cache game data in our PostgreSQL database so that we don't have to use multiple API calls for recenlty displayed games. This should speed up page loads for frequently viewed games.
 
 ## Game Cache Table
 
